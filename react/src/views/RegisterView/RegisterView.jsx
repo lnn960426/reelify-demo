@@ -14,6 +14,7 @@ export default function RegisterView() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [favoriteGenre, setFavoriteGenre] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -27,6 +28,7 @@ export default function RegisterView() {
       // If no errors, send data to server
       AuthService.register({
         username,
+        favoriteGenre,
         password,
         confirmPassword,
         role: 'user',
@@ -71,6 +73,25 @@ export default function RegisterView() {
 
         <div className={styles.formControl}>
           <label htmlFor="password" className={styles.password}>Password:</label>
+        <div className="form-control">
+          <label htmlFor="favoriteGenre">Favorite Genre:</label>
+          <input
+            type="text"
+            id="favoriteGenre"
+            value={favoriteGenre}
+            size="50"
+            required
+            autoFocus
+            autoComplete="favoriteGenre"
+            onChange={(event) => setFavoriteGenre(event.target.value)}
+          />
+        </div>
+        </div>
+
+
+
+        <div className="form-control">
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
             id="password"

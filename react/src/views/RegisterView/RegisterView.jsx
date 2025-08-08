@@ -44,14 +44,19 @@ export default function RegisterView() {
   }
 
   return (
-    <div id="view-register">
-      <h2>Register</h2>
+  
+    <div id="view-register" className={styles.container}>
+      <h2 className={styles.title}>Register</h2>
+      <p className={styles.description}>
+      Explore great movies, save your favorites, and get smart suggestions based on your taste. 
+      </p>
 
       <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-control">
-          <label htmlFor="username">Username:</label>
+      <form onSubmit={handleSubmit} className={styles.form}>
+
+        <div className={styles.formControl}>
+          <label htmlFor="username" className={styles.username}>Username:</label>
           <input
             type="text"
             id="username"
@@ -64,8 +69,8 @@ export default function RegisterView() {
           />
         </div>
 
-        <div className="form-control">
-          <label htmlFor="password">Password:</label>
+        <div className={styles.formControl}>
+          <label htmlFor="password" className={styles.password}>Password:</label>
           <input
             type="password"
             id="password"
@@ -76,8 +81,8 @@ export default function RegisterView() {
           />
         </div>
 
-        <div className="form-control">
-          <label htmlFor="confirmPassword">Confirm Password:</label>
+        <div className={styles.formControl}>
+          <label htmlFor="confirmPassword" className={styles.password}>Confirm Password:</label>
           <input
             type="password"
             id="confirmPassword"
@@ -91,7 +96,9 @@ export default function RegisterView() {
         <button type="submit" className={`btn-primary ${styles.formButton}`}>
           Register
         </button>
-        <Link to="/login">Have an account? Log-in</Link>
+        <p className={styles.registerText}>
+        Have an account? <Link to="/login"> Log-in</Link>
+        </p>
       </form>
     </div>
   );

@@ -6,6 +6,7 @@ import RegisterView from './views/RegisterView/RegisterView';
 import UserProfileView from './views/UserProfileView/UserProfileView';
 import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer/Footer';
 
 export default function App() {
 
@@ -30,6 +31,7 @@ export default function App() {
             </Routes>
           </main>
       </div>
+      <Footer />
     </BrowserRouter>
   );
 }

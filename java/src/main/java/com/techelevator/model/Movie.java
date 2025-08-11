@@ -1,14 +1,28 @@
 package com.techelevator.model;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+
 public class Movie {
 
+    @JsonProperty("id")
     private int movieId;
-    private int genreId;
+
     private String title;
     private String overview;
+
+    @JsonProperty("poster_path")
     private String posterPath;
+
+    @JsonProperty("vote_average")
     private double voteAverage;
+
+    @JsonProperty("release_date")
     private String releaseDate;
+
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
 
     public int getMovieId() {
         return movieId;
@@ -18,13 +32,6 @@ public class Movie {
         this.movieId = movieId;
     }
 
-    public int getGenreId() {
-        return genreId;
-    }
-
-    public void setGenreId(int genreId) {
-        this.genreId = genreId;
-    }
 
     public String getTitle() {
         return title;
@@ -66,4 +73,11 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
 }

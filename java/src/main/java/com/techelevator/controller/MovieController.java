@@ -30,14 +30,14 @@ public class MovieController{
 
     private MovieDao movieDao;
 
-    @GetMapping(path="discover/movie?page={page}")
+   /* @GetMapping(path="discover/movie?page={page}")
     public List<Movie> getAllMovies(@PathVariable int page){
         MovieDocs apiData = new MovieDocs();
 
         try{
 
-        }
-    }
+        };
+    } */
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")
     public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId){

@@ -1,0 +1,14 @@
+.movieCard {
+    width: 100%;
+    grid-column: auto;
+    padding: 16px;
+
+}
+
+
+.image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}

@@ -12,7 +12,9 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -26,18 +28,13 @@ public class MovieController{
     @Value("${api-key}")
     private String API_KEY;
 
+    @Value("${api-read-access-token}")
+    private String READ_ACCESS_TOKEN;
+
     private RestClient restClient = RestClient.create();
 
     private MovieDao movieDao;
 
-   /* @GetMapping(path="discover/movie?page={page}")
-    public List<Movie> getAllMovies(@PathVariable int page){
-        MovieDocs apiData = new MovieDocs();
-
-        try{
-
-        };
-    } */
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")
     public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId){
@@ -51,4 +48,56 @@ public class MovieController{
         }
         return movies;
     }
+
+    @GetMapping(path = "movies/random")
+    public List<Movie> getMoviesByUserLikedGenres(@RequestParam String genreIds) {
+
+        List<Integer> genreIdList = Arrays.stream(genreIds.split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+
+
+        try {
+            StringBuilder genreParamBuilder = new StringBuilder();
+            for (int i = 0; i < genreIdList.size(); i++) {
+                genreParamBuilder.append(genreIdList.get(i));
+                if (i < genreIdList.size() - 1) {
+                    genreParamBuilder.append(",");
+                }
+            }
+            String genreParam = genreParamBuilder.toString();
+
+
+            String urlFirstPage = API_MOVIE_DATABASE + "/discover/movie?api_key=" + API_KEY + "&with_genres=" + genreParam;
+
+            MovieDocs firstPageData = restClient.get()
+                    .uri(urlFirstPage)
+                    .retrieve()
+                    .body(MovieDocs.class);
+
+            int totalPages = Math.min(firstPageData.getTotalPages(), 500);
+            if (totalPages == 0) {
+                return new ArrayList<>();
+            }
+
+            int randomPage = (int) (Math.random() * totalPages) + 1;
+
+            String urlRandomPage = API_MOVIE_DATABASE + "/discover/movie?api_key=" + API_KEY
+                    + "&with_genres=" + genreParam
+                    + "&page=" + randomPage;
+
+            MovieDocs randomPageData = restClient.get()
+                    .uri(urlRandomPage)
+                    .retrieve()
+                    .body(MovieDocs.class);
+
+
+            return randomPageData.getResults();
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch movies from TMDB", e);
+        }
+    }
+
 }

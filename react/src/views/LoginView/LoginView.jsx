@@ -7,7 +7,6 @@ import { UserContext } from '../../context/UserContext';
 import axios from 'axios';
 
 import styles from './LoginView.module.css';
-
 export default function LoginView() {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -80,6 +79,9 @@ export default function LoginView() {
         <button type="submit" className={`btn-primary ${styles.formButton}`}>
          Log In
         </button>
+        <p className={styles.registerText}>
+          forgot password? <Link to="/forgotPassword"> Reset your password</Link>
+        </p>
         <p className={styles.registerText}>
           New? <Link to="/register"> Register here!</Link>
         </p>

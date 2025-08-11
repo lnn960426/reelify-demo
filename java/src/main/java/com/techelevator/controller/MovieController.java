@@ -18,7 +18,7 @@ import java.util.List;
 @CrossOrigin
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
-public class MovieController{
+public class MovieController {
 
     @Value("${api-movie-database}")
     private String API_MOVIE_DATABASE;
@@ -30,13 +30,10 @@ public class MovieController{
 
     private MovieDao movieDao;
 
-    @GetMapping(path="discover/movie?page={page}")
-    public List<Movie> getAllMovies(@PathVariable int page){
+    @GetMapping(path = "discover/movie?page={page}")
+    public List<Movie> getAllMovies(@PathVariable int page) {
         MovieDocs apiData = new MovieDocs();
-
-        try{
-
-        }
+        return null;
     }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")

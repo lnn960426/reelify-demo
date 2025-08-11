@@ -37,6 +37,10 @@ public class MovieController{
     private UserDao userDao;
     private MovieDao movieDao;
 
+    public MovieController(UserDao userDao, MovieDao movieDao){
+        this.userDao = userDao;
+        this.movieDao = movieDao;
+    }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")
     public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId){

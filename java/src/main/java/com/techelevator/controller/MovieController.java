@@ -60,7 +60,6 @@ public class MovieController{
 
 
         try {
-
             StringBuilder genreParamBuilder = new StringBuilder();
             for (int i = 0; i < genreIdList.size(); i++) {
                 genreParamBuilder.append(genreIdList.get(i));
@@ -94,9 +93,6 @@ public class MovieController{
                     .retrieve()
                     .body(MovieDocs.class);
 
-            System.out.println("Total pages from TMDB: " + totalPages);
-            System.out.println("Random page chosen: " + randomPage);
-            System.out.println("Movies returned: " + randomPageData.getResults().size());
 
             return randomPageData.getResults();
 

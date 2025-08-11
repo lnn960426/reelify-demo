@@ -54,7 +54,7 @@ public class JdbcMovieDao implements MovieDao{
 
     private Movie mapRowToMovie(SqlRowSet rs){
         Movie movie = new Movie();
-        movie.setGenreId(rs.getInt("genre_id"));
+        movie.setTitle(rs.getString("title"));
         movie.setMovieId(rs.getInt("movie_id"));
         movie.setOverview(rs.getString("overview"));
         movie.setPosterPath(rs.getString("poster_path"));

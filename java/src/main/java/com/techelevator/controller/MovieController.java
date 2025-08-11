@@ -59,7 +59,7 @@ public class MovieController{
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
-        return movieList.getMovies();
+        return movieList.getResults();
     }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}&page={pageNum}")
@@ -79,7 +79,7 @@ public class MovieController{
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
-        return movieList.getMovies();
+        return movieList.getResults();
     }
 
     @GetMapping(path = "movies/random")

@@ -3,6 +3,7 @@ package com.techelevator.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ public class User {
 
    private int id;
    private String username;
+   private List<String> favoriteGenre;
    @JsonIgnore
    private String password;
    @JsonIgnore
@@ -18,8 +20,9 @@ public class User {
 
    public User() { }
 
-   public User(int id, String username, String password, String authorities) {
+   public User(int id, String username, List<String> favoriteGenre, String password, String authorities) {
       this.id = id;
+      this.favoriteGenre = favoriteGenre;
       this.username = username;
       this.password = password;
       if (authorities != null) this.setAuthorities(authorities);

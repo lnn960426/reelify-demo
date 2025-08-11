@@ -5,10 +5,18 @@ DROP TABLE IF EXISTS users, movie, users_movie, genre, movie_genre, users_genre;
 
 
 CREATE TABLE users (
+<<<<<<< HEAD
+	user_id SERIAL,
+	username varchar(50) NOT NULL UNIQUE,
+	password_hash varchar(200) NOT NULL,
+	role varchar(50) NOT NULL,
+	CONSTRAINT PK_user PRIMARY KEY (user_id)
+=======
 	user_id SERIAL PRIMARY KEY,
 	username VARCHAR(50) NOT NULL UNIQUE,
 	password_hash VARCHAR(200) NOT NULL,
 	role VARCHAR(50) NOT NULL
+>>>>>>> dee5dedca91cf2afcdaa78e12c6f63ab6585bc49
 );
 
 CREATE TABLE genre (

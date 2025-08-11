@@ -6,12 +6,22 @@ export default function MainNav() {
   const { user } = useContext(UserContext);
 
   return (
-    <nav id="main-nav" className="nav-list">
+    <nav id="main-nav" className="nav-bar container">
+    <Link to="/" className="logo">
+    <img src="/Logo.png" alt="Logo" className="app-logo" />
+    </Link>
+
+    <div className="nav-list">
       <div className="nav-link">
         <NavLink to="/">Home</NavLink>
       </div>
       {user ? (
         <>
+        <div className="nav-link">
+            <NavLink to="/browseMovies">
+              Browse Movie
+            </NavLink>
+          </div>
           <div className="nav-link">
             <NavLink to="/userProfile">
               Profile
@@ -30,6 +40,8 @@ export default function MainNav() {
           </NavLink>
         </div>
       )}
+    </div>
     </nav>
+
   );
 }

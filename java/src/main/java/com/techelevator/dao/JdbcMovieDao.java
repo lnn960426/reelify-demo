@@ -4,10 +4,12 @@ import com.techelevator.exception.DaoException;
 import com.techelevator.model.Movie;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcMovieDao implements MovieDao{
 
     private final JdbcTemplate jdbcTemplate;
@@ -35,9 +37,26 @@ public class JdbcMovieDao implements MovieDao{
         return movies;
     }
 
+    @Override
+    public void addMovieByUserLikedGenre(Movie movie) {
+        String movieSql = "INSERT INTO movie(genre_id, title, overview, poster_path, release_date, vote_average) " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
+
+        try {
+            jdbcTemplate.update(movieSql,
+                    movie.getGenreIds(),
+                    movie.getTitle(),
+                    movie.getOverview(),
+                    movie.getPosterPath(),
+                    movie.getVoteAverage());
+        } catch (DaoException e) {
+            throw new DaoException("An error occurred updating database movie: ", e);
+        }
+    }
+
     private Movie mapRowToMovie(SqlRowSet rs){
         Movie movie = new Movie();
-        movie.setGenreId(rs.getInt("genre_id"));
+        movie.setTitle(rs.getString("title"));
         movie.setMovieId(rs.getInt("movie_id"));
         movie.setOverview(rs.getString("overview"));
         movie.setPosterPath(rs.getString("poster_path"));

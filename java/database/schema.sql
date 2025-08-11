@@ -5,58 +5,58 @@ DROP TABLE IF EXISTS users, movie, users_movie, genre, movie_genre, users_genre;
 
 
 CREATE TABLE users (
+<<<<<<< HEAD
 	user_id SERIAL,
 	username varchar(50) NOT NULL UNIQUE,
-	favorite_genre varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	role varchar(50) NOT NULL,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
+=======
+	user_id SERIAL PRIMARY KEY,
+	username VARCHAR(50) NOT NULL UNIQUE,
+	password_hash VARCHAR(200) NOT NULL,
+	role VARCHAR(50) NOT NULL
+>>>>>>> dee5dedca91cf2afcdaa78e12c6f63ab6585bc49
 );
 
 CREATE TABLE genre (
-	genre_id int NOT NULL,
-	name varchar(32),
-	CONSTRAINT PK_genre PRIMARY KEY (genre_id)
+	genre_id INT PRIMARY KEY,
+	name VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE movie (
-    movie_id int NOT NULL, 
-    genre_id int NOT NULL, 
-    title varchar(50) NOT NULL,
-    overview varchar(200),
-    poster_path varchar(100),
-	release_date varchar(50) NOT NULL,
-	vote_average numeric,
-	CONSTRAINT PK_movie PRIMARY KEY (movie_id),
-	CONSTRAINT FK_genre FOREIGN KEY (genre_id) references genre (genre_id)
+    movie_id INT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    overview TEXT,
+    poster_path VARCHAR(100),
+    release_date DATE,
+    vote_average NUMERIC
 );
-
-CREATE TABLE users_movie (
-	movie_id int NOT NULL,
-	user_id int NOT NULL,
-	liked int,
-	favorited boolean,
-	CONSTRAINT PK_user_movie PRIMARY KEY (movie_id, user_id),
-	CONSTRAINT FK_user FOREIGN KEY (user_id) references users (user_id),
-	CONSTRAINT FK_movie FOREIGN KEY (movie_id) references movie (movie_id)
-);
-
-
 
 CREATE TABLE movie_genre (
-	movie_id int NOT NULL,
-	genre_id int NOT NULL,
-	CONSTRAINT PK_movie_genre PRIMARY KEY (movie_id, genre_id),
-	CONSTRAINT FK_movie FOREIGN KEY (movie_id) references movie (movie_id),
-	CONSTRAINT FK_genre FOREIGN KEY (genre_id) references genre (genre_id)
+	movie_id INT NOT NULL,
+	genre_id INT NOT NULL,
+	PRIMARY KEY (movie_id, genre_id),
+	FOREIGN KEY (movie_id) REFERENCES movie (movie_id),
+	FOREIGN KEY (genre_id) REFERENCES genre (genre_id)
 );
 
 CREATE TABLE users_genre (
-	user_id int NOT NULL,
-	genre_id int NOT NULL,
-	CONSTRAINT PK_users_genre PRIMARY KEY (user_id, genre_id),
-	CONSTRAINT FK_user FOREIGN KEY (user_id) references users (user_id),
-	CONSTRAINT FK_genre FOREIGN KEY (genre_id) references genre (genre_id)
+	user_id INT NOT NULL,
+	genre_id INT NOT NULL,
+	PRIMARY KEY (user_id, genre_id),
+	FOREIGN KEY (user_id) REFERENCES users (user_id),
+	FOREIGN KEY (genre_id) REFERENCES genre (genre_id)
+);
+
+CREATE TABLE users_movie (
+	movie_id INT NOT NULL,
+	user_id INT NOT NULL,
+	liked INT,
+	favorited BOOLEAN,
+	PRIMARY KEY (movie_id, user_id),
+	FOREIGN KEY (user_id) REFERENCES users (user_id),
+	FOREIGN KEY (movie_id) REFERENCES movie (movie_id)
 );
 
 

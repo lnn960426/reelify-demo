@@ -36,7 +36,6 @@ public class MovieController{
     private MovieDao movieDao;
 
 
-
     @GetMapping(path = "discover/movie?with_genres={genreId}")
     public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId){
         List<Movie> movies = new ArrayList<>();

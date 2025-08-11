@@ -17,6 +17,8 @@ public class RegisterUserDto {
     private String confirmPassword;
     @NotEmpty(message = "Please select a role for this user.")
     private String role;
+    @NotEmpty
+    private int initialMovieGenre = 0;
 
     public String getUsername() {
         return username;
@@ -48,5 +50,13 @@ public class RegisterUserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public int getInitialMovieGenre() {
+        return initialMovieGenre;
+    }
+
+    public void setInitialMovieGenre(int initialMovieGenre) {
+        this.initialMovieGenre = initialMovieGenre;
     }
 }

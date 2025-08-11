@@ -35,6 +35,23 @@ public class JdbcMovieDao implements MovieDao{
         return movies;
     }
 
+    @Override
+    public void addMovieByUserLikedGenre(Movie movie) {
+        String movieSql = "INSERT INTO movie(genre_id, title, overview, poster_path, release_date, vote_average) " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
+
+        try {
+            jdbcTemplate.update(movieSql,
+                    movie.getGenreId(),
+                    movie.getTitle(),
+                    movie.getOverview(),
+                    movie.getPosterPath(),
+                    movie.getVoteAverage());
+        } catch (DaoException e) {
+            throw new DaoException("An error occurred updating database movie: ", e);
+        }
+    }
+
     private Movie mapRowToMovie(SqlRowSet rs){
         Movie movie = new Movie();
         movie.setGenreId(rs.getInt("genre_id"));

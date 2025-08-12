@@ -4,7 +4,6 @@ import { UserContext } from '../../context/UserContext';
 
 export default function MainNav() {
   const { user } = useContext(UserContext);
-  const { pathname } = useLocation();
 
   return (
     <nav id="main-nav" className="nav-bar container">
@@ -16,7 +15,20 @@ export default function MainNav() {
         <div className="nav-link">
           <NavLink to="/">Home</NavLink>
         </div>
-        {user ? (
+
+      {!user && (
+        <>
+        <div className="nav-link">
+          <NavLink to="/register">Register</NavLink>
+        </div>
+        <div className="nav-link">
+          <NavLink to="/login">Login</NavLink>
+        </div>
+        </>
+      )}
+
+
+        {user && (
           <>
             <div className="nav-link">
               <NavLink to="/browseMovies">
@@ -34,20 +46,7 @@ export default function MainNav() {
               </Link>
             </div>
           </>
-        ) : (
-          <div className="nav-link">
-            {pathname === '/login' ? (
-              <NavLink to="/register" className="login-cta">Register</NavLink>
-            ) : (
-              <NavLink
-                to="/login"
-                className={pathname === '/register' ? 'login-cta' : undefined}
-              >
-                Login
-              </NavLink>
-            )}
-          </div>
-        )}
+               )}
       </div>
     </nav>
 

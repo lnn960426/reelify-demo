@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../context/UserContext'
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 import Notification from '../../components/Notification/Notification';
@@ -16,6 +17,7 @@ export default function RegisterView() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [favoriteGenre, setFavoriteGenre] = useState([]);
+  const { setUser } = useContext(UserContext);
 
   function handleChange(event) {
     const selectedValues = Array.from(event.target.selectedOptions).map(option => option.value);
@@ -38,9 +40,25 @@ export default function RegisterView() {
         confirmPassword,
         role: 'user',
       })
-        .then(() => {
+      .then(() => {
+        // call login api after register
+        return AuthService.login({username, password});
+      })
+        .then((res) => {
+          //get the response data (token and user)
+          const { token, user} = res.data || {};
+
+          // if on token will catch a error
+          if (!token) throw new Error ('Login succeeded but no token returned');
+
+          //put token in local storage
+          localStorage.setItem('authToken', res.data.token);
+
+          //change the status of nav bar
+          setUser(user);
+
           setNotification({ type: 'success', message: 'Registration successful' });
-          navigate('/login');
+          navigate('/');
         })
         .catch((error) => {
           // Check for a response message, but display a default if that doesn't exist

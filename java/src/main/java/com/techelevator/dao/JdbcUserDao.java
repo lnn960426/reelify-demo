@@ -74,13 +74,37 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User createUser(RegisterUserDto user) {
         User newUser = null;
+        int newUserId;
         String insertUserSql = "INSERT INTO users (username, password_hash, role) values (LOWER(TRIM(?)), ?, ?) RETURNING user_id";
         String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
         String ssRole = user.getRole().toUpperCase().startsWith("ROLE_") ? user.getRole().toUpperCase() : "ROLE_" + user.getRole().toUpperCase();
         try {
-            int newUserId = jdbcTemplate.queryForObject(insertUserSql, int.class, user.getUsername(), password_hash, ssRole);
+            newUserId = jdbcTemplate.queryForObject(insertUserSql, int.class, user.getUsername(), password_hash, ssRole);
             newUser = getUserById(newUserId);
         } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        List<String> genres = user.getFavoriteGenre();
+        List<Integer> genreIds = new ArrayList<>();
+        String getGenreIdsSql = "SELECT genre_id FROM genre WHERE name ILIKE ?;";
+        try {
+            for (String genre : genres) {
+                int genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
+                genreIds.add(genreId);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        String insertIntoUserGenre = "INSERT INTO users_genre(user_id, genre_id) VALUES (?,?);";
+        try{
+            for(int id : genreIds){
+                jdbcTemplate.update(insertIntoUserGenre, newUserId, id);
+            }
+        }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
@@ -88,13 +112,14 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
-    private User mapRowToUser(SqlRowSet rs) {
-        User user = new User();
-        user.setId(rs.getInt("user_id"));
-        user.setUsername(rs.getString("username"));
-        user.setPassword(rs.getString("password_hash"));
-        user.setAuthorities(Objects.requireNonNull(rs.getString("role")));
-        user.setActivated(true);
-        return user;
-    }
+        private User mapRowToUser (SqlRowSet rs){
+            User user = new User();
+            user.setId(rs.getInt("user_id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password_hash"));
+            user.setAuthorities(Objects.requireNonNull(rs.getString("role")));
+            user.setActivated(true);
+            return user;
+        }
+
 }

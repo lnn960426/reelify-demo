@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 import Notification from '../../components/Notification/Notification';
-
+import art from "../../assets/register-art.svg";
 import styles from './RegisterView.module.css';
 import { faV } from '@fortawesome/free-solid-svg-icons';
 
@@ -54,7 +54,13 @@ export default function RegisterView() {
     console.log(favoriteGenre);
   }, [favoriteGenre]);
 
+
+  function handleRemoveGenre(g) {
+    setFavoriteGenre(prev => prev.filter(x => x !== g));
+  }
   return (
+    <div className={styles.page}>
+      <img src={art} alt="Register illustration" className={styles.art} />
 
     <div id="view-register" className={styles.container}>
       <h2 className={styles.title}>Register</h2>
@@ -81,29 +87,66 @@ export default function RegisterView() {
         </div>
 
         <div>
-          <label htmlFor="favoriteGenre">Favorite Genres: </label>
-          <select id="favoriteGenre" name="genres" multiple onChange={handleChange}>
+          <div className={styles.genres}><label htmlFor="favoriteGenre">Favorite Genres: </label>
+          </div>
+            <p className={styles.tips}>
+              Press Ctrl(Win) / Control(Mac) with click to select mutiple genres 
+              </p>
+
+          <select
+            id="favoriteGenre"
+            name="genres"
+            multiple
+            size={8}
+            className={styles.genreSelect}
+            value={favoriteGenre}
+            onChange={handleChange}
+          >
+
             <option value="Action">Action</option>
-            <option>Adventure</option>
-            <option>Animation</option>
-            <option>Comedy</option>
-            <option>Crime</option>
-            <option>Documentary</option>
-            <option>Drama</option>
-            <option>Family</option>
-            <option>Fantasy</option>
-            <option>History</option>
-            <option>Horror</option>
-            <option>Music</option>
-            <option>Mystery</option>
-            <option>Romance</option>
-            <option>Science Fiction</option>
-            <option>TV Movie</option>
-            <option>Thriller</option>
-            <option>War</option>
-            <option>Western</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Animation">Animation</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Crime">Crime</option>
+            <option value="Documentary">Documentary</option>
+            <option value="Drama">Drama</option>
+            <option value="Family">Family</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="History">History</option>
+            <option value="Horror">Horror</option>
+            <option value="Music">Music</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Romance">Romance</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="TV Movie">TV Movie</option>
+            <option value="Thriller">Thriller</option>
+            <option value="War">War</option>
+            <option value="Western">Western</option>
           </select>
+
+          <div className={styles.helper}>
+            <span className={styles.count}>Currently Selected: {favoriteGenre.length}</span>
+          </div>
+
+          {favoriteGenre.length > 0 && (
+            <div className={styles.chips}>
+              {favoriteGenre.map(g => (
+                <span key={g} className={styles.chip}
+                >{g}
+                  <button
+                    type="button"
+                    className={styles.remove}
+                    onClick={() => handleRemoveGenre(g)}
+                  >
+                    x
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
         </div>
+
 
         <div className={styles.formControl}>
           <label htmlFor="password" className={styles.password}>Password:</label>
@@ -130,12 +173,13 @@ export default function RegisterView() {
         </div>
 
         <button type="submit" className={`btn-primary ${styles.formButton}`}>
-          Register
+          REGISTER
         </button>
         <p className={styles.registerText}>
           Have an account? <Link to="/login"> Log-in</Link>
         </p>
       </form>
+    </div>
     </div>
   );
 }

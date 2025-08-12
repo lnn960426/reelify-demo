@@ -1,10 +1,12 @@
-import { mockMovies } from "./mockMovies";
-import { useState } from "react";
+import MovieService from "../../services/MovieService";
+import { useState, useContext } from "react";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import styles from "./BrowseMovies.module.css";
+import { UserContext } from "../../context/UserContext"
 export default function BrowseMovies() {
     
-    const movies = mockMovies.results; //change backend data here
+    const { user } = useContext(UserContext);
+    let movies = MovieService.getMoviesByUserLikedGenres(user); //change backend data here
 
     function handleFavorite(movie){
         //TODO:  FAVORITES (POST/DELETE)
@@ -22,7 +24,7 @@ export default function BrowseMovies() {
                   <h2 className={styles.title}>Movie Recommendation Just For You</h2>
 
             <div className={styles.movieGrid}>
-                {mockMovies.results.map(movie => (    //change backend data here
+                {movies.results.map(movie => (    //change backend data here
                     <MovieCard 
                     key={movie.id} 
                     movie={movie}

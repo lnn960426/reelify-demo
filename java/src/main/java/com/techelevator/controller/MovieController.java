@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin
 @PreAuthorize("isAuthenticated()")
-@RequestMapping(path = "API_MOVIE_DATABASE/")
+@RequestMapping(path = "/")
 public class MovieController{
 
     @Value("${api-movie-database}")

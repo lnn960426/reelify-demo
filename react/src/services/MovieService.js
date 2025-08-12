@@ -11,5 +11,7 @@ export default {
     return axios.post('/login', user);
   },
 
-
+  getMoviesByUserLikedGenres(user){
+    return axios.get('movies/random', user);
+  }
 }

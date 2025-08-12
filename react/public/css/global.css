@@ -63,7 +63,7 @@ main {
     height: 3.5rem;
     margin-right: 1rem;
     margin-left: 5rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 #app-footer {
@@ -78,38 +78,58 @@ main {
 
 #main-nav {
     grid-area: nav;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+
 }
 
 /* Main Nav styles */
 .nav-bar {
     display: flex;
     align-items: center;justify-content: space-between;
-    margin-right: 5rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    padding-bottom: 2rem;
 }
 .nav-list {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    padding-top: 2rem;
 
 }
 
 .nav-link a {
     display: block;
-    color: #000;
     margin: 0;
     padding: 0.5rem 1rem;
     text-decoration: none;
     font-size: 1.5rem;
+    border-radius: 0.5rem;
+
 }
 
 .nav-link a:hover {
-    color:#2f27ce;
+    background: #4b3fff;
+    color: white;
+    box-shadow: 0 2px 8px rgb(0,0,0,.2);
 }
 
 a.active {
     background-color:#2f27ce;
     color: rgb(255, 255, 255);
     border-radius: 0.5rem;
+}
+
+.login-cta{
+    background: #2f27ce;
+    color:#fff !important;
+    padding: 8px 14px;
+    border-radius: 12px;
+}
+
+.login-cta:hover{
+    background: #4b3fff;
+    box-shadow: 0 2px 8px rgb(0,0,0,.2);
 }
 
 
@@ -194,3 +214,5 @@ tr {
 tr:nth-child(even) {
     background-color: rgba(136, 193, 231, 0.3);
 }
+
+

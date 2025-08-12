@@ -1,10 +1,12 @@
 package com.techelevator.controller;
 
+import com.techelevator.dao.FavoriteDao;
 import com.techelevator.dao.MovieDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Movie;
 import com.techelevator.model.MovieDocs;
+import com.techelevator.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin
 @PreAuthorize("isAuthenticated()")
-@RequestMapping(path = "API_MOVIE_DATABASE/")
+@RequestMapping(path = "/")
 public class MovieController{
 
     @Value("${api-movie-database}")
@@ -36,10 +39,12 @@ public class MovieController{
 
     private UserDao userDao;
     private MovieDao movieDao;
+    private FavoriteDao favoriteDao;
 
-    public MovieController(UserDao userDao, MovieDao movieDao){
+    public MovieController(UserDao userDao, MovieDao movieDao, FavoriteDao favoriteDao){
         this.userDao = userDao;
         this.movieDao = movieDao;
+        this.favoriteDao = favoriteDao;
     }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")
@@ -83,24 +88,21 @@ public class MovieController{
     }
 
     @GetMapping(path = "movies/random")
-    public List<Movie> getMoviesByUserLikedGenres(@RequestParam String genreIds) {
+    public List<Movie> getMoviesByUserLikedGenres(Principal principal) {
 
-        List<Integer> genreIdList = Arrays.stream(genreIds.split(","))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        User user = userDao.getUserByUsername(principal.getName());
+        int userId = user.getId();
 
+        List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(userId);
 
+        if(genreIdList.isEmpty()){
+            return new ArrayList<>();
+        }
 
         try {
-            StringBuilder genreParamBuilder = new StringBuilder();
-            for (int i = 0; i < genreIdList.size(); i++) {
-                genreParamBuilder.append(genreIdList.get(i));
-                if (i < genreIdList.size() - 1) {
-                    genreParamBuilder.append(",");
-                }
-            }
-            String genreParam = genreParamBuilder.toString();
-
+            String genreParam = genreIdList.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining("|"));
 
             String urlFirstPage = API_MOVIE_DATABASE + "/discover/movie?api_key=" + API_KEY + "&with_genres=" + genreParam;
 
@@ -110,7 +112,7 @@ public class MovieController{
                     .body(MovieDocs.class);
 
             int totalPages = Math.min(firstPageData.getTotalPages(), 500);
-            if (totalPages == 0) {
+            if (totalPages == 0){
                 return new ArrayList<>();
             }
 

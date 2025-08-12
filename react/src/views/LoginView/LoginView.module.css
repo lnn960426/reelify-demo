@@ -1,8 +1,27 @@
 .container {
     max-width: 500px;
-    margin: 4rem auto;
+    margin: 1.4rem auto;
     padding: 2rem;
 }
+
+.page {
+    max-width: 80%;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 2rem;
+    align-items:center;
+}
+
+.art {
+    width: 100%;
+    max-height: 1000px;
+    object-fit: contain;
+    display: block;
+    background-color: #f7f6ff;
+    border-radius: 3rem;
+}
+
 
 .title {
     font-size: 2.5rem;
@@ -47,6 +66,8 @@ input{
     background-color: #2f27ce;
     width: 100%;
     color: white;
+    font-weight: bold;
+
     
 }
 

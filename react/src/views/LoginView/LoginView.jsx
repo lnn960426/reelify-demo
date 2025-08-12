@@ -5,7 +5,7 @@ import AuthService from '../../services/AuthService';
 import Notification from '../../components/Notification/Notification';
 import { UserContext } from '../../context/UserContext';
 import axios from 'axios';
-
+import art from "../../assets/signin-art.svg";
 import styles from './LoginView.module.css';
 
 export default function LoginView() {
@@ -45,6 +45,9 @@ export default function LoginView() {
   }
 
   return (
+    <div className={styles.page}>
+    <img src={art} alt="Register illustration" className={styles.art} />
+
     <div id="view-login" className={styles.container}>
       <h2 className={styles.title}>Login</h2>
       <p className={styles.description}>
@@ -78,7 +81,7 @@ export default function LoginView() {
         </div>
 
         <button type="submit" className={`btn-primary ${styles.formButton}`}>
-         Log In
+         LOGIN
         </button>
         <p className={styles.registerText}>
           New? <Link to="/register"> Register here!</Link>
@@ -86,5 +89,7 @@ export default function LoginView() {
       </form>
 
     </div>
+    </div>
+
   );
 }

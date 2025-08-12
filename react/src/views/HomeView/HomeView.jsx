@@ -9,16 +9,9 @@ export default function HomeView() {
   return (
     <div className={styles.homeContainer}>
       <header className={styles.header}>
-        <div className={styles.logo}>
-          <img src= "/css/movielogo.jpg" />
-        </div>
+        <nav className={styles.nav}></nav>
+        <a href="/browseMovies" className={styles.navLink}>Browse Movie</a>
       
-        <nav className={styles.nav}>
-          <a href="#" className={`${styles.navLink} ${styles.active}`}>Home</a>
-          <a href="/BrowseMovie" className={styles.browseBtn}>Browse Movie</a>
-          <a href= "/login" className={styles.loginBtn}>Login</a>
-          <a href= "/register" className={styles.signupBtn}>Sign up</a>
-        </nav>
 
       </header>
 

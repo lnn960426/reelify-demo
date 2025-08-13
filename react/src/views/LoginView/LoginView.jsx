@@ -84,9 +84,7 @@ export default function LoginView() {
         <button type="submit" className={`btn-primary ${styles.formButton}`}>
          LOGIN
         </button>
-        <p className={styles.registerText}>
-          forgot password? <Link to="/forgotPassword"> Reset your password</Link>
-        </p>
+       
         <p className={styles.registerText}>
           New? <Link to="/register"> Register here!</Link>
         </p>

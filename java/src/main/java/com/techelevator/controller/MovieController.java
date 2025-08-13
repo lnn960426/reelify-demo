@@ -135,4 +135,10 @@ public class MovieController{
         }
     }
 
+    @PostMapping(path="favorite")
+    public void addFavoriteMovie(Principal principal, int movieId){
+        User targetUser= userDao.getUserByUsername(principal.getName());
+        favoriteDao.addFavoriteMovie(targetUser.getId(), movieId);
+    }
+
 }

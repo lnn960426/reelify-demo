@@ -1,20 +1,30 @@
-import { mockMovies } from "./mockMovies";
-import { useState } from "react";
+import MovieService from "../../services/MovieService";
+import { useState, useEffect } from "react";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import styles from "./BrowseMovies.module.css";
+import { UserContext } from "../../context/UserContext"
 export default function BrowseMovies() {
     
-    const movies = mockMovies.results; //change backend data here
+    const [movies, setMovies] = useState([]);
+    const [isLoading,setLoading] = useState(true);
 
-    function handleFavorite(movie){
-        //TODO:  FAVORITES (POST/DELETE)
-        console.log("favorite", movie_id);
+    useEffect(() => {
+        MovieService.getRandomMoviesByUserGenres()
+            .then(response => {
+                setMovies(response.data)
+            })
+            .catch(error => {
+                console.log("Error Fetching Movies: ", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
+
+    if(isLoading) {
+       return <p>Loading........</p>
     }
 
-    function handleVote(movie,vote){
-        //TODO:  RATING
-        console.log("vote", movie_id, vote);
-    }
 
     return (
         <div id="browse-movie" className={styles.wrapper}>
@@ -22,12 +32,10 @@ export default function BrowseMovies() {
                   <h2 className={styles.title}>Movie Recommendation Just For You</h2>
 
             <div className={styles.movieGrid}>
-                {mockMovies.results.map(movie => (    //change backend data here
+                {movies.map(movie => (   
                     <MovieCard 
                     key={movie.id} 
                     movie={movie}
-                    onFavorite={handleFavorite}
-                    onVote={handleVote}
                      />
                 ))}
             </div>

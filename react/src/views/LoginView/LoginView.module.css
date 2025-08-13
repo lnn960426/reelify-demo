@@ -62,8 +62,9 @@ input{
     font-size: 1rem;
     padding:1rem;
     margin-top: 10px;
-    border-radius: 12px;
+    border-radius: 999px;
     background-color: #2f27ce;
+    border-style: none;
     width: 100%;
     color: white;
     font-weight: bold;

@@ -62,7 +62,7 @@ main {
 .app-logo {
     height: 3.5rem;
     margin-right: 1rem;
-    margin-left: 5rem;
+    margin-left: 2rem;
     margin-top: 2rem;
 }
 
@@ -104,7 +104,7 @@ main {
     padding: 0.5rem 1rem;
     text-decoration: none;
     font-size: 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 999px;
 
 }
 
@@ -117,14 +117,14 @@ main {
 a.active {
     background-color:#2f27ce;
     color: rgb(255, 255, 255);
-    border-radius: 0.5rem;
+    border-radius: 999px;
 }
 
 .login-cta{
     background: #2f27ce;
     color:#fff !important;
     padding: 8px 14px;
-    border-radius: 12px;
+    border-radius: 999px;
 }
 
 .login-cta:hover{

@@ -28,7 +28,9 @@ export default function LoginView() {
 
         // Add the login data to local storage
         localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        localStorage.setItem('authToken', token);
+
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         // Use the provided setter to add user to context
         setUser(user);

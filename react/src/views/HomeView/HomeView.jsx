@@ -8,10 +8,7 @@ export default function HomeView() {
   const { user } = useContext(UserContext);
   return (
     <div className={styles.homeContainer}>
-      <header className={styles.header}>
-        <nav className={styles.nav}></nav>
-        <a href="/browseMovies" className={styles.navLink}>Browse Movie</a>
-      
+      <header className={styles.header}>      
 
       </header>
 
@@ -22,7 +19,7 @@ export default function HomeView() {
             Your Movies
           </h1>
           <p className={styles.displaySubtitle}>
-            Smart suggestions, based on what you already enjoy
+            Smart suggestions, based on what you already enjoy!
           </p>
         </section>
         </main>
@@ -31,10 +28,13 @@ export default function HomeView() {
             <div className={styles.featureIcon}>
             <img src="/css/recommendation image.png"></img>
             </div>
+            <div className={styles.featureContent}>
+
             <h3 className={styles.featureTitle}>Recommendations</h3>
             <p className={styles.featureDescription}>
               Get movie suggestions based on your favorite genres
             </p>
+          </div>
           </div>
 
           <div id= "featureCard2" className={styles.featureCard}>
@@ -42,23 +42,53 @@ export default function HomeView() {
             <img src="/css/profile icon.png"/>
 
             </div>
+            <div className={styles.featureContent}>
+
             <h3 className={styles.featureTitle}>Profiles</h3>
             <p className={styles.featureDescription}>
               Create an account to save your preferences and favorites
             </p>
+          </div>
           </div>
 
           <div id= "featureCard3" className={styles.featureCard}>
             <div className={styles.featureIcon}>
               <img src="/css/browse movie icon.jpg" />
             </div>
+            <div className={styles.featureContent}>
             <h3 className={styles.featureTitle}>Browse Movies</h3>
             <p className={styles.featureDescription}>
               View films that match your taste
             </p>
           </div>
+          </div>
+          </section>
+        <section className={styles.recommendationsSection}>
+        <h3
+                className={styles.recommendationsTitle}>Recent Added Recommendation
+              </h3> 
+              <div className={styles.movieGrid}></div>
+
+  
         </section>
+        <section className={styles.ctaSection}>
+          <div className={styles.ctaOverlay}>
+            <div className={styles.ctaContent}>
+              <h4 className={styles.ctaTitle}>Start Watching Smarter</h4>
+              <p className={styles.ctaSubtitle}>
+                Explore great movies, save your favorites, and get smart suggestions based on your taste.
+              </p>
+              <a href="/register" className={styles.registerBtn}>Register Now
+    
+              </a>
+            </div>
+          </div>
+          
+        </section>
+        
+
       </div>
+
   );
 };
 

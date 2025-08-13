@@ -3,19 +3,15 @@
     padding: 20px;
     margin: 0 auto;
     background-color: aliceblue;
-    height: 500vh; 
-    background-image: url("/css/logoback.jpg");
+    height: 200vh; 
   }
 
   .logo img {
     border: 2px solid #333;
     border-radius: 50%;
-    border-style:outset;
-    display: grid;
-    justify-content:right;
-    margin: 0 auto 25px auto;
-    width: 120px;
-    height: 120px;
+    display: flex;
+    justify-content:left;
+    margin: 0 auto 25px 0;
 
   }
   
@@ -23,113 +19,170 @@
   .header {
     display: flex;
     justify-content: space-between;
-    align-items:start;
-    margin-bottom: 40px;
-    padding: 0 20px;
-    text-size-adjust: 18px;
+    margin-bottom: 20px;
+    padding: 20px 40px;
     
   }
 
-  .mainContent {
-    background-color: rgb(237, 106, 124);
+  .mainContent{
     display: flex;
     flex-direction: column;
-   text-align: center;
-    border-style: inset;
-    border-color: red;
-    gap: 50px;
-    height: 10%;
-    background-image: url("/main img.avif"); 
-    
+    color: white;    
+    padding: 100px 100px;
+    margin: 0 0;
+    max-width: 95%;
+    min-height: 800px;
+    background-image: url("/css/Landing Page image.jpg"); 
+    border-radius: 1.5%;
+    background-repeat: no-repeat ;
+    background-size: cover;
   }
-  .displaySection {
-    color:aliceblue;
 
-    border: 2px solid #333;
+  .displaySection{
+    align-items: right;
+    justify-content: right;
+    border-radius: 20px;
+    margin: 250px 100px;
+    margin-bottom: 0;
     
-    padding: 40px 100px;
-    text-align: center;
-    max-width: 80%;
-    max-height: 16%;  
-  
   }
 
   .displayTitle {
-    font-size: 5.0 rem;
+    font-size: 7rem;
     font-weight: bold;
-    margin: 0px 0 15px 0;
-    line-height: 1.0;
-    color:rgb(47, 39, 206);
-    animation: forwards;
+    line-height: 1.2;
+    color:white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+  
   }
   
   .displaySubtitle {
-    font-size: 1.1rem;
-    color:rgb(47, 39, 206);
-    margin: 0;
-    font-weight: 400;
-    animation:alternate-reverse
+    font-size: 3.5rem;
+    color: white;
+    font-weight: 400px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-top: 20px;
+
+
   }
   
   .featuresSection {
     display: grid;
-    justify-content: center;
-    align-items:center;
-    margin-bottom: 40px;
-    padding: 0 20px;
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    text-align: center;
+    align-content: center;
+    margin-bottom: 100px;
+    padding: 0 40px;
+    max-height: 80%;
   }
+
+
   .featureIcon{
-    display: flex;
-    justify-content:space-between;
-    margin: 0 auto 25px auto;
-    width: 50px;
-    height: 50px;
-    border: 2px solid #333;
-    border-radius: 50%;
-    align-items: center;
-    overflow: hidden;
-  }
-  .featureDescription{
-    color:rgb(248, 244, 245);
-    font-size: 1.5rem;
-    border-style:inset;
-  }
-  
-  .featureIcon img {
+   
+    margin: 80px auto 20px auto;
+    width: 100px;
+    height: 100px;
+    border: 4px solid #333;
+    border-radius: 15px;
+    
+  } 
+   .featureIcon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+  } 
+   .featureTitle{
+    font-size: 3rem;
+    color: rgb(47, 39, 206);
+    font-weight: bold;
   }
 
-  .featureTitle{
-    font-size: 2rem;
-    color: rgb(246, 248, 248);
-    border-style: inset;
+  .featureDescription{
+    color: black;
+    font-size: 1.8rem;
   }
 
-  .nav {
-    display: grid;
-    align-content: space-between;
-    gap: 10px;
-    font-size: 0.7rem;
-  }
+  /*recentRecommendation*/
+  .recommendationsSection{
+    padding: 0 40px;
 
-  .navLink:hover,
-.navLink.active {
-  color: #007bff;
+  }
+  .recommendationsTitle{
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 50px 0 50px 5px;
+    color:#100909;
+    text-align: left;
+    }
+
+  
+ /*ctaSection*/
+
+ 
+
+.ctaSection{
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 100px 10px 100px 10px;
+  border-radius: 25px;
+  background-image: url("/css/Registersection.jpg");
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+
 }
 
+.ctaOverlay {
+  background: rgba(0,0,0,0.3);
+  width: 100%;
+  height: 500%;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  border-radius: 20px;
+}
 
-.browseBtn {
-  padding: 8px 16px;
-  border: 2px solid #333;
-  color: rgb(20, 198, 221);
+.ctaContent {
+  text-align: left;
+  color: white;
+  max-width: 600px;
+  max-height: 300px;
+  padding: 40px;
+}
+
+.ctaTitle {
+  font-size: 3.0rem;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.ctaSubtitle {
+  font-size: 1.8rem;
+  margin: 0 0 50px 0;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.registerBtn {
+  background: white;
+  color: #333;
+  padding: 15px 20px;
+  border-radius: 25px;
+  font-size: 1.5rem;
+  font-weight: bold;
   cursor: pointer;
-  font-weight: 500;
-  border-radius: 4px;
   transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: 18rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+
+.registerBtn:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
 

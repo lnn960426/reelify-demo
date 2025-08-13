@@ -52,5 +52,8 @@ CREATE TABLE users_movie (
 	FOREIGN KEY (movie_id) REFERENCES movie (movie_id)
 );
 
+ALTER TABLE users_movie
+DROP CONSTRAINT users_movie_movie_id_fkey;
+
 
 COMMIT TRANSACTION;

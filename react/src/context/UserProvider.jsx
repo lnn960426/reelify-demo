@@ -7,7 +7,7 @@ export default function UserProvider({ children }) {
 
   function getUserAndTokenFromStorage() {
     const user = JSON.parse(localStorage.getItem('user'));
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
 
     if (user && token) {
       // Set the token in the axios default headers

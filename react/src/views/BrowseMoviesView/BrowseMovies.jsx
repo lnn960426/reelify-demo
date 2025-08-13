@@ -6,16 +6,7 @@ import { UserContext } from "../../context/UserContext"
 export default function BrowseMovies() {
     
     const [movies, setMovies] = useState([]);
-
-    function handleFavorite(movie){
-        //TODO:  FAVORITES (POST/DELETE)
-        console.log("favorite", movie_id);
-    }
-
-    function handleVote(movie,vote){
-        //TODO:  RATING
-        console.log("vote", movie_id, vote);
-    }
+    const [isLoading,setLoading] = useState(true);
 
     useEffect(() => {
         MovieService.getRandomMoviesByUserGenres()
@@ -24,8 +15,16 @@ export default function BrowseMovies() {
             })
             .catch(error => {
                 console.log("Error Fetching Movies: ", error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }, []);
+
+    if(isLoading) {
+       return <p>Loading........</p>
+    }
+
 
     return (
         <div id="browse-movie" className={styles.wrapper}>
@@ -33,12 +32,10 @@ export default function BrowseMovies() {
                   <h2 className={styles.title}>Movie Recommendation Just For You</h2>
 
             <div className={styles.movieGrid}>
-                {movies.map(movie => (    //change backend data here
+                {movies.map(movie => (   
                     <MovieCard 
                     key={movie.id} 
                     movie={movie}
-                    onFavorite={handleFavorite}
-                    onVote={handleVote}
                      />
                 ))}
             </div>

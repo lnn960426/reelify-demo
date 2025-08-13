@@ -6,6 +6,7 @@ import Notification from '../../components/Notification/Notification';
 import art from "../../assets/register-art.svg";
 import styles from './RegisterView.module.css';
 import { faV } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 export default function RegisterView() {
   const navigate = useNavigate();
@@ -49,10 +50,13 @@ export default function RegisterView() {
           const { token, user} = res.data || {};
 
           // if on token will catch a error
-          if (!token) throw new Error ('Login succeeded but no token returned');
+          if (!token || !user) throw new Error ('Login succeeded but missing token/user');
 
           //put token in local storage
-          localStorage.setItem('authToken', res.data.token);
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('authToken', token);
+
+          axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
           //change the status of nav bar
           setUser(user);

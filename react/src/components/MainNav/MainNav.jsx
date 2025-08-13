@@ -19,10 +19,10 @@ export default function MainNav() {
       {!user && (
         <>
         <div className="nav-link">
-          <NavLink to="/register">Register</NavLink>
+          <NavLink to="/register" >Register</NavLink>
         </div>
         <div className="nav-link">
-          <NavLink to="/login">Login</NavLink>
+          <NavLink to="/login" >Login</NavLink>
         </div>
         </>
       )}

@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
+import java.sql.Types;
 import java.util.List;
 
 @Component
@@ -23,7 +24,7 @@ public class JdbcFavoriteDao implements FavoriteDao {
         return jdbcTemplate.queryForList(sql, Integer.class, userId);
     }
 
-    @Override
+   @Override
     public void addFavoriteMovie(int userId, int movieId){
 
         String setFavoriteSql = "INSERT INTO users_movie (movie_id, user_id, liked, favorited) " +
@@ -31,7 +32,7 @@ public class JdbcFavoriteDao implements FavoriteDao {
         String getLikeSettingSql = "SELECT liked FROM users_movie WHERE user_id=? AND movie_id=?;";
 
         try{
-            SqlRowSet liked = jdbcTemplate.queryForRowSet(getLikeSettingSql, userId, movieId);
+            int liked = jdbcTemplate.queryForObject(getLikeSettingSql, int.class, userId, movieId);
             jdbcTemplate.update(setFavoriteSql,
                     movieId,
                     userId,

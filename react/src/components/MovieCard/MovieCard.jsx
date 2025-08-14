@@ -18,7 +18,7 @@ export default function MovieCard({ movie }) {
         if (isFavorited) return;
         setIsFavorite(true);
 
-        MovieService.addFavoriteMovie(movie) //backend change here
+        MovieService.addFavoriteMovie(movie.id) //backend change here
             .then(() => {
                 console.log("Added to favorite");
             })

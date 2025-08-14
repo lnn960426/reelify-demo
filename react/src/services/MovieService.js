@@ -17,9 +17,8 @@ export default {
   },
 
   addFavoriteMovie(movieId){
-    axios.post('/user', {
-      movieId : movieId
-    })
-      
+    alert(movieId)
+    axios.post("/favorite", null,
+    {params: {movieId:movieId}})
   }
 }

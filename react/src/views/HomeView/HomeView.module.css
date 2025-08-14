@@ -1,188 +1,179 @@
-.homeContainer {
-    color: #100909;
-    padding: 20px;
-    margin: 0 auto;
-    background-color: aliceblue;
-    height: 200vh; 
-  }
-
-  .logo img {
-    border: 2px solid #333;
-    border-radius: 50%;
-    display: flex;
-    justify-content:left;
-    margin: 0 auto 25px 0;
-
-  }
-  
-  /* Header Styles */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 20px 40px;
-    
-  }
-
-  .mainContent{
-    display: flex;
-    flex-direction: column;
-    color: white;    
-    padding: 100px 100px;
-    margin: 0 0;
-    max-width: 95%;
-    min-height: 800px;
-    background-image: url("/css/Landing Page image.jpg"); 
-    border-radius: 1.5%;
-    background-repeat: no-repeat ;
-    background-size: cover;
-  }
-
-  .displaySection{
-    align-items: right;
-    justify-content: right;
-    border-radius: 20px;
-    margin: 250px 100px;
-    margin-bottom: 0;
-    
-  }
-
-  .displayTitle {
-    font-size: 7rem;
-    font-weight: bold;
-    line-height: 1.2;
-    color:white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-
-  
-  }
-  
-  .displaySubtitle {
-    font-size: 3.5rem;
-    color: white;
-    font-weight: 400px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    margin-top: 20px;
-
-
-  }
-  
-  .featuresSection {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    text-align: center;
-    align-content: center;
-    margin-bottom: 100px;
-    padding: 0 40px;
-    max-height: 80%;
-  }
-
-
-  .featureIcon{
-   
-    margin: 80px auto 20px auto;
-    width: 100px;
-    height: 100px;
-    border: 4px solid #333;
-    border-radius: 15px;
-    
-  } 
-   .featureIcon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  } 
-   .featureTitle{
-    font-size: 3rem;
-    color: rgb(47, 39, 206);
-    font-weight: bold;
-  }
-
-  .featureDescription{
-    color: black;
-    font-size: 1.8rem;
-  }
-
-  /*recentRecommendation*/
-  .recommendationsSection{
-    padding: 0 40px;
-
-  }
-  .recommendationsTitle{
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 50px 0 50px 5px;
-    color:#100909;
-    text-align: left;
-    }
-
-  
- /*ctaSection*/
-
- 
-
-.ctaSection{
-  min-height: 700px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 100px 10px 100px 10px;
-  border-radius: 25px;
-  background-image: url("/css/Registersection.jpg");
-  background-position: center;
-  background-repeat: no-repeat ;
+.hero {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background-image: url(/src/assets/LandingPageimage.jpg);
   background-size: cover;
+  background-position: center;
+  padding: 6rem 3rem;
+  height: 350px;
+  margin-top: 5rem;
+}
+
+.heroTitle,
+.heroSubtitle {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  margin-left: 3rem;
+
 
 }
 
-.ctaOverlay {
-  background: rgba(0,0,0,0.3);
+.heroTitle {
+  font-size: 5rem;
+  font-weight: bold;
+  line-height: 1. 1;
+  margin-top: 5rem;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  margin-top: 2rem;
+}
+
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin: 3rem 0;
+  align-items: start;
+  justify-content: center;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.featureCard {
   width: 100%;
-  height: 500%;
+  max-width: 360px;
+  padding: 1.75rem, 1.5rem;
   display: flex;
-  align-items: left;
-  justify-content: left;
-  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
 }
+
+.featureIcon {
+  width: 3rem;
+  height: 3rem;
+  background-color: #edecff;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.featureContent {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.featureTitle {
+  font-size: 1.75rem;
+  color: #433bff;
+  margin-bottom: 0.5rem;
+}
+
+.featureDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+
+/*recentRecommendation*/
+.recommendationsSection {
+  margin: 3rem 0 0;
+}
+
+.recommendationsTitle {
+  font-size: 2.5rem;
+  margin: 0 0 1.5rem 0;
+  text-align: left;
+}
+
+
+/*ctaSection*/
+
+.cta {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background-image: url("/src/assets/Registersection.jpg");
+  background-size: cover;
+  background-position: center;
+  margin: 4rem 0;
+  height: 25rem;
+
+}
+
 
 .ctaContent {
   text-align: left;
   color: white;
   max-width: 600px;
-  max-height: 300px;
-  padding: 40px;
+  margin-left: 5rem;
+  margin-top: 6rem;
 }
 
 .ctaTitle {
-  font-size: 3.0rem;
+  font-size: 3rem;
   font-weight: bold;
   margin: 0 0 20px 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .ctaSubtitle {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   margin: 0 0 50px 0;
-  line-height: 1.6;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  line-height: 1.3;
 }
 
 .registerBtn {
-  background: white;
-  color: #333;
-  padding: 15px 20px;
-  border-radius: 25px;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  padding: 1rem;
+  margin-top: 10px;
+  border-radius: 999px;
+  background-color: #ffffff;
+  border-style: none;
+  width: 100%;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 0px;
 }
 
 .registerBtn:hover {
-  background: #f0f0f0;
+  background: #2f27ce;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
 
+
+.movieCard {
+  width: 100%;
+  grid-column: auto;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 25px;
+
+}
+
+.movieGrid{
+  display: grid;
+  grid-template-columns: repeat(5,16rem);
+  gap: 1.25rem;
+  justify-content: start;
+  justify-content: center;
+}

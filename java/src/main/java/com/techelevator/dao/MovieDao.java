@@ -13,4 +13,10 @@ public interface MovieDao {
     Integer getMovieLikeStatus(int userId, int movieId);
     
     void addNewMovie(Movie movie);
+
+    public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited);
+
+    public Integer getMovieFavoriteStatus(int userId, int movieId);
+
+    List<Integer> getFavoriteMovieIdsByUser(int userId);
 }

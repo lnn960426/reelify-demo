@@ -98,4 +98,40 @@ public class JdbcMovieDao implements MovieDao{
         movie.setVoteAverage(rs.getDouble("vote_average"));
         return movie;
     }
+
+    @Override
+    public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited){
+
+        String sql = "INSERT INTO users_movie (user_id, movie_id, favorited) " +
+                "VALUES (?, ?, ?) " +
+                "ON CONFLICT (user_id, movie_id) " +
+                "DO UPDATE SET favorited = EXCLUDED.favorited";
+
+        jdbcTemplate.update(sql, userId, movieId, favorited);
+    }
+
+    @Override
+    public Integer getMovieFavoriteStatus(int userId, int movieId) {
+        String sql = "SELECT favorited FROM users_movie WHERE user_id = ? AND movie_id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            if(rs.next()) {
+                return rs.getInt("favorited");
+            }
+            return null;
+        }, userId, movieId);
+    }
+
+    @Override
+    public List<Integer> getFavoriteMovieIdsByUser(int userId){
+        List<Integer> favorites = new ArrayList<>();
+
+        String sql = "SELECT movie_id FROM users_movie WHERE user_id = ? AND favorited = true";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        while (results.next()) {
+            favorites.add(results.getInt("movie_id"));
+        }
+
+        return favorites;
+    }
 }

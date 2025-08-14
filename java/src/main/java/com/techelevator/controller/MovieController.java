@@ -41,26 +41,25 @@ public class MovieController {
     private MovieDao movieDao;
     private FavoriteDao favoriteDao;
 
-    public MovieController(UserDao userDao, MovieDao movieDao, FavoriteDao favoriteDao){
+    public MovieController(UserDao userDao, MovieDao movieDao, FavoriteDao favoriteDao) {
         this.userDao = userDao;
         this.movieDao = movieDao;
         this.favoriteDao = favoriteDao;
     }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId){
+    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId) {
         //holding container for restClient return
         MovieDocs movieList = new MovieDocs();
         //reach out to external api for list of movies
 
-        try{
+        try {
             movieList = restClient.get()
                     .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}")
                     .header("Authorization", "Bearer " + API_KEY)
                     .retrieve()
                     .body(MovieDocs.class);
-        }
-        catch(DaoException e){
+        } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
@@ -68,19 +67,18 @@ public class MovieController {
     }
 
     @GetMapping(path = "discover/movie?with_genres={genreId}&page={pageNum}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId, int pageNum){
+    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId, int pageNum) {
         //holding container for restClient return
         MovieDocs movieList = new MovieDocs();
         //reach out to external api for list of movies
 
-        try{
+        try {
             movieList = restClient.get()
                     .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}&page={pageNum}")
                     .header("Authorization", "Bearer " + API_KEY)
                     .retrieve()
                     .body(MovieDocs.class);
-        }
-        catch(DaoException e){
+        } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
@@ -95,7 +93,7 @@ public class MovieController {
 
         List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(userId);
 
-        if(genreIdList.isEmpty()){
+        if (genreIdList.isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -112,7 +110,7 @@ public class MovieController {
                     .body(MovieDocs.class);
 
             int totalPages = Math.min(firstPageData.getTotalPages(), 500);
-            if (totalPages == 0){
+            if (totalPages == 0) {
                 return new ArrayList<>();
             }
 
@@ -144,7 +142,7 @@ public class MovieController {
     }
     
     @PutMapping("/movies/{movieId}/like")
-    public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status){
+    public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status) {
         User user = userDao.getUserByUsername(principal.getName());
         movieDao.setMovieLikeStatus(user.getId(), movieId, status);
     }
@@ -159,12 +157,55 @@ public class MovieController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "movie")
     public void createNewMovie(@RequestBody Movie newMovie) {
-        try{
+        try {
             movieDao.addNewMovie(newMovie);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create new movie", e);
         }
     }
 
+    @PutMapping("/movies/{movieId}/favorite")
+    public void setMovieFavoriteStatus(Principal principal, @PathVariable int movieId, @RequestParam boolean favorited) {
+        User user = userDao.getUserByUsername(principal.getName());
+        movieDao.setMovieFavoriteStatus(user.getId(), movieId, favorited);
     }
+
+    @GetMapping("/movies/{movieId}/favorite")
+    public Integer getMovieFavoriteStatus(Principal principal, @PathVariable int movieId) {
+        User user = userDao.getUserByUsername(principal.getName());
+        return movieDao.getMovieFavoriteStatus(user.getId(), movieId);
+    }
+
+    @GetMapping(path = "/favorites")
+    public List<Movie> getFavoriteMovies(Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        int userId = user.getId();
+
+        List<Integer> favoriteIds = movieDao.getFavoriteMovieIdsByUser(userId);
+
+        if (favoriteIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Movie> favoriteMovies = new ArrayList<>();
+
+        try {
+            for (Integer movieId : favoriteIds) {
+                String url = API_MOVIE_DATABASE + "/movie/" + movieId + "?api_key=" + API_KEY;
+
+                Movie movie = restClient.get()
+                        .uri(url)
+                        .retrieve()
+                        .body(Movie.class);
+
+                favoriteMovies.add(movie);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch favorites TMDB", e);
+        }
+
+        return favoriteMovies;
+    }
+}
+
+
 

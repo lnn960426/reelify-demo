@@ -66,6 +66,27 @@ public class JdbcMovieDao implements MovieDao{
             throw new DaoException("An error occurred updating database movie: ", e);
         }
     }
+    @Override
+    public void setMovieLikeStatus(int userId, int movieId, int status){
+
+        String sql = "INSERT INTO users_movie (user_id, movie_id, liked) " +
+                "VALUES (?, ?, ?) " +
+                "ON CONFLICT (user_id, movie_id) " +
+                "DO UPDATE SET liked = EXCLUDED.liked";
+
+        jdbcTemplate.update(sql, userId, movieId, status);
+    }
+
+    @Override
+    public Integer getMovieLikeStatus(int userId, int movieId) {
+        String sql = "SELECT liked FROM users_movie WHERE user_id = ? AND movie_id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            if(rs.next()) {
+                return rs.getInt("liked");
+            }
+            return null;
+        }, userId, movieId);
+    }
 
     private Movie mapRowToMovie(SqlRowSet rs){
         Movie movie = new Movie();

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
-public class MovieController{
+public class MovieController {
 
     @Value("${api-movie-database}")
     private String API_MOVIE_DATABASE;
@@ -146,5 +146,16 @@ public class MovieController{
         User user = userDao.getUserByUsername(principal.getName());
         return movieDao.getMovieLikeStatus(user.getId(), movieId);
     }
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "movie")
+    public void createNewMovie(@RequestBody Movie newMovie) {
+        try{
+            movieDao.addNewMovie(newMovie);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create new movie", e);
+        }
+    }
 
-}
+    }
+

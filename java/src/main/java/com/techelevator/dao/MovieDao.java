@@ -13,4 +13,6 @@ public interface MovieDao {
     void setMovieLikeStatus(int userId, int movieId, int status);
 
     Integer getMovieLikeStatus(int userId, int movieId);
+    
+    void addNewMovie(Movie movie);
 }

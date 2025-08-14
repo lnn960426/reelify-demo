@@ -10,6 +10,10 @@ export default {
     axios.put(`/movies/${movieId}/like`, null, {
       params: { status: status } 
     })
+  },
+  
+  createNewMovie(){
+    return axios.post("/movie")
   }
 
 }

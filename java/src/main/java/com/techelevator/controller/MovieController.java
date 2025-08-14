@@ -135,4 +135,16 @@ public class MovieController{
         }
     }
 
+    @PutMapping("/movies/{movieId}/like")
+    public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status){
+        User user = userDao.getUserByUsername(principal.getName());
+        movieDao.setMovieLikeStatus(user.getId(), movieId, status);
+    }
+
+    @GetMapping("/movies/{movieId}/like")
+    public Integer getMovieLikeStatus(Principal principal, @PathVariable int movieId) {
+        User user = userDao.getUserByUsername(principal.getName());
+        return movieDao.getMovieLikeStatus(user.getId(), movieId);
+    }
+
 }

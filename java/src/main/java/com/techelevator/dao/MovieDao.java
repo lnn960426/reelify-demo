@@ -9,4 +9,8 @@ public interface MovieDao {
     List<Movie> getMoviesByUserLikedGenre(int userId);
 
     void addMovieByUserLikedGenre(Movie movie);
+
+    void setMovieLikeStatus(int userId, int movieId, int status);
+
+    Integer getMovieLikeStatus(int userId, int movieId);
 }

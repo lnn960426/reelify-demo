@@ -18,11 +18,11 @@ CREATE TABLE genre (
 );
 
 CREATE TABLE movie (
-    movie_id INT PRIMARY KEY,
+    movie_id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     overview TEXT,
     poster_path VARCHAR(100),
-    release_date DATE,
+    release_date VARCHAR (50),
     vote_average NUMERIC
 );
 

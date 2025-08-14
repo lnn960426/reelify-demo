@@ -141,6 +141,18 @@ public class MovieController{
         int userId = targetUser.getId();
         int movieId = movie.getMovieId();
         favoriteDao.addFavoriteMovie(userId, movieId);
+
+    }
+    
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "movie")
+    public void createNewMovie(@RequestBody Movie newMovie) {
+        try{
+            movieDao.addNewMovie(newMovie);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create new movie", e);
+        }
     }
 
 }

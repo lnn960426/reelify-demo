@@ -14,6 +14,16 @@ export default {
   
   createNewMovie(){
     return axios.post("/movie")
+  },
+
+  updateMovieFavoriteStatus(movieId, favorited) {
+    axios.put(`/movies/${movieId}/favorite`, null, {
+      params: { favorited: favorited } 
+    })
+  },
+
+  getFavorites() {
+    return axios.get("/favorites");
   }
 
 }

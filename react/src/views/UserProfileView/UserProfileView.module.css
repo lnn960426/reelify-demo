@@ -1,8 +1,10 @@
 .heroSection{
     background-image: url('../../assets/UserProfile.png');
+    background-color: #dedcff;
     background-size: cover;
     background-position: center;
-    height: 360px;
+    border-radius: 2rem;
+    height: 400px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -13,17 +15,46 @@
     color:black;
     margin-left: 2rem;
     padding: 1rem 1.5rem;
-
+    padding-right: 520px;
+    min-width: 0;
 }
 
-
 .subtitleProfile{
-    margin-top: 2rem;
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+}
+
+.genresHeader {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
 }
 
 .subtitleGenres{
-    margin-top: 4rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    
 }
+
+.editButton{
+    font-size: 0.9rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+}
+
+.editButton:hover{background: #f7f7ff;}
+
+.genreList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    }
 
 .subtitleFavorite{
     margin-top: 4rem;
@@ -36,17 +67,50 @@
     gap: 16px;
 }
 
-.genreList {
-display: flex;
-flex-wrap: wrap;
-gap: 0.5rem;
-margin-bottom: 1.5rem;
-}
 
 .genreChip {
-    background-color: #eee;
+    background-color: #ffffff;
     border-radius: 999px;
     padding: 0.4rem 0.8rem;
-    font-size: 0.85;
+    font-size: 0.85rem;
     font-weight: 500;
+}
+
+
+.remove {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #414141;
+    opacity: 0.7;
+}
+
+
+.editGenres {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.genreSelect {
+    height: 7rem;
+    border-radius: 10px;
+    border: 1px solid #cfc7ff;
+    padding: .5rem;
+}
+
+.helper .count{
+    color: #666; font-size: 0.9rem;
+}
+
+.addButton {
+    padding: .4rem .8rem;
+    border: 0;
+    border-radius: 999px;
+    background-color: #433bff;
+    color: white;
+    cursor: pointer;
 }

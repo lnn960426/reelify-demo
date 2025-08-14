@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./MovieCard.module.css";
 import MovieService from "../../services/MovieService";
 import likeIcon from "../../assets/Like.svg";

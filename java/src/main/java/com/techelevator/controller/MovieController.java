@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
 public class MovieController{
@@ -127,7 +127,6 @@ public class MovieController{
                     .retrieve()
                     .body(MovieDocs.class);
 
-
             return randomPageData.getResults();
 
         } catch (Exception e) {
@@ -136,9 +135,12 @@ public class MovieController{
     }
 
     @PostMapping(path="favorite")
-    public void addFavoriteMovie(Principal principal, int movieId){
+    public void addFavoriteMovie(Principal principal, @RequestParam Movie movie ){
+
         User targetUser= userDao.getUserByUsername(principal.getName());
-        favoriteDao.addFavoriteMovie(targetUser.getId(), movieId);
+        int userId = targetUser.getId();
+        int movieId = movie.getMovieId();
+        favoriteDao.addFavoriteMovie(userId, movieId);
     }
 
 }

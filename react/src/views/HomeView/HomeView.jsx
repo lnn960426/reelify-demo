@@ -9,7 +9,9 @@ export default function HomeView() {
   return (
     <div className={styles.homeContainer}>
       <header className={styles.header}>      
-
+      <a href="/addMovies" className={styles.AddMoviesBtn}>Add Movies
+    
+    </a>
       </header>
 
       <main className={styles.mainContent}>

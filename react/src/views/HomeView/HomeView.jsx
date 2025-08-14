@@ -9,7 +9,8 @@ export default function HomeView() {
   return (
     <div className={styles.homeContainer}>
       <header className={styles.header}>      
-      <a href="/addMovies" className={styles.AddMoviesBtn}>Add Movies
+      <a href="/admin/Add-Movies" className={styles.AddMoviesBtn}>Add Movies
+      <a href="/errorPage" className={styles.ErrorPage}>Error Page</a>
     
     </a>
       </header>

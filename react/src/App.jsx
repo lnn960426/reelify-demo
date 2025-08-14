@@ -4,11 +4,12 @@ import LoginView from './views/LoginView/LoginView';
 import LogoutView from './views/LogoutView';
 import RegisterView from './views/RegisterView/RegisterView';
 import UserProfileView from './views/UserProfileView/UserProfileView';
-import ErrorPageView from './views/ErrorPageView/ErrorPageView';
 import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import BrowseMovies from './views/BrowseMoviesView/BrowseMovies';
+import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies'; 
+
 
 export default function App() {
 
@@ -23,7 +24,6 @@ export default function App() {
               <Route path="/login" element={<LoginView />} />
               <Route path="/logout" element={<LogoutView />} />
               <Route path="/register" element={<RegisterView />} />
-              <Route path="/error" element={<ErrorPageView />} />
               <Route
                 path="/userProfile"
                 element={
@@ -31,6 +31,14 @@ export default function App() {
                     <UserProfileView />
                   </ProtectedRoute>
                 }
+              />
+              <Route 
+              path="/admin/add-movies"
+              element={
+                <ProtectedRoute>
+                  <AdminAddMovies />
+                </ProtectedRoute>
+              }
               />
             </Routes>
           </main>

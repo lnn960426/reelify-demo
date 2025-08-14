@@ -1,5 +1,5 @@
 import { useContext} from 'react';
-import styles from './ErrorPageView.module.css';
+import styles from './ErrorPage.module.css';
 import { UserContext } from '../../context/UserContext';
 
 export default function HomeView() {

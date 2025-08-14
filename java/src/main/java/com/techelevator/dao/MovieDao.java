@@ -8,5 +8,5 @@ public interface MovieDao {
 
     List<Movie> getMoviesByUserLikedGenre(int userId);
 
-    void addMovieByUserLikedGenre(Movie movie);
+    void addNewMovie(Movie movie);
 }

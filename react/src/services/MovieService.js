@@ -4,6 +4,10 @@ export default {
 
   getRandomMoviesByUserGenres() {
     return axios.get("/movies/random")
+  },
+
+  createNewMovie(){
+    return axios.post("/movie")
   }
 
 }

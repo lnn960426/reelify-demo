@@ -17,6 +17,18 @@ export default function AdminAddMovies() {
     const [isAdding, setIsAdding] = useState(false);
     const [message, setMessage] = useState("");
 
+    const [activeTab, setActiveTab] = useState("assign"); // "assign" or "create"
+    
+    // Form state for creating new movies
+    const [newMovie, setNewMovie] = useState({
+        title: "",
+        overview: "",
+        poster_path: "",
+        release_date: "",
+        vote_average: ""
+    });
+    const [isCreating, setIsCreating] = useState(false);
+
 
     const { user } = useContext(UserContext);
 
@@ -134,7 +146,7 @@ if (isUsersLoading) {
                                     </div>
                                 ))}
                             </div>
-                            
+
 
                             {movies.length === 0 && (
                                 <p className={styles.noMovies}>

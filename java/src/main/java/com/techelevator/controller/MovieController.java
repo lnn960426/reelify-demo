@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
-public class MovieController{
+public class MovieController {
 
     @Value("${api-movie-database}")
     private String API_MOVIE_DATABASE;
@@ -141,9 +141,20 @@ public class MovieController{
         int userId = targetUser.getId();
         int movieId = movie.getMovieId();
         favoriteDao.addFavoriteMovie(userId, movieId);
-
     }
     
+    @PutMapping("/movies/{movieId}/like")
+    public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status){
+        User user = userDao.getUserByUsername(principal.getName());
+        movieDao.setMovieLikeStatus(user.getId(), movieId, status);
+    }
+
+    @GetMapping("/movies/{movieId}/like")
+    public Integer getMovieLikeStatus(Principal principal, @PathVariable int movieId) {
+        User user = userDao.getUserByUsername(principal.getName());
+        return movieDao.getMovieLikeStatus(user.getId(), movieId);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "movie")
@@ -155,4 +166,5 @@ public class MovieController{
         }
     }
 
-}
+    }
+

@@ -18,7 +18,7 @@ export default function MovieCard({ movie }) {
         if (isFavorited) return;
         setIsFavorite(true);
 
-        MovieService.addFavorite(movie) //backend change here
+        MovieService.updateMovieFavoriteStatus(movie.id, true) 
             .then(() => {
                 console.log("Added to favorite");
             })
@@ -32,7 +32,7 @@ export default function MovieCard({ movie }) {
         if (!isFavorited) return;
         setIsFavorite(false);
 
-        MovieService.removeFavorite(movie.id) //backend change here
+        MovieService.updateMovieFavoriteStatus(movie.id, false) 
             .then(() => {
                 console.log("Remove from favorite");
             })

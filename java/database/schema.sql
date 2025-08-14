@@ -18,11 +18,11 @@ CREATE TABLE genre (
 );
 
 CREATE TABLE movie (
-    movie_id INT PRIMARY KEY,
+    movie_id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     overview TEXT,
     poster_path VARCHAR(100),
-    release_date DATE,
+    release_date VARCHAR (50),
     vote_average NUMERIC
 );
 
@@ -51,6 +51,9 @@ CREATE TABLE users_movie (
 	FOREIGN KEY (user_id) REFERENCES users (user_id),
 	FOREIGN KEY (movie_id) REFERENCES movie (movie_id)
 );
+
+ALTER TABLE users_movie
+DROP CONSTRAINT users_movie_movie_id_fkey;
 
 
 COMMIT TRANSACTION;

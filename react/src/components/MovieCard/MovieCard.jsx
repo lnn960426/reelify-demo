@@ -52,7 +52,16 @@ export default function MovieCard({ movie }) {
         }
         setIsVote(finalVote);
 
-        MovieService.setVote(movie.id, finalVote) //backend change here
+        const statusMap = {
+            like: 1,
+            meh: 0,
+            dislike: -1,
+            null: null
+        };
+
+        const statusValue = statusMap[finalVote] ?? null;
+
+        MovieService.updateMovieLikeStatus(movie.id, statusValue)
             .then(() => {
                 console.log("You vote: ", finalVote);
             })

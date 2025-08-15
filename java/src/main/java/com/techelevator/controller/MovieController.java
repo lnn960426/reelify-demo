@@ -47,42 +47,25 @@ public class MovieController {
         this.favoriteDao = favoriteDao;
     }
 
-    @GetMapping(path = "discover/movie?with_genres={genreId}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId) {
+    @GetMapping(path = "movies/movie?title={title}")
+    public List<Movie> getMovieByTitle(@PathVariable String title) {
+        //return list of movies from external api by title search
+
         //holding container for restClient return
-        MovieDocs movieList = new MovieDocs();
+        List<Movie> movieList = new ArrayList<>();
         //reach out to external api for list of movies
 
         try {
             movieList = restClient.get()
-                    .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}")
+                    .uri(API_MOVIE_DATABASE + "search/movie?query="+ title)
                     .header("Authorization", "Bearer " + API_KEY)
                     .retrieve()
-                    .body(MovieDocs.class);
+                    .body(ArrayList.class);
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
-        return movieList.getResults();
-    }
-
-    @GetMapping(path = "discover/movie?with_genres={genreId}&page={pageNum}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId, int pageNum) {
-        //holding container for restClient return
-        MovieDocs movieList = new MovieDocs();
-        //reach out to external api for list of movies
-
-        try {
-            movieList = restClient.get()
-                    .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}&page={pageNum}")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .retrieve()
-                    .body(MovieDocs.class);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-
-        return movieList.getResults();
+        return movieList;
     }
 
     @GetMapping(path = "movies/random")
@@ -132,14 +115,14 @@ public class MovieController {
         }
     }
 
-    @PostMapping(path="/favorite")
+/*    @PostMapping(path="/favorite")
     public void addFavoriteMovie(Principal principal, @RequestParam int movieId ){
 
         User targetUser= userDao.getUserByUsername(principal.getName());
         int userId = targetUser.getId();
         //int movieId = movie.getMovieId();
         favoriteDao.addFavoriteMovie(userId, movieId);
-    }
+    }*/
     
     @PutMapping("/movies/{movieId}/like")
     public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status) {
@@ -205,6 +188,22 @@ public class MovieController {
 
         return favoriteMovies;
     }
+
+    @GetMapping(path="/movies/{movieId}/totalLikes")
+    public int getNumberLikes(@PathVariable int movieId){
+         return movieDao.getNumberLikes(movieId);
+    }
+
+    @GetMapping(path="/movies/{movieId}/totalDislikes")
+    public int getNumberDislikes(@PathVariable int movieId){
+        return movieDao.getNumberDislikes(movieId);
+    }
+
+    @GetMapping(path="/movies/{movieId}/totalIndifferents")
+    public int getNumberIndifferents(@PathVariable int movieId){
+        return movieDao.getNumberIndifferents(movieId);
+    }
+
 }
 
 

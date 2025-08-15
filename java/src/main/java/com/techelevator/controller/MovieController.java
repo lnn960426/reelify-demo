@@ -197,6 +197,12 @@ public class MovieController {
 
         return favoriteMovies;
     }
+
+    @GetMapping("/favorites/genres")
+    public List<Integer> getUserFavoriteGenres(Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        return favoriteDao.getFavoriteGenresByUserId(user.getId());
+    }
 }
 
 

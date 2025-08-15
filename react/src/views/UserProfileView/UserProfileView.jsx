@@ -15,6 +15,7 @@ export default function UserProfileView() {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [favoriteGenres, setFavoriteGenres] = useState([]);
   const [selectedToAdd, setSelectedToAdd] = useState([]);
+  const [interestMovies, setInterestMovies] = useState([])
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -110,7 +111,7 @@ if (isLoading) {
       <div className={styles.heroSection}>
         <div className={styles.textSection}>
           <h2>Welcome Back! {user.username}</h2>
-          <p> Ready to take a rest with some of your movies? </p>
+          <p> In the mood for your favorite movies? </p>
 
       <div className={styles.genresHeader}>
           <h3 className={styles.subtitleGenres}> My Favorite Genres </h3>
@@ -119,7 +120,7 @@ if (isLoading) {
           className={styles.editButton}
           onClick={() => setIsEditing((prevEditing) => !prevEditing)}
           >
-            {isEditing ? "Done" : "Edit"}
+            {isEditing ? "Update" : "Add"}
           </button>
           </div>
 
@@ -170,6 +171,7 @@ if (isLoading) {
           )}
         </div>
       </div>
+          
 
       <h3 className={styles.subtitleFavorite}>Favorite Movie</h3>
       <div className={styles.grid}>
@@ -182,11 +184,12 @@ if (isLoading) {
               movie={movie}
               onUnfavorite={removeMovieFromList}
             />
-
           ))
         )}
       </div>
-    </div>
+
+      </div>
+ 
 
   );
 }

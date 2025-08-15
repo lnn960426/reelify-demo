@@ -20,4 +20,10 @@ public interface MovieDao {
     public Integer getMovieFavoriteStatus(int userId, int movieId);
 
     List<Integer> getFavoriteMovieIdsByUser(int userId);
+
+    public int getNumberIndifferents(int movieId);
+
+    public int getNumberDislikes(int movieId);
+
+    public int getNumberLikes(int movieId);
 }

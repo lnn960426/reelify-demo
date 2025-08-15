@@ -203,6 +203,19 @@ public class MovieController {
         User user = userDao.getUserByUsername(principal.getName());
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
     }
+
+    @GetMapping(path="/movies/{movieId}/totalLikes")
+    public int getNumberLikes(@PathVariable int movieId){
+        return movieDao.getNumberLikes(movieId);
+    }
+    @GetMapping(path="/movies/{movieId}/totalDislikes")
+    public int getNumberDislikes(@PathVariable int movieId){
+        return movieDao.getNumberDislikes(movieId);
+    }
+    @GetMapping(path="/movies/{movieId}/totalIndifferents")
+    public int getNumberIndifferents(@PathVariable int movieId){
+        return movieDao.getNumberIndifferents(movieId);
+    }
 }
 
 

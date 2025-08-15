@@ -47,25 +47,23 @@ public class MovieController {
         this.favoriteDao = favoriteDao;
     }
 
-    @GetMapping(path = "movies/movie?title={title}")
-    public List<Movie> getMovieByTitle(@PathVariable String title) {
-        //return list of movies from external api by title search
-
-        //holding container for restClient return
-        List<Movie> movieList = new ArrayList<>();
-        //reach out to external api for list of movies
+    @GetMapping(path = "movies/search?title={title}")
+    public List<Movie> getMoviesByTitle(@PathVariable String title) {
 
         try {
-            movieList = restClient.get()
-                    .uri(API_MOVIE_DATABASE + "search/movie?query="+ title)
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .retrieve()
-                    .body(ArrayList.class);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
 
-        return movieList;
+            String searchFor = API_MOVIE_DATABASE + "/search/movie?query={title}&api_key=" + API_KEY;
+
+            MovieDocs found = restClient.get()
+                    .uri(searchFor)
+                    .retrieve()
+                    .body(MovieDocs.class);
+
+            return found.getResults();
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch movies from TMDB", e);
+        }
     }
 
     @GetMapping(path = "movies/random")

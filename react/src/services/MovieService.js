@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
 
   getMovieByTitleSearch(title){
-    return axios.get(`/movies/movie?title=${title}`, null,
+    return axios.get(`/movies/search/${title}`, null,
     {params: { title: title}})
   },
 
@@ -47,7 +47,8 @@ export default {
     return axios.get(`/movies/${movieId}/totalIndifferents`, null, {
       params: {movieId : movieId}
     })
-  }
+  },
+
   getFavoriteGenres() {
     return axios.get("/favorites/genres");
 }

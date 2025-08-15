@@ -16,6 +16,7 @@ export default function UserProfileView() {
   const [favoriteGenres, setFavoriteGenres] = useState([]);
   const [selectedToAdd, setSelectedToAdd] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const GENRE_MAP = {
     28: "Action",
@@ -46,9 +47,11 @@ export default function UserProfileView() {
     MovieService.getFavorites()
     .then((response) => {
       setFavoriteMovies(response.data); 
+      setIsLoading(false);
     })
     .catch((error) => {
       console.error("Error fetching favorites:", error);
+      setIsLoading(false);
     });
 
 
@@ -61,6 +64,10 @@ export default function UserProfileView() {
     console.error("Error fetching favorite genres:", error);
   });
 }, []);
+
+if (isLoading) {
+  return <p>Loading........</p>;
+}
 
   function removeMovieFromList(movieId, revert = false) {
     if (revert) {

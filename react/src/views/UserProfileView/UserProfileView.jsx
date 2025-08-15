@@ -17,24 +17,61 @@ export default function UserProfileView() {
   const [selectedToAdd, setSelectedToAdd] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
+  const GENRE_MAP = {
+    28: "Action",
+    12: "Adventure",
+    16: "Animation",
+    35: "Comedy",
+    80: "Crime",
+    99: "Documentary",
+    18: "Drama",
+    10751: "Family",
+    14: "Fantasy",
+    36: "History",
+    27: "Horror",
+    10402: "Music",
+    9648: "Mystery",
+    10749: "Romance",
+    878: "Science Fiction",
+    10770: "TV Movie",
+    53: "Thriller",
+    10752: "War",
+    37: "Western"
+  };
+
 
 
   //loading favorite movie & genre
   useEffect(() => {
-    setFavoriteMovies(mockMovies.results); //backend change here
-    setFavoriteGenres(["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama",
-      "Family", "Fantasy", "History", "Horror"]); //backend change here
-  }, []);
+    MovieService.getFavorites()
+    .then((response) => {
+      setFavoriteMovies(response.data); 
+    })
+    .catch((error) => {
+      console.error("Error fetching favorites:", error);
+    });
 
-  function removeMovieFromList(movieId) {
 
-    // TODO: BACKEND
-    setFavoriteMovies((currentFavoriteMovies) =>
-      currentFavoriteMovies.filter(
-        (movieItem) => movieItem.id !== movieId
-      )
-    );
-  }
+    MovieService.getFavoriteGenres()
+  .then((response) => {
+    const genreNames = response.data.map(id => GENRE_MAP[id]).filter(Boolean);
+    setFavoriteGenres(genreNames);
+  })
+  .catch((error) => {
+    console.error("Error fetching favorite genres:", error);
+  });
+}, []);
+
+  function removeMovieFromList(movieId, revert = false) {
+    if (revert) {
+        MovieService.getFavorites().then((response) => {
+            setFavoriteMovies(response.data);
+        });
+        return;
+    }
+
+    setFavoriteMovies((prev) => prev.filter((m) => m.id !== movieId));
+}
 
   function handleRemoveGenre(genre) {
 

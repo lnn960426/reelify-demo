@@ -22,7 +22,7 @@ export default {
   },
 
   updateMovieFavoriteStatus(movieId, favorited) {
-    axios.put(`/movies/${movieId}/favorite`, null, {
+    return axios.put(`/movies/${movieId}/favorite`, null, {
       params: { favorited: favorited } 
     })
   },
@@ -48,5 +48,8 @@ export default {
       params: {movieId : movieId}
     })
   }
+  getFavoriteGenres() {
+    return axios.get("/favorites/genres");
+}
 
 }

@@ -1,10 +1,12 @@
 package com.techelevator.dao;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import com.techelevator.exception.DaoException;
+import com.techelevator.model.GenreDto;
 import com.techelevator.model.RegisterUserDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -14,11 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.model.User;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 public class JdbcUserDao implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
+
+
 
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -110,6 +115,78 @@ public class JdbcUserDao implements UserDao {
             throw new DaoException("Data integrity violation", e);
         }
         return newUser;
+    }
+
+    public void addGenre(User user, GenreDto genres, List<Integer> genreIdList){
+        String getGenreIdsSql = "SELECT genre_id FROM genre WHERE name ILIKE ?;";
+        List<Integer> genreIds = new ArrayList<>();
+        List<String> genreNames = genres.getGenres();
+
+        try{
+            for(String genre : genreNames){
+                int genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
+                genreIds.add(genreId);
+            }
+
+            for(Integer id : genreIdList){
+                if(!genreIds.contains(id)){
+                    genreIds.add(id);
+                }
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        List<Integer> addIds = new ArrayList<>();
+        String insertUserGenreSql = "INSERT INTO users_genre(user_id, genre_id) VALUES (?,?);";
+
+        try{
+            for(Integer id : genreIds){
+                if(!genreIdList.contains(id)){
+                    addIds.add(id);
+                }
+            }
+
+            for(Integer id : addIds){
+                jdbcTemplate.update(insertUserGenreSql, user.getId(), id);
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+    }
+
+    public void deleteGenre(User user, GenreDto genres, List<Integer> genreIdList){
+        String getGenreIdsSql = "SELECT genre_id FROM genre WHERE name ILIKE ?;";
+        List<Integer> genreIds = new ArrayList<>();
+        List<String> genreNames = genres.getGenres();
+
+        try {
+            for (String genre : genreNames) {
+                int genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
+                genreIds.add(genreId);
+            }
+
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        String deleteGenreSql = "DELETE FROM users_genre WHERE user_id = ? AND genre_id = ?;";
+        try{
+            for(Integer id : genreIds){
+                if(genreIdList.contains(id)){
+                    jdbcTemplate.update(deleteGenreSql, user.getId(), id);
+                }
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
     }
 
         private User mapRowToUser (SqlRowSet rs){

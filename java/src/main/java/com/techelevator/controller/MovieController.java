@@ -204,6 +204,11 @@ public class MovieController {
         return movieDao.getNumberIndifferents(movieId);
     }
 
+    @GetMapping("/favorites/genres")
+    public List<Integer> getUserFavoriteGenres(Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        return favoriteDao.getFavoriteGenresByUserId(user.getId());
+    }
 }
 
 

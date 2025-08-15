@@ -47,7 +47,7 @@ export default function HomeView() {
           <div className={styles.featureContent}>
             <h3 className={styles.featureTitle}>Recommendations</h3>
             <p className={styles.featureDescription}>
-            Personalized picks curated from your genres and ratings—refreshed to match your mood
+            Manually curated picks — regularly updated with fresh finds we love, alongside top-rated movies from around the web
             </p>
           </div>
         </article>
@@ -60,7 +60,7 @@ export default function HomeView() {
           <div className={styles.featureContent}>
             <h3 className={styles.featureTitle}>Profiles</h3>
             <p className={styles.featureDescription}>
-            Save favorites and let your profile power smarter suggestions over time
+            View your favorite movies and add your go-to genres — watch your profile power smarter, more personal suggestions over time
             </p>
           </div>
         </article>
@@ -72,7 +72,7 @@ export default function HomeView() {
           <div className={styles.featureContent}>
             <h3 className={styles.featureTitle}>Browse Movies</h3>
             <p className={styles.featureDescription}>
-            Search by genre, mood, year, or rating to quickly land on the perfect film
+            Get random movie recommendations tailored to your favorite genres — discover your next favorite film in seconds
             </p>
           </div>
         </article>

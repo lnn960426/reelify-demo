@@ -15,17 +15,21 @@ export default {
   },
   
   
-  createNewMovie(){
-    return axios.post("/movie")
+  createNewMovie(movieData){
+    return axios.post("/movie", movieData);
+    headers: { Authorization: `Bearer ${token}` }
   },
 
 
-getAllUsers(){
-  return axios.get("admin/users");
-},
+  updateMovieFavoriteStatus(movieId, favorited) {
+    axios.put(`/movies/${movieId}/favorite`, null, {
+      params: { favorited: favorited } 
+    })
+  },
+
+  getFavorites() {
+    return axios.get("/favorites");
+  }
 
 
-createNewMovie(movieData) {
-  return axios.post("/admin/movie", movieData);
-},
 }

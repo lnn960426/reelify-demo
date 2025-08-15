@@ -9,6 +9,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import BrowseMovies from './views/BrowseMoviesView/BrowseMovies';
 import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies'; 
+import AdminAddMovies from './views/AdminAddMovies/AdminAccountMng'; 
+
 
 
 export default function App() {
@@ -41,6 +43,14 @@ export default function App() {
               }
               />
             </Routes>
+            <Route 
+              path="/admin/account-mng"
+              element={
+                <ProtectedRoute>
+                  <AdminAddMovies />
+                </ProtectedRoute>
+              }
+              />
           </main>
       </div>
       <Footer />

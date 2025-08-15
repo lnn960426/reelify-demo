@@ -19,4 +19,14 @@ export default {
     return axios.get(`/users/${userId}`);
   },
 
+
+
+getAllUsers() {
+  return axios.get('/users');
+},
+
+// Delete a user by ID (admin only)
+deleteUser(userId) {
+  return axios.delete(`/users/${userId}`);
+},
 }

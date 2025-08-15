@@ -1,161 +1,167 @@
 import MovieService from "../../services/MovieService";
-import { useState, useEffect, useContext } from "react";
-import MovieCard from "../../components/MovieCard/MovieCard";
+import { useState } from "react";
 import styles from "./AdminAddMovies.module.css";
-import { UserContext } from "../../context/UserContext";
-
-
 
 export default function AdminAddMovies() {
-    
-    const [movies, setMovies] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState("");
-    const [isLoading, setLoading] = useState(true);
-    const [isUsersLoading, setUsersLoading] = useState(true);
-    const [selectedMovies, setSelectedMovies] = useState(new Set());
-    const [isAdding, setIsAdding] = useState(false);
-    const [message, setMessage] = useState("");
-
-    const [activeTab, setActiveTab] = useState("assign"); // "assign" or "create"
-    
-    // Form state for creating new movies
-    const [newMovie, setNewMovie] = useState({
-        title: "",
-        overview: "",
-        poster_path: "",
-        release_date: "",
-        vote_average: ""
-    });
-    const [isCreating, setIsCreating] = useState(false);
-
-
-    const { user } = useContext(UserContext);
-
-    //fetching all users
-    useEffect(()=>{
-        MovieService.getAllUsers()
-        .then(response=>{
-            setUsers(response.data);
-        })
-        .finally(()=>{
-            setUsersLoading(false);
+  
+        const [formData, setFormData] = useState({
+          title: "",
+          overview: "",
+          posterPath: "",
+          releaseDate: "",
+          voteAverage: ""
         });
-    }, []);
+      
+        const [message, setMessage] = useState({ type: "", text: "" });
+      
+        //updates changed fields
+        const handleInputChange = (e) => {
+          const { name, value } = e.target;
+          setFormData((prev) => ({
+            ...prev,
+            [name]: value
+          }));
+        };
+      
+        const handleSubmit = async (e) => {
+          e.preventDefault(); //prevent page refresh when submitting, will refresh after 2 seconds
+      
+          try {
+            const movieData = {
+              title: formData.title.trim(),
+              overview: formData.overview.trim() || null,
+              poster_path: formData.posterPath.trim() || null,
+              release_date: formData.releaseDate || null,
+              vote_average: formData.voteAverage ? parseFloat(formData.voteAverage) : null,
 
-    //fetching all movies by user
-    useEffect(() => {
-        if (selectedUser) {
-            setLoading(true);
-            setMovies([]);
-
-            //get movies based on users selected genre
-        MovieService.getRandomMoviesByUserGenres(selectedUser)
-            .then(response => {
-                setMovies(response.data)
-                setSelectedMovies(new Set());
-            })
-            .catch(error => {
-                console.log("Error Fetching Movies: ", error);
-                setMessage("Error loading movies for selected user");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            };
+      //Calls service function to send the movie data to the backend.
+            await MovieService.createNewMovie(movieData);
+      
+            setMessage({ type: "success", text: "Movie added successfully!" });
+            setTimeout(()=>{
+            resetForm();
+                }, 2000); //wait 2 secs before refreshing
+      } catch (error) {
+        console.error('Error adding movie:', error);
+      
+      // Handle different error scenarios
+      if (error.response?.status === 400) {
+        setMessage({ type: 'error', text: 'Invalid movie data. Please check your inputs.' });
+      } else if (error.response?.status === 409) {
+        setMessage({ type: 'error', text: 'Movie already exists in the database.' });
+      } else {
+        setMessage({ type: 'error', text: 'Failed to add movie. Please try again.' });
+      }
     }
-}, [selectedUser]);
-
-
-    const handleAddMoviesToUser= async () => {
-        if (!selectedUser || selectedMovies.size === 0){
-            setMessage("Please select a user to add movies");
-            return;
-        }
-        setIsAdding(true);
-        setMessage("");
-        try {
-            await MovieService.addMoviesToUser(selectedUser, Array.from(selectedMovies));
-            setMessage("Movies added successfully!");
-            setSelectedMovies(new Set());
-        } catch (error) {
-            console.error("Error adding movies:", error);
-            setMessage("Failed to add movies");
-        } finally {
-            setIsAdding(false);
-        }
-    };
-
-if (isUsersLoading) {
-    return <p>Loading users...</p>;
-}
-
-
-
-    return (
-        //user list
-        <div id="admin-add-movies" className={styles.wrapper}>
-            
-                  <h2 className={styles.title}>Admin: Add Movies to User Site</h2>
-
-            <div className={styles.userSelection}>
-                <label htmlFor="user-select" className = {styles.label}>
-                    Select User:
-                    </label>
-                    <select
-                    id="user-select"
-                    value={selectedUser}
-                    onChange={(e) => setSelectedUser(e.target.value)}
-                    className={styles.userSelect}>
-                        <option value="" > -- Select a User --</option>
-                        {users.map(user => (
-                            <option key={user.id} value={user.id}>
-                                {user.name || user.username} 
-                            </option>
-                        ))}
-                    </select>
-                    </div>
-                        {/*movie list*/}
-
-                    {selectedUser && (
-                <>
-                    {isLoading ? (
-                        <p>Loading movies...</p>
-                    ) : (
-                        <>
-                        {/*movie selection controls*/}
-                        <div className={styles.controls}>
-                                <button
-                                    onClick={handleAddMoviesToUser}
-                                    className={styles.addBtn}
-                                    disabled={movies.length === 0 || isAdding}
-                                >
-                                    {isAdding
-                                        ? "Adding..."
-                                        : `Add All ${movies.length} Movies to User Site`}
-                                </button>
-                            </div>
-                    {/*movie cards*/}
-
-                    <div className={styles.movieGrid}>
-                                {movies.map(movie => (
-                                    <div
-                                        key={movie.id}
-                                        className={styles.movieCardWrapper}
-                                    >
-                                        <MovieCard movie={movie} />
-                                    </div>
-                                ))}
-                            </div>
-
-
-                            {movies.length === 0 && (
-                                <p className={styles.noMovies}>
-                                    No movies available for the selected user's genres.
-                                </p>
-                            )}
-                        </>
-                    )}
-                </>
-            )}
-        </div>
-    )};
+  };
+      
+        const resetForm = () => {
+          setFormData({
+            title: "",
+            overview: "",
+            posterPath: "",
+            releaseDate: "",
+            voteAverage: ""
+          });
+        };
+      
+        return (
+        
+          <div className="container">
+            <div className={styles.header}>
+              <h1>Movie Admin Panel</h1>
+              <p>Add a new movie to the database</p>
+        <Link to="/admin/users" className={styles.linkButton}>
+          Manage Users
+        </Link>
+      </div>
+        
+      
+            <div className={styles.formContainer}>
+              {message.text && (
+                <div className={`${styles.message} ${styles[message.type]}`}>
+                  {message.text}
+                </div>
+              )}
+      
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="title">Movie Title *</label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                  />
+                </div>
+      
+                <div className={styles.formGroup}>
+                  <label htmlFor="overview">Overview</label>
+                  <textarea
+                    id="overview"
+                    name="overview"
+                    value={formData.overview}
+                    onChange={handleInputChange}
+                  />
+                </div>
+      
+                <div className={styles.formGroup}>
+                  <label htmlFor="posterPath">Poster Path</label>
+                  <input
+                    type="text"
+                    id="posterPath"
+                    name="posterPath"
+                    value={formData.posterPath}
+                    onChange={handleInputChange}
+                  />
+                </div>
+      
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="releaseDate">Release Date</label>
+                    <input
+                      type="date"
+                      id="releaseDate"
+                      name="releaseDate"
+                      value={formData.releaseDate}
+                      onChange={handleInputChange}
+                    />
+                  
+                  </div>
+                  </div>
+      
+                  <div className={styles.formGroup}>
+                    <label htmlFor="voteAverage">Vote Average</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      id="voteAverage"
+                      name="voteAverage"
+                      value={formData.voteAverage}
+                      onChange={handleInputChange}
+                    
+                    />
+                  </div>
+                 
+                
+      
+                <div className={styles.btnContainer}>
+                  <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
+                    Add Movie
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.btn} ${styles.btnSecondary}`}
+                    onClick={resetForm}
+                  >
+                    Reset Form
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        );
+              };
+    

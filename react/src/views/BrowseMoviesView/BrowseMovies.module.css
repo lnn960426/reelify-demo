@@ -1,10 +1,16 @@
-
+.titleSection{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0;
+    width: 100%;
+}
 .movieGrid{
     display: grid;
     grid-template-columns: repeat(5,16rem);
     gap: 1.25rem;
     justify-content: start;
-    justify-content: center;
 }
 
 .wrapper {
@@ -18,3 +24,50 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
+
+.footerButton{
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0 3rem;
+    
+}
+
+@keyframes spin {
+    to {transform: rotate(360deg);}
+    
+}
+.icon {
+    width: 28px;
+    height: 28px;
+    display: block;
+    pointer-events: none;
+    transition: transform 80ms ease, filter 120ms ease, opacity 120ms ease;
+    transform-origin: center;
+
+}
+
+.refreshButton{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid;
+    font-size: 1rem;
+    font-weight: bold;
+    padding:1rem;
+    border-radius: 999px;
+    width: auto;
+    background-color: #e3e0ff;
+    color: #433bff;
+    transition: background-color 120ms ease, color 120ms ease;
+
+}
+
+.refreshButton:hover{
+    transform: translateY(-1px);
+}
+
+.refreshButton:hover .icon{
+    animation: spin 1000ms linear infinite;
+}
+

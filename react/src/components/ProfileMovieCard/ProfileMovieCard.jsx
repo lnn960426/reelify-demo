@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../MovieCard/MovieCard.module.css";
 import MovieService from "../../services/MovieService";
+import defaultPoster from "../../assets/movieDefaultPoster.jpg";
 
 
 export default function ProfileMovieCard({ movie, onUnfavorite }) {
@@ -27,8 +28,9 @@ export default function ProfileMovieCard({ movie, onUnfavorite }) {
             <div className={styles.movieCardImg}>
                 <img
                     className={styles.image}
-                    src={imageBase + movie.poster_path}
+                    src={movie.poster_path ? `${imageBase}${movie.poster_path}` :defaultPoster}
                     alt={movie.title}
+                    onError={(e) => e.target.src = defaultPoster}
                 />
             </div>
 

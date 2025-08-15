@@ -1,7 +1,9 @@
 package com.techelevator.controller;
 
+import com.techelevator.dao.FavoriteDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.exception.DaoException;
+import com.techelevator.model.GenreDto;
 import com.techelevator.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,9 +32,11 @@ import java.util.List;
 public class UserController {
 
     private UserDao userDao;
+    private FavoriteDao favoriteDao;
 
-    public UserController(UserDao userDao) {
+    public UserController(UserDao userDao, FavoriteDao favoriteDao) {
         this.userDao = userDao;
+        this.favoriteDao = favoriteDao;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -62,6 +66,29 @@ public class UserController {
         }
 
         return user;
+    }
+
+    @PostMapping(path = "/genre")
+    public void addGenre(@RequestBody GenreDto genres, Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(user.getId());
+        try{
+            userDao.addGenre(user, genres, genreIdList);
+        }catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @DeleteMapping(path = "/genre")
+    public void deleteGenre(@RequestBody GenreDto genres, Principal prinicipal){
+        User user = userDao.getUserByUsername(prinicipal.getName());
+        List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(user.getId());
+        try{
+            userDao.deleteGenre(user, genres, genreIdList);
+        }catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        
     }
 
 }

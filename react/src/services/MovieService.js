@@ -17,13 +17,17 @@ export default {
   },
 
   updateMovieFavoriteStatus(movieId, favorited) {
-    axios.put(`/movies/${movieId}/favorite`, null, {
+    return axios.put(`/movies/${movieId}/favorite`, null, {
       params: { favorited: favorited } 
     })
   },
 
   getFavorites() {
     return axios.get("/favorites");
-  }
+  },
+
+  getFavoriteGenres() {
+    return axios.get("/favorites/genres");
+}
 
 }

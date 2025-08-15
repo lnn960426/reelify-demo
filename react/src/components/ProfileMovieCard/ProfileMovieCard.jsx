@@ -10,14 +10,16 @@ export default function ProfileMovieCard({ movie, onUnfavorite }) {
 
     function handleUnfavorite() {
 
-        MovieService.removeFavorite(movie.id) //backend change here
-            .then(() => {
-                console.log("Remove from your favorite");
-                onUnfavorite && onUnfavorite(movie.id);
-            })
-            .catch((e) => {
-                console.error("Remove favorite from your list failed:", e);
-            });
+        onUnfavorite && onUnfavorite(movie.id);
+
+    MovieService.updateMovieFavoriteStatus(movie.id, false)
+        .then(() => {
+            console.log("Removed from favorites");
+        })
+        .catch((e) => {
+            console.error("Remove favorite failed:", e);
+            onUnfavorite && onUnfavorite(movie.id, true);
+        });
     }
 
 

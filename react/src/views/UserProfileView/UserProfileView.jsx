@@ -15,26 +15,71 @@ export default function UserProfileView() {
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [favoriteGenres, setFavoriteGenres] = useState([]);
   const [selectedToAdd, setSelectedToAdd] = useState([]);
+  const [interestMovies, setInterestMovies] = useState([])
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const GENRE_MAP = {
+    28: "Action",
+    12: "Adventure",
+    16: "Animation",
+    35: "Comedy",
+    80: "Crime",
+    99: "Documentary",
+    18: "Drama",
+    10751: "Family",
+    14: "Fantasy",
+    36: "History",
+    27: "Horror",
+    10402: "Music",
+    9648: "Mystery",
+    10749: "Romance",
+    878: "Science Fiction",
+    10770: "TV Movie",
+    53: "Thriller",
+    10752: "War",
+    37: "Western"
+  };
 
 
 
   //loading favorite movie & genre
   useEffect(() => {
-    setFavoriteMovies(mockMovies.results); //backend change here
-    setFavoriteGenres(["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama",
-      "Family", "Fantasy", "History", "Horror"]); //backend change here
-  }, []);
+    MovieService.getFavorites()
+    .then((response) => {
+      setFavoriteMovies(response.data); 
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching favorites:", error);
+      setIsLoading(false);
+    });
 
-  function removeMovieFromList(movieId) {
 
-    // TODO: BACKEND
-    setFavoriteMovies((currentFavoriteMovies) =>
-      currentFavoriteMovies.filter(
-        (movieItem) => movieItem.id !== movieId
-      )
-    );
-  }
+    MovieService.getFavoriteGenres()
+  .then((response) => {
+    const genreNames = response.data.map(id => GENRE_MAP[id]).filter(Boolean);
+    setFavoriteGenres(genreNames);
+  })
+  .catch((error) => {
+    console.error("Error fetching favorite genres:", error);
+  });
+}, []);
+
+if (isLoading) {
+  return <p>Loading........</p>;
+}
+
+  function removeMovieFromList(movieId, revert = false) {
+    if (revert) {
+        MovieService.getFavorites().then((response) => {
+            setFavoriteMovies(response.data);
+        });
+        return;
+    }
+
+    setFavoriteMovies((prev) => prev.filter((m) => m.id !== movieId));
+}
 
   function handleRemoveGenre(genre) {
 
@@ -66,7 +111,7 @@ export default function UserProfileView() {
       <div className={styles.heroSection}>
         <div className={styles.textSection}>
           <h2>Welcome Back! {user.username}</h2>
-          <p> Ready to take a rest with some of your movies? </p>
+          <p> In the mood for your favorite movies? </p>
 
       <div className={styles.genresHeader}>
           <h3 className={styles.subtitleGenres}> My Favorite Genres </h3>
@@ -75,7 +120,7 @@ export default function UserProfileView() {
           className={styles.editButton}
           onClick={() => setIsEditing((prevEditing) => !prevEditing)}
           >
-            {isEditing ? "Done" : "Edit"}
+            {isEditing ? "Update" : "Add"}
           </button>
           </div>
 
@@ -126,6 +171,7 @@ export default function UserProfileView() {
           )}
         </div>
       </div>
+          
 
       <h3 className={styles.subtitleFavorite}>Favorite Movie</h3>
       <div className={styles.grid}>
@@ -138,11 +184,12 @@ export default function UserProfileView() {
               movie={movie}
               onUnfavorite={removeMovieFromList}
             />
-
           ))
         )}
       </div>
-    </div>
+
+      </div>
+ 
 
   );
 }

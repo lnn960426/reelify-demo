@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import HomeView from './views/HomeView/HomeView';
 import LoginView from './views/LoginView/LoginView';
 import LogoutView from './views/LogoutView';
@@ -17,6 +18,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <div id="app">
           <MainNav />
           <main id="main-content">

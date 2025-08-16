@@ -207,6 +207,7 @@ public class MovieController {
         User user = userDao.getUserByUsername(principal.getName());
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
     }
+
 }
 
 

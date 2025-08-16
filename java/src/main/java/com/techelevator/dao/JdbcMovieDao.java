@@ -129,9 +129,7 @@ public class JdbcMovieDao implements MovieDao{
     public int getNumberLikes(int movieId){
         //query local database for number of likes a particular movie has
         int totalLikes = 0;
-
         String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
-
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
         while (results.next()) {
             if (results.getInt("liked") == 1){
@@ -144,44 +142,37 @@ public class JdbcMovieDao implements MovieDao{
     public int getNumberDislikes(int movieId){
         //query local database for number of dislikes a particular movie has
         int totalDislikes = 0;
-
         String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
-
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
         while (results.next()){
             if (results.getInt("liked") == -1){
                 totalDislikes += 1;
             }
         }
-
         return totalDislikes;
     }
 
     public int getNumberIndifferents(int movieId){
         //query local database for number of indifferents a particular movie has
         int totalIndifferents = 0;
-
         String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
-
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
         while (results.next()){
             if (results.getInt("liked") == 0){
                 totalIndifferents += 1;
             }
         }
-
         return totalIndifferents;
     }
 
-    private Movie mapRowToMovie(SqlRowSet rs){
-        //convert row of movie information to java object
+    public Movie mapRowToMovie(SqlRowSet results){
         Movie movie = new Movie();
-        movie.setTitle(rs.getString("title"));
-        movie.setMovieId(rs.getInt("movie_id"));
-        movie.setOverview(rs.getString("overview"));
-        movie.setPosterPath(rs.getString("poster_path"));
-        movie.setReleaseDate(rs.getString("release_date"));
-        movie.setVoteAverage(rs.getDouble("vote_average"));
+
+        movie.setTitle(results.getString("title"));
+        movie.setOverview(results.getString("overview"));
+        movie.setPosterPath(results.getString("posterPath"));
+        movie.setReleaseDate(results.getString("releaseDate"));
+        movie.setVoteAverage(results.getDouble("voterAverage"));
         return movie;
     }
 }

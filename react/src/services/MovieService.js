@@ -12,18 +12,18 @@ export default {
   },
 
   updateMovieLikeStatus(movieId, status) {
-    axios.put(`/movies/${movieId}/like`, null, {
-      params: { status: status } 
+    return axios.put(`/movies/${movieId}/like`, null, {
+      params: { status: status }
     })
   },
-  
-  createNewMovie(){
+
+  createNewMovie() {
     return axios.post("/movie")
   },
 
   updateMovieFavoriteStatus(movieId, favorited) {
     return axios.put(`/movies/${movieId}/favorite`, null, {
-      params: { favorited: favorited } 
+      params: { favorited: favorited }
     })
   },
 
@@ -31,26 +31,20 @@ export default {
     return axios.get("/favorites");
   },
 
-  getNumberLikes(movieId) {
-    return axios.get(`/movies/${movieId}/totalLikes`, null, {
-      params: {movieId : movieId}
-    })
-  },
-
-  getNumberDislikes(movieId) {
-    return axios.get(`/movies/${movieId}/totalDislikes`, null, {
-      params: {movieId : movieId}
-    })
-  },
-
-  getNumberIndifferents(movieId) {
-    return axios.get(`/movies/${movieId}/totalIndifferents`, null, {
-      params: {movieId : movieId}
-    })
-  },
-
   getFavoriteGenres() {
     return axios.get("/favorites/genres");
+  },
+
+  getLikes(movieId) {
+    return axios.get(`/movies/${movieId}/totalLikes`);
+  },
+
+  getDislikes(movieId) {
+    return axios.get(`/movies/${movieId}/totalDislikes`);
+  },
+
+  getIndifferents(movieId) {
+    return axios.get(`/movies/${movieId}/totalIndifferents`);
   }
 
 }

@@ -15,11 +15,30 @@ export default function MovieCard({ movie }) {
     const [isFavorited, setIsFavorite] = useState(Boolean(movie.favoritedByUser));
     const [isVote, setIsVote] = useState(movie.myReaction ?? null);
 
-    const [counts, setCounts] = useState({
-        like: movie.likeCount ?? movie.reactions?.like ?? 0,
-        meh: movie.mehCount ?? movie.reactions?.meh ?? 0,
-        dislike: movie.dislikeCount ?? movie.reactions?.dislike ?? 0,
+    const [counts, setCounts] = useState({ like: 0, meh: 0, dislike: 0 });
+
+    function fetchCounts() {
+    Promise.all([
+        MovieService.getLikes(movie.id),
+        MovieService.getIndifferents(movie.id),
+        MovieService.getDislikes(movie.id)
+    ])
+    .then(([likesRes, mehsRes, dislikesRes]) => {
+        setCounts({
+            like: likesRes.data ?? 0,
+            meh: mehsRes.data ?? 0,
+            dislike: dislikesRes.data ?? 0
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to fetch counts:", err);
+        setCounts({ like: 0, meh: 0, dislike: 0 });
     });
+}
+
+    useEffect(() => {
+        fetchCounts(); 
+    }, [movie.id]);
 
     function handleFavorite() {
         if (isFavorited) return;
@@ -56,40 +75,32 @@ export default function MovieCard({ movie }) {
 
         const prevVote = isVote;
         const finalVote = prevVote === next ? null : next;
-    
         setIsVote(finalVote);
-
-        setCounts((prevCounts) => {
-            const nextCounts = { ...prevCounts };
-            if (prevVote) nextCounts[prevVote] = Math.max(0, nextCounts[prevVote] - 1);
-            if (finalVote) nextCounts[finalVote] = (nextCounts[finalVote] ?? 0) + 1;
-            return nextCounts;
-        });
-
-
-        const statusMap = {
-            like: 1,
-            meh: 0,
-            dislike: -1,
-            null: null
-        };
-
+    
+        const statusMap = { like: 1, meh: 0, dislike: -1, null: null };
         const statusValue = finalVote == null ? null : statusMap[finalVote];
-        
-
+    
         MovieService.updateMovieLikeStatus(movie.id, statusValue)
-            .then(() => {                            
-                console.log("You vote: ", finalVote);
+            .then(() => {
+                Promise.all([
+                    MovieService.getLikes(movie.id),
+                    MovieService.getIndifferents(movie.id),
+                    MovieService.getDislikes(movie.id)
+                ])
+                .then(([likesRes, mehsRes, dislikesRes]) => {
+                    setCounts({
+                        like: likesRes.data,
+                        meh: mehsRes.data,
+                        dislike: dislikesRes.data
+                    });
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch updated counts:", err);
+                });
             })
             .catch((e) => {
-                console.error("failed to vote:", e);
+                console.error("Failed to vote:", e);
                 setIsVote(prevVote);
-                setCounts((prevCounts) => {
-                    const nextCounts = { ...prevCounts };
-                    if (finalVote) nextCounts[finalVote] = Math.max(0, nextCounts[finalVote] - 1);
-                    if (prevVote) nextCounts[prevVote] = (nextCounts[prevVote] ?? 0) + 1;
-                    return nextCounts;
-                })
             });
     }
 

@@ -1,0 +1,166 @@
+.movieCard {
+    width: 100%;
+    grid-column: auto;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 0 25px;
+
+}
+
+
+.image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.movieInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.movieTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.movieDescription {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.releaseDate {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+    color:#433bff;
+}
+
+.rating {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color:#433bff;
+}
+
+.voteBar {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: #f3f5f7;
+    border-radius: 999px;
+    gap: 2px;
+    width: 100%;
+}
+
+.voteBar button {
+   font-size: 0.8rem;
+   font-weight: bold;
+}
+
+.btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    padding: 10px 0;
+    display: grid;
+    place-items: center;
+    transition: background-color 120ms ease,
+    color 120ms ease, transform 80ms ease;
+    cursor: pointer;
+    color: inherit;
+    grid-auto-flow: row;
+}
+
+.like {
+    color: #35a853; opacity:.7;
+}
+
+.meh {
+    color: #8a8f98; opacity:.7;
+}
+
+.dislike {
+    color:#e03131; opacity: .7;
+}
+
+.like:hover {
+    background:#c8f1d8; opacity: 1;
+}
+
+.meh:hover {
+    background:#e0e5e9; opacity: 1;
+}
+
+.dislike:hover{
+    background:#f7c7c7; opacity: 1;
+}
+
+
+.active.like {
+    background:#c8f1d8; opacity: 1;
+}
+
+.active.meh {
+    background:#c8ced3; opacity: 1;
+}
+
+.active.dislike{
+    background:#f7c7c7; opacity: 1;
+}
+
+.btn:active{ transform: translateY(3px);}
+.btn:focus-visible{
+    outline:2px solid rgba(0,0,0,.2);
+    outline-offset: 2px;
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+    display: block;
+    pointer-events: none;
+    transition: transform 80ms ease, filter 120ms ease, opacity 120ms ease;
+
+}
+
+.btn:hover .icon {
+    transform: scale(1.06);
+}
+
+.count {
+    font-size: 0.75rem;
+    line-height: 1;
+    margin-top: 4px;
+    opacity: 0.85;
+}
+
+.favoriteBar button{
+    background-color: white;
+    border: 2px solid;
+    border-color: #433bff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding:1rem;
+    border-radius: 999px;
+    width: 100%;
+    color: #433bff;
+    transition: background-color 120ms ease, color 120ms ease;
+    
+}
+
+.favoriteBar button:hover{
+    background-color: #433bff;
+    color: white;
+}
+

@@ -5,9 +5,8 @@ import AuthService from '../../services/AuthService';
 import Notification from '../../components/Notification/Notification';
 import { UserContext } from '../../context/UserContext';
 import axios from 'axios';
-
+import art from "../../assets/signin-art.svg";
 import styles from './LoginView.module.css';
-
 export default function LoginView() {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -29,7 +28,9 @@ export default function LoginView() {
 
         // Add the login data to local storage
         localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        localStorage.setItem('authToken', token);
+
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         // Use the provided setter to add user to context
         setUser(user);
@@ -45,28 +46,52 @@ export default function LoginView() {
   }
 
   return (
-    <div id="view-login">
-      <h2>Login</h2>
+    <div className={styles.page}>
+    <img src={art} alt="Register illustration" className={styles.art} />
+
+    <div id="view-login" className={styles.container}>
+      <h2 className={styles.title}>Login</h2>
+      <p className={styles.description}>
+      Explore great movies, save your favorites, and get smart suggestions based on your taste. 
+      </p>
 
       <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
 
-        <div className="form-control">
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" value={username} size="50" required autoFocus autoComplete="username"
-              onChange={ event => setUsername(event.target.value)} />
+        <div className={styles.formControl}>
+          <label htmlFor="username" className={styles.username}>Username:</label>
+          <input type="text"
+            id="username"
+            value={username}
+            required
+            autoFocus
+            autoComplete="username"
+            onChange={event => setUsername(event.target.value)}
+          />
         </div>
 
-        <div className="form-control">
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={password} size="50" required
-              onChange={ event => setPassword(event.target.value)} />
+        <div className={styles.formControl}>
+          <label htmlFor="password" className={styles.password}>Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            required
+            onChange={event => setPassword(event.target.value)} />
         </div>
 
-        <button type="submit" className={`btn-primary ${styles.formButton}`}>Sign in</button>
-        <Link to="/register">New? Register here!</Link>
+        <button type="submit" className={`btn-primary ${styles.formButton}`}>
+         LOGIN
+        </button>
+       
+        <p className={styles.registerText}>
+          New? <Link to="/register"> Register here!</Link>
+        </p>
       </form>
+
     </div>
+    </div>
+
   );
 }

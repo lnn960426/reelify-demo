@@ -47,12 +47,12 @@ public class MovieController {
         this.favoriteDao = favoriteDao;
     }
 
-    @GetMapping(path = "movies/search?title={title}")
-    public List<Movie> getMoviesByTitle(@PathVariable String title) {
+    @GetMapping(path = "movies/search/{title}")
+    public List<Movie> getMoviesByTitle(@PathVariable("title") String title) {
 
         try {
 
-            String searchFor = API_MOVIE_DATABASE + "/search/movie?query={title}&api_key=" + API_KEY;
+            String searchFor = API_MOVIE_DATABASE + "/search/movie?query=" + title + "&api_key=" + API_KEY;
 
             MovieDocs found = restClient.get()
                     .uri(searchFor)

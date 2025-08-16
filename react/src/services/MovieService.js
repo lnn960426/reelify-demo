@@ -37,7 +37,7 @@ export default {
     })
   },
 
-  getNumberLikes(movieId) {
+  getNumberDislikes(movieId) {
     return axios.get(`/movies/${movieId}/totalDislikes`, null, {
       params: {movieId : movieId}
     })
@@ -51,6 +51,6 @@ export default {
 
   getFavoriteGenres() {
     return axios.get("/favorites/genres");
-}
+  }
 
 }

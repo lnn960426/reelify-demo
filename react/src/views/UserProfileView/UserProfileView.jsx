@@ -3,6 +3,7 @@ import { UserContext } from '../../context/UserContext';
 import styles from "../UserProfileView/UserProfileView.module.css";
 import ProfileMovieCard from "../../components/ProfileMovieCard/ProfileMovieCard";
 import MovieService from '../../services/MovieService'; //backend change here
+import GenreService from '../../services/GenreService';
 import { mockMovies } from '../BrowseMoviesView/mockMovies';
 
 const ALL_GENRES = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama",
@@ -22,9 +23,15 @@ export default function UserProfileView() {
   //loading favorite movie & genre
   useEffect(() => {
     setFavoriteMovies(mockMovies.results); //backend change here
-    setFavoriteGenres(["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama",
-      "Family", "Fantasy", "History", "Horror"]); //backend change here
+    GenreService.getUserGenres()
+      .then(response => {
+        setFavoriteGenres(response.data)
+      })
+      .catch(error => {
+        console.log("Error fetching user genres: ", error);
+      })
   }, []);
+
 
   function removeMovieFromList(movieId) {
 
@@ -38,8 +45,13 @@ export default function UserProfileView() {
 
   function handleRemoveGenre(genre) {
 
-        // TODO: BACKEND
-    setFavoriteGenres((prev) => prev.filter((g) => g !== genre)); 
+    GenreService.deleteGenre(genre)
+      .then(response => {
+        setFavoriteGenres((prev) => prev.filter((g) => g !== genre));
+      })
+      .catch(error => {
+        console.log("Error deleting genre: ", error);
+      }); 
   }
 
   function handlePickedGenres(e) {
@@ -50,10 +62,15 @@ export default function UserProfileView() {
   function handleAddSelected() {
     if (selectedToAdd.length === 0) return;
     const mergedGenres = Array.from(new Set([...favoriteGenres, ...selectedToAdd]));
-        // TODO: BACKEND
-
-    setFavoriteGenres(mergedGenres);
-    setSelectedToAdd([]);
+    const genreParam = selectedToAdd.join(",");
+    GenreService.addGenre(genreParam)
+      .then(response => {
+        setFavoriteGenres(mergedGenres);
+        setSelectedToAdd([]);
+      })
+      .catch(error => {
+        console.log("Error adding new genres: ", error);
+      })
   }
 
   //show only available genres

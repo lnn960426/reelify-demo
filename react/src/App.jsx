@@ -10,7 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import BrowseMovies from './views/BrowseMoviesView/BrowseMovies';
 import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies'; 
-import AdminAddMovies from './views/AdminAddMovies/AdminAccountMng'; 
+import AdminAccountMng from './views/AdminAccountMng/AdminAccountMng'; 
 
 
 
@@ -44,15 +44,16 @@ export default function App() {
                 </ProtectedRoute>
               }
               />
-            </Routes>
+            
             <Route 
               path="/admin/account-mng"
               element={
                 <ProtectedRoute>
-                  <AdminAddMovies />
+                  <AdminAccountMng />
                 </ProtectedRoute>
               }
               />
+              </Routes>
           </main>
       </div>
       <Footer />

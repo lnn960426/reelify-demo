@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AuthService from '../../services/AuthService';
-import styles from "./AdminAccountManagement.module.css";
+import styles from "./AdminAccountMng.module.css";
 
 export default function AdminAccountManagement() {
   // ---------------- User State ----------------

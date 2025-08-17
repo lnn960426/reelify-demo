@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 25px;
+    padding: 0 0 25px;
 
 }
 
@@ -79,6 +79,7 @@
     color 120ms ease, transform 80ms ease;
     cursor: pointer;
     color: inherit;
+    grid-auto-flow: row;
 }
 
 .like {
@@ -135,6 +136,13 @@
 
 .btn:hover .icon {
     transform: scale(1.06);
+}
+
+.count {
+    font-size: 0.75rem;
+    line-height: 1;
+    margin-top: 4px;
+    opacity: 0.85;
 }
 
 .favoriteBar button{

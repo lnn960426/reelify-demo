@@ -2,10 +2,6 @@ import axios from 'axios';
 
 export default{
 
-    getUserGenres(){
-        return axios.get("/users/genre");
-    },
-
     addGenre(genreParam){
         return axios.put(`/users/genre?genres=${genreParam}`);
     },

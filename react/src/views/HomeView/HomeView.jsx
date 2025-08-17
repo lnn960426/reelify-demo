@@ -7,12 +7,14 @@ import BrowseMoviesIcon from '../../assets/BrowseMovie.svg';
 import MovieCard from '../../components/MovieCard/MovieCard';
 
 import { mockMovies } from '../BrowseMoviesView/mockMovies';
+import { NavLink } from 'react-router-dom';
 
 
 
 export default function HomeView() {
 
   const { user } = useContext(UserContext);
+  const authedUser = Boolean(user?.token || user?.id || user?.username);
 
   const all = Array.isArray(mockMovies?.results)
   ?mockMovies.results
@@ -93,7 +95,13 @@ export default function HomeView() {
             <p className={styles.ctaSubtitle}>
             Explore a curated feed of films chosen from your favorite genres—fresh titles every time you browse
             </p>
-            <a href="/register" className={styles.registerBtn}>Register Now</a>
+            <NavLink
+            to={authedUser ? "/browseMovies" : "/register"}
+            className={styles.registerBtn}
+            >
+              {authedUser ? "Browse Now" : "Register Now"}
+            </NavLink>
+           
           </div>
         </div>
       </section>

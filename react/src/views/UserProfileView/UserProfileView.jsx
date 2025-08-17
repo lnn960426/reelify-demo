@@ -67,7 +67,23 @@ export default function UserProfileView() {
 }, []);
 
 if (isLoading) {
-  return <p>Loading........</p>;
+  return (
+      <div className={`container ${styles.loadingWrap}`}>
+          <div className={styles.loadingBox}>
+              <div className={styles.dotSpinner}>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+                  <div className={styles.dotSpinnerDot}></div>
+              </div>
+              <p className={styles.loadingText}>Loading, please wait......</p>
+          </div>
+      </div>
+  );
 }
 
   function removeMovieFromList(movieId, revert = false) {

@@ -83,7 +83,7 @@ export default function HomeView() {
         <div className={styles.movieGrid}>
 
         {firstFive.map((m) => (
-          <MovieCard key={m.id} movie={m} />
+          <MovieCard key={m.id} movie={m} requireAuthForActions/>
         ))}
         </div>
       </section>

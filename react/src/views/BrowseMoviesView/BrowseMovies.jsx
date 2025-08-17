@@ -56,8 +56,25 @@ export default function BrowseMovies() {
     }
 
     if (isLoading) {
-        return <p>Loading........</p>
+        return (
+            <div className={`container ${styles.loadingWrap}`}>
+                <div className={styles.loadingBox}>
+                    <div className={styles.dotSpinner}>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                        <div className={styles.dotSpinnerDot}></div>
+                    </div>
+                    <p className={styles.loadingText}>Loading, please wait......</p>
+                </div>
+            </div>
+        );
     }
+
 
 
     return (
@@ -65,7 +82,7 @@ export default function BrowseMovies() {
             <div id="browse-movie" className={styles.wrapper}>
                 <div className={styles.titleSection}>
                     <h2 className={styles.title}>Movie Recommendation Just For You</h2>
-                        <SearchBar onSearch={handleSearchSubmit} />
+                    <SearchBar onSearch={handleSearchSubmit} />
                     <button className={styles.refreshButton} onClick={handleRefresh}>
                         <img src={refreshButton} alt="refreshButton" className={styles.icon}></img>
                         Show me more

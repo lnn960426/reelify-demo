@@ -177,3 +177,19 @@
   justify-content: start;
   justify-content: center;
 }
+
+.registerBtn,
+.registerBtn:link,
+.registerBtn:visited{
+  color: #000000;
+  text-decoration: none;
+}
+
+.registerBtn:hover,
+.registerBtn:focus,
+.registerBtn:active,
+.registerBtn:visited:hover{
+  background-color: #2f27ce;
+  color: white;
+  text-decoration: none;
+}

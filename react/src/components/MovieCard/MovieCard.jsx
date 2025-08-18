@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./MovieCard.module.css";
 import MovieService from "../../services/MovieService";
 import likeIcon from "../../assets/Like.svg";
@@ -8,8 +8,23 @@ import disLikeActive from "../../assets/DislikeActive.svg";
 import mehIcon from "../../assets/Meh.svg";
 import mehActiveIcon from "../../assets/MehActive.svg";
 import defaultPoster from "../../assets/movieDefaultPoster.jpg"
+import { UserContext } from "../../context/UserContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({ movie, requireAuthForActions = false }) {
+
+    const { user } = useContext(UserContext);
+    const authedUser = Boolean(user?.token || user?.id || user?.username);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const gate =() => {
+        if(requireAuthForActions && !authedUser){
+            navigate("/register", {state: {from:location.pathname + location.search}});
+            return true;
+        }
+        return false;
+    };
+
     const imageBase = "https://image.tmdb.org/t/p/w500";
 
     const [isFavorited, setIsFavorite] = useState(Boolean(movie.favoritedByUser));
@@ -41,6 +56,7 @@ export default function MovieCard({ movie }) {
     }, [movie.id]);
 
     function handleFavorite() {
+        if(gate()) return;
         if (isFavorited) return;
         setIsFavorite(true);
 
@@ -55,6 +71,7 @@ export default function MovieCard({ movie }) {
     }
 
     function handleUnfavorite() {
+        if(gate()) return;
         if (!isFavorited) return;
         setIsFavorite(false);
 
@@ -69,6 +86,7 @@ export default function MovieCard({ movie }) {
     }
 
     function handleVote(next) {
+        if(gate()) return;
         const prevVote = isVote;
         const finalVote = prevVote === next ? null : next;
         setIsVote(finalVote);

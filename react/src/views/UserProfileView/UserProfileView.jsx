@@ -3,6 +3,7 @@ import { UserContext } from '../../context/UserContext';
 import styles from "../UserProfileView/UserProfileView.module.css";
 import ProfileMovieCard from "../../components/ProfileMovieCard/ProfileMovieCard";
 import MovieService from '../../services/MovieService'; //backend change here
+import GenreService from '../../services/GenreService';
 import { mockMovies } from '../BrowseMoviesView/mockMovies';
 
 const ALL_GENRES = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama",
@@ -83,8 +84,13 @@ if (isLoading) {
 
   function handleRemoveGenre(genre) {
 
-        // TODO: BACKEND
-    setFavoriteGenres((prev) => prev.filter((g) => g !== genre)); 
+    GenreService.deleteGenre(genre)
+      .then(response => {
+        setFavoriteGenres((prev) => prev.filter((g) => g !== genre));
+      })
+      .catch(error => {
+        console.log("Error deleting genre: ", error);
+      }); 
   }
 
   function handlePickedGenres(e) {
@@ -95,10 +101,15 @@ if (isLoading) {
   function handleAddSelected() {
     if (selectedToAdd.length === 0) return;
     const mergedGenres = Array.from(new Set([...favoriteGenres, ...selectedToAdd]));
-        // TODO: BACKEND
-
-    setFavoriteGenres(mergedGenres);
-    setSelectedToAdd([]);
+    const genreParam = selectedToAdd.join(",");
+    GenreService.addGenre(genreParam)
+      .then(response => {
+        setFavoriteGenres(mergedGenres);
+        setSelectedToAdd([]);
+      })
+      .catch(error => {
+        console.log("Error adding new genres: ", error);
+      })
   }
 
   //show only available genres

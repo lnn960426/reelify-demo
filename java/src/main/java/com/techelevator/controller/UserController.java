@@ -4,6 +4,7 @@ import com.techelevator.dao.FavoriteDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.GenreDto;
+import com.techelevator.model.RegisterUserDto;
 import com.techelevator.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,27 +70,40 @@ public class UserController {
         return user;
     }
 
-    @PostMapping(path = "/genre")
-    public void addGenre(@RequestBody GenreDto genres, Principal principal) {
+    @GetMapping(path = "/genre")
+    public List<String> getUserGenres(Principal principal){
         User user = userDao.getUserByUsername(principal.getName());
+        List<String> genres = new ArrayList<>();
+        try{
+           genres = userDao.getUserGenres(user);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return genres;
+    }
+
+    @PutMapping(path = "/genre")
+    public void addGenre(@RequestParam String genres, Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        List<String> genreList = Arrays.asList(genres.split(","));
         List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(user.getId());
         try{
-            userDao.addGenre(user, genres, genreIdList);
+            userDao.addGenre(user, genreList, genreIdList);
         }catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @DeleteMapping(path = "/genre")
-    public void deleteGenre(@RequestBody GenreDto genres, Principal prinicipal){
+    public void deleteGenre(@RequestParam  String genre, Principal prinicipal){
         User user = userDao.getUserByUsername(prinicipal.getName());
         List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(user.getId());
         try{
-            userDao.deleteGenre(user, genres, genreIdList);
+            userDao.deleteGenre(user, genre, genreIdList);
         }catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        
+
     }
 
 }

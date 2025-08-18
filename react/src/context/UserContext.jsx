@@ -4,3 +4,4 @@ export const UserContext = createContext({
   user: null,
   setUser: () => {},
 });
+

@@ -33,27 +33,35 @@ export default function MainNav() {
 
             {user && (
               <>
+               {user.role === 'USER' && (
                 <div className="nav-link">
                   <NavLink to="/browseMovies">
                     Browse Movie
                   </NavLink>
                 </div>
+              )}
+
+                {user.role === 'USER' && (
                 <div className="nav-link">
                   <NavLink to="/userProfile">
                     Profile
                   </NavLink>
                 </div>
+                )}
+
+                 {user.role === 'ADMIN' && (
+                         <div className="nav-link">
+                         <NavLink to="/admin/add-movies">
+                           Dashboard
+                         </NavLink>
+                       </div>
+                 )}
+
                 <div className="nav-link">
                   <Link to="/logout">
                     Logout
                   </Link>
                 </div>
-                <div className="nav-link">
-                  <Link to="/admin/add-movies">
-                    Admin
-                  </Link>
-                </div>
-               
               </>
             )}
           </div>

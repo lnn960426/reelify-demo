@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.techelevator.model.Movie;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MovieDao {
 
@@ -27,4 +28,6 @@ public interface MovieDao {
     public int getNumberLikes(int movieId);
 
     public List<Movie> getRecentlyAddedMovies();
+    
+    public Map<Integer, Integer> getMovieLikeStatuses(int userId, List<Integer> movieIds);
 }

@@ -18,6 +18,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -213,6 +214,13 @@ public class MovieController {
     @GetMapping("added")
     public List<Movie> getRecentlyAddedMovies(){
         return movieDao.getRecentlyAddedMovies();
+    @PostMapping("/movies/likeStatuses")
+    public Map<Integer, Integer> getMovieLikeStatuses(
+            Principal principal,
+            @RequestBody List<Integer> movieIds) {
+
+        User user = userDao.getUserByUsername(principal.getName());
+        return movieDao.getMovieLikeStatuses(user.getId(), movieIds);
     }
 
 }

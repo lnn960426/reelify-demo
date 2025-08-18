@@ -25,14 +25,21 @@ export default function App() {
           <main id="main-content">
             <Routes>
               <Route path="/" element={<HomeView />} />
-              <Route path="/browseMovies" element={<BrowseMovies />} />
+              <Route 
+              path="/browseMovies" 
+              element={
+                <ProtectedRoute roles={['USER']}>
+              <BrowseMovies />
+              </ProtectedRoute>
+            } />
+            
               <Route path="/login" element={<LoginView />} />
               <Route path="/logout" element={<LogoutView />} />
               <Route path="/register" element={<RegisterView />} />
               <Route
                 path="/userProfile"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute roles={['USER']}>
                     <UserProfileView />
                   </ProtectedRoute>
                 }
@@ -40,7 +47,7 @@ export default function App() {
               <Route 
               path="/admin/add-movies"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={['ADMIN']}>
                   <AdminAddMovies />
                 </ProtectedRoute>
               }
@@ -49,7 +56,7 @@ export default function App() {
             <Route 
               path="/admin/account-management"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute roles={['ADMIN']}>
                   <AdminAccountManagement />
                 </ProtectedRoute>
               }

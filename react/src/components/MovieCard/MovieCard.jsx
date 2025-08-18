@@ -69,9 +69,7 @@ export default function MovieCard({ movie }) {
     }
 
     function handleVote(next) {
-        const numberLikes = MovieService.getNumberLikes(movie.id);
-        const numberDislikes = MovieService.getNumberDislikes(movie.id);
-        const numberIndifferents = MovieService.getNumberIndifferents(movie.id);
+      
 
         const prevVote = isVote;
         const finalVote = prevVote === next ? null : next;

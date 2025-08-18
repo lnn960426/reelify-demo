@@ -49,7 +49,7 @@ export default function BrowseMovies() {
         }
 
         setLoading(true);
-        MovieService.searchMoviesByTitle(keyword) //make sure the method name matches
+        MovieService.getMovieByTitleSearch(keyword) //make sure the method name matches
             .then(res => setMovies(res.data))
             .catch(err => console.log("Search error:", err))
             .finally(() => setLoading(false));

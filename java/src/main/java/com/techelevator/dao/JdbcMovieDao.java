@@ -88,16 +88,7 @@ public class JdbcMovieDao implements MovieDao{
         }, userId, movieId);
     }
 
-    private Movie mapRowToMovie(SqlRowSet rs){
-        Movie movie = new Movie();
-        movie.setTitle(rs.getString("title"));
-        movie.setMovieId(rs.getInt("movie_id"));
-        movie.setOverview(rs.getString("overview"));
-        movie.setPosterPath(rs.getString("poster_path"));
-        movie.setReleaseDate(rs.getString("release_date"));
-        movie.setVoteAverage(rs.getDouble("vote_average"));
-        return movie;
-    }
+
 
     @Override
     public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited){
@@ -172,5 +163,17 @@ public class JdbcMovieDao implements MovieDao{
             }
         }
         return totalIndifferents;
+    }
+
+    public Movie mapRowToMovie(SqlRowSet results){
+        Movie movie = new Movie();
+
+        movie.setTitle(results.getString("title"));
+        movie.setMovieId(results.getInt("movie_id"));
+        movie.setOverview(results.getString("overview"));
+        movie.setPosterPath(results.getString("poster_path"));
+        movie.setReleaseDate(results.getString("release_date"));
+        movie.setVoteAverage(results.getDouble("vote_average"));
+        return movie;
     }
 }

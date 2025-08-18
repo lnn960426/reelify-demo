@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 import AuthService from '../../services/AuthService';
-import styles from "./AdminAccountMng.module.css";
+import styles from "./AdminAccountManagement.module.css";
 
 export default function AdminAccountManagement() {
-  // ---------------- User State ----------------
+  // User state
   const [userForm, setUserForm] = useState({
     username: "",
     email: "",
     role: "user"
   });
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [usersLoading, setUsersLoading] = useState(true);
 
-  // ---------------- Message ----------------
+  // message
   const [message, setMessage] = useState({ type: "", text: "" });
 
-  // ---------------- Fetch users on mount ----------------
+  //fetch users
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -22,19 +24,20 @@ export default function AdminAccountManagement() {
   const fetchUsers = async () => {
     try {
       const res = await AuthService.getAllUsers();
+      console.log("Fetched users:", res.data); 
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching users:", err);
+      setUsersLoading (false);
     }
   };
 
-  // ---------------- Handle input changes ----------------
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ---------------- Add User ----------------
+  // Add user
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -54,11 +57,11 @@ export default function AdminAccountManagement() {
     setUserForm({ username: "", email: "", role: "user" });
   };
 
-  // ---------------- Delete User ----------------
-  const handleDeleteUser = async (userId) => {
+  // Delete User
+  const handleDeleteUser = async (user_Id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await AuthService.deleteUser(userId);
+      await AuthService.deleteUser(user_Id);
       setMessage({ type: "success", text: "User deleted successfully!" });
       fetchUsers();
     } catch (error) {
@@ -67,10 +70,10 @@ export default function AdminAccountManagement() {
     }
   };
 
-  // ---------------- Render ----------------
+
   return (
     <div className="container">
-      <h1 className={styles.header}>User Account Management</h1>
+      <h1 className={styles.header}>Admin User Account Management</h1>
 
       {message.text && (
         <div className={`${styles.message} ${styles[message.type]}`}>
@@ -78,11 +81,12 @@ export default function AdminAccountManagement() {
         </div>
       )}
 
-      {/* ---------------- Add User Form ---------------- */}
+      
       <div className={styles.formContainer}>
         <h2>Add New User</h2>
         <form onSubmit={handleUserSubmit} className={styles.form}>
-          <input
+                  <label htmlFor="username">Username</label>          
+                  <input
             type="text"
             name="username"
             placeholder="Username"
@@ -90,24 +94,28 @@ export default function AdminAccountManagement() {
             onChange={handleInputChange}
             required
           />
+     <label htmlFor="email">Email</label>          
           <input
             type="email"
             name="email"
             placeholder="Email"
             value={userForm.email}
             onChange={handleInputChange}
-            required
+          
           />
           <select name="role" value={userForm.role} onChange={handleInputChange}>
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
+          <>
           <button type="submit">Add User</button>
           <button type="button" onClick={resetForm}>Reset</button>
+          </>
         </form>
       </div>
 
-      {/* ---------------- User List ---------------- */}
+      {/*delete function*/}
+
       <div className={styles.formContainer}>
         <h2>Existing Users</h2>
         <ul className={styles.userList}>

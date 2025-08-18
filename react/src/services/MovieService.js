@@ -10,20 +10,18 @@ export default {
 
   updateMovieLikeStatus(movieId, status) {
     return axios.put(`/movies/${movieId}/like`, null, {
-      params: { status: status } 
-    });
+      params: { status: status }
+    })
   },
-  
-  
-  createNewMovie(movieData){
-    return axios.post("/movie", movieData);
-    headers: { Authorization: `Bearer ${token}` }
+
+  createNewMovie() {
+    return axios.post("/movie");
   },
 
 
   updateMovieFavoriteStatus(movieId, favorited) {
     return axios.put(`/movies/${movieId}/favorite`, null, {
-      params: { favorited: favorited } 
+      params: { favorited: favorited }
     })
   },
 
@@ -33,7 +31,20 @@ export default {
 
   getFavoriteGenres() {
     return axios.get("/favorites/genres");
-}
+  },
+
+  getLikes(movieId) {
+    return axios.get(`/movies/${movieId}/totalLikes`);
+    
+  },
+
+  getDislikes(movieId) {
+    return axios.get(`/movies/${movieId}/totalDislikes`);
+  },
+
+  getIndifferents(movieId) {
+    return axios.get(`/movies/${movieId}/totalIndifferents`);
+  }
 
 
 }

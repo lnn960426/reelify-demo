@@ -1,6 +1,8 @@
 import MovieService from "../../services/MovieService";
 import { useState } from "react";
 import styles from "./AdminAddMovies.module.css";
+import { NavLink } from "react-router-dom";
+import AdminAccountManagement from "../AdminAccountManagement/AdminAccountManagement";
 
 export default function AdminAddMovies() {
   
@@ -67,14 +69,25 @@ export default function AdminAddMovies() {
         };
       
         return (
+
+          <>
+         <header>
+      <NavLink 
+        to="/admin/account-management" 
+        className={({ isActive }) => 
+          isActive ? `${styles.linkButton} ${styles.active}` : styles.linkButton
+        }
+      >
+        Account Management
+      </NavLink>
+    </header>
+          
         
           <div className="container">
             <div className={styles.header}>
               <h1>Movie Admin Panel</h1>
               <p>Add a new movie to the database</p>
-        <Link to="/admin/users" className={styles.linkButton}>
-          Manage Users
-        </Link>
+       
       </div>
         
       
@@ -144,9 +157,6 @@ export default function AdminAddMovies() {
                     
                     />
                   </div>
-                 
-                
-      
                 <div className={styles.btnContainer}>
                   <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
                     Add Movie
@@ -162,6 +172,7 @@ export default function AdminAddMovies() {
               </form>
             </div>
           </div>
+          </>
         );
               };
     

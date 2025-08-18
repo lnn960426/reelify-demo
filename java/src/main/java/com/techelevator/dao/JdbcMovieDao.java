@@ -134,4 +134,43 @@ public class JdbcMovieDao implements MovieDao{
 
         return favorites;
     }
+
+    public int getNumberLikes(int movieId){
+        //query local database for number of likes a particular movie has
+        int totalLikes = 0;
+        String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
+        while (results.next()) {
+            if (results.getInt("liked") == 1){
+                totalLikes += 1;
+            }
+        }
+        return totalLikes;
+    }
+
+    public int getNumberDislikes(int movieId){
+        //query local database for number of dislikes a particular movie has
+        int totalDislikes = 0;
+        String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
+        while (results.next()){
+            if (results.getInt("liked") == -1){
+                totalDislikes += 1;
+            }
+        }
+        return totalDislikes;
+    }
+
+    public int getNumberIndifferents(int movieId){
+        //query local database for number of indifferents a particular movie has
+        int totalIndifferents = 0;
+        String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
+        while (results.next()){
+            if (results.getInt("liked") == 0){
+                totalIndifferents += 1;
+            }
+        }
+        return totalIndifferents;
+    }
 }

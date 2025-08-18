@@ -100,7 +100,15 @@ input[type="date"] {
     color: #3b9e43e1;
     border: 1px solid #bee5eb;
   }
- 
-
+  .linkButton {
+    display: inline-block;
+    padding: 1rem 2rem;              
+    color: blue;
+    text-decoration: none;           
+    border: 2px solid #007bff;       
+    border-radius: 8px;             
+    font-size: 2.5rem;              
+    text-align: center;             
+  }
 
 

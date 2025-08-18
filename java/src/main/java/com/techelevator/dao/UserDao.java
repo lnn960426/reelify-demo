@@ -17,7 +17,9 @@ public interface UserDao {
 
     User createUser(RegisterUserDto user);
 
-    void addGenre(User user, GenreDto genres, List<Integer> genreIdList);
+    List<String> getUserGenres(User user);
 
-    void deleteGenre(User user, GenreDto genres, List<Integer> genreIdList);
+    void addGenre(User user, List<String> genres, List<Integer> genreIdList);
+
+    void deleteGenre(User user, String genre, List<Integer> genreIdList);
 }

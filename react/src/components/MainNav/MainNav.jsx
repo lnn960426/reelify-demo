@@ -26,6 +26,7 @@ export default function MainNav() {
                 <div className="nav-link">
                   <NavLink to="/login" >Login</NavLink>
                 </div>
+               
               </>
             )}
 
@@ -47,6 +48,12 @@ export default function MainNav() {
                     Logout
                   </Link>
                 </div>
+                <div className="nav-link">
+                  <Link to="/admin/add-movies">
+                    Admin
+                  </Link>
+                </div>
+               
               </>
             )}
           </div>

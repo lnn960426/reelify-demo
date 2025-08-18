@@ -2,6 +2,11 @@ import axios from 'axios';
 
 export default {
 
+  getMovieByTitleSearch(title){
+    return axios.get(`/movies/search/${title}`, null,
+    {params: { title: title}})
+  },
+
   getRandomMoviesByUserGenres() {
     return axios.get("/movies/random")
   },

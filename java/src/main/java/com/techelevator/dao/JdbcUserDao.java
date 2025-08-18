@@ -76,6 +76,33 @@ public class JdbcUserDao implements UserDao {
         return user;
     }
 
+    public List<String> getUserGenres(User user){
+        String userGenreSql = "SELECT genre_id FROM users_genre WHERE user_id = ?;";
+        List<Integer> genreIds = new ArrayList<>();
+        List<String> genres = new ArrayList<>();
+        SqlRowSet results;
+        try{
+            results = jdbcTemplate.queryForRowSet(userGenreSql, user.getId());
+            while(results.next()){
+                genreIds.add(results.getInt("genre_id"));
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        String genreNameSql = "SELECT name FROM genre WHERE genre_id = ?;";
+        try{
+            for(Integer id : genreIds){
+                String genreName = jdbcTemplate.queryForObject(genreNameSql, String.class, id);
+                genres.add(genreName);
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        return genres;
+    }
+
     @Override
     public User createUser(RegisterUserDto user) {
         User newUser = null;
@@ -117,13 +144,12 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
-    public void addGenre(User user, GenreDto genres, List<Integer> genreIdList){
+    public void addGenre(User user, List<String> genres, List<Integer> genreIdList){
         String getGenreIdsSql = "SELECT genre_id FROM genre WHERE name ILIKE ?;";
         List<Integer> genreIds = new ArrayList<>();
-        List<String> genreNames = genres.getGenres();
 
         try{
-            for(String genre : genreNames){
+            for(String genre : genres){
                 int genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
                 genreIds.add(genreId);
             }
@@ -159,16 +185,12 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    public void deleteGenre(User user, GenreDto genres, List<Integer> genreIdList){
+    public void deleteGenre(User user, String genre, List<Integer> genreIdList){
         String getGenreIdsSql = "SELECT genre_id FROM genre WHERE name ILIKE ?;";
-        List<Integer> genreIds = new ArrayList<>();
-        List<String> genreNames = genres.getGenres();
+        int genreId;
 
         try {
-            for (String genre : genreNames) {
-                int genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
-                genreIds.add(genreId);
-            }
+            genreId = jdbcTemplate.queryForObject(getGenreIdsSql, int.class, genre);
 
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -177,10 +199,8 @@ public class JdbcUserDao implements UserDao {
         }
         String deleteGenreSql = "DELETE FROM users_genre WHERE user_id = ? AND genre_id = ?;";
         try{
-            for(Integer id : genreIds){
-                if(genreIdList.contains(id)){
-                    jdbcTemplate.update(deleteGenreSql, user.getId(), id);
-                }
+            if(genreIdList.contains(genreId)) {
+                jdbcTemplate.update(deleteGenreSql, user.getId(), genreId);
             }
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);

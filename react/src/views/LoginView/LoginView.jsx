@@ -16,6 +16,11 @@ export default function LoginView() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  function getRoleFromUser(user){
+    const raw = user?.authorities?.[0]?.name || 'ROLE_USER';
+    return raw.startsWith('ROLE_') ? raw.substring(5) : raw;
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -24,19 +29,26 @@ export default function LoginView() {
         // Grab the user and token
         const user = response.data.user;
         const token = response.data.token;
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        //get the login role
+        const role = getRoleFromUser(user);
+
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         // Add the login data to local storage
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('authToken', token);
-
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        localStorage.setItem('role', role)
 
         // Use the provided setter to add user to context
-        setUser(user);
+        setUser({...user, role, token});
 
-        // Navigate to the home page
-        navigate('/');
+        // Navigate to the home page for user, add movie page for admin
+        if(role === 'ADMIN'){
+          navigate('/admin/add-movies');
+        } else {
+          navigate('/')
+        };
       })
       .catch((error) => {
         // Check for a response message, but display a default if that doesn't exist

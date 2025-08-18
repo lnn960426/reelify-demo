@@ -38,7 +38,7 @@ public class JdbcMovieDao implements MovieDao{
     }
 
     @Override
-    public void addNewMovie(Movie movie) {
+    public void addNewMovie(Movie movie, int userId) {
         String movieSql = "INSERT INTO movie(title, overview, poster_path, release_date, vote_average) " +
                 "VALUES (?, ?, ?, ?, ?) RETURNING movie_id;";
         List<Integer> genreIds = movie.getGenreIds();
@@ -65,6 +65,8 @@ public class JdbcMovieDao implements MovieDao{
         }catch (DaoException e) {
             throw new DaoException("An error occurred updating database movie: ", e);
         }
+
+        String insertIntoUsersMovie = "INSERT INTO users_movie(movie_id, user_id, liked, favorited) VALUES (?,?,?,?);";
     }
     @Override
     public void setMovieLikeStatus(int userId, int movieId, int status){
@@ -163,6 +165,20 @@ public class JdbcMovieDao implements MovieDao{
             }
         }
         return totalIndifferents;
+    }
+
+    public List<Movie> getRecentlyAddedMovies(){
+        List<Movie> movies = new ArrayList<>();
+        String getMoviesSql = "SELECT * FROM movie;";
+        try{
+            SqlRowSet results = jdbcTemplate.queryForRowSet(getMoviesSql);
+            while(results.next()){
+                movies.add(mapRowToMovie(results));
+            }
+        }catch (DaoException e) {
+            throw new DaoException("An error occurred updating database movie: ", e);
+        }
+        return movies;
     }
 
     public Movie mapRowToMovie(SqlRowSet results){

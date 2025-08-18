@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import styles from './HomeView.module.css';
 import { UserContext } from '../../context/UserContext';
 import RecommendationIcon from'../../assets/Recommendation.svg';
 import ProfileIcon from '../../assets/Profile.svg';
 import BrowseMoviesIcon from '../../assets/BrowseMovie.svg';
 import MovieCard from '../../components/MovieCard/MovieCard';
-
+import MovieService from '../../services/MovieService';
 import { mockMovies } from '../BrowseMoviesView/mockMovies';
 import { NavLink } from 'react-router-dom';
 
@@ -14,15 +14,21 @@ import { NavLink } from 'react-router-dom';
 export default function HomeView() {
 
   const { user } = useContext(UserContext);
+  const [movies, setMovies] = useState([]);
   const authedUser = Boolean(user?.token || user?.id || user?.username);
 
-  const all = Array.isArray(mockMovies?.results)
-  ?mockMovies.results
-  :Array.isArray(mockMovies)
-  ?mockMovies
-  : [];
+  useEffect(() => {
+    MovieService.getRecentlyAddedMovies()
+      .then(response => {
+        setMovies(response.data)
+        console.log(movies);
+      })
+      .catch(error => {
+        console.log("Error Fetching Movies: ", error);
+      });
+  }, []);
   
-  const firstFive = all.slice(0,5);
+  const firstFive = movies.slice(0,5);
 
   return (
 

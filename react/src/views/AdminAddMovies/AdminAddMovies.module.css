@@ -111,4 +111,15 @@ input[type="date"] {
     text-align: center;             
   }
 
+  .idSelect{
+    width: 100%;
+    max-width: 620px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    background:#fff;
+    outline: none;
+  }
+
 

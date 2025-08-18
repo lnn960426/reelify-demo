@@ -137,9 +137,11 @@ public class MovieController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/movie")
-    public void createNewMovie(@RequestBody Movie newMovie) {
+    public void createNewMovie(@RequestBody Movie newMovie, Principal principal) {
+        User user = userDao.getUserByUsername(principal.getName());
+        int userId = user.getId();
         try {
-            movieDao.addNewMovie(newMovie);
+            movieDao.addNewMovie(newMovie, userId);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create new movie", e);
         }
@@ -206,6 +208,11 @@ public class MovieController {
     public List<Integer> getUserFavoriteGenres(Principal principal) {
         User user = userDao.getUserByUsername(principal.getName());
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
+    }
+
+    @GetMapping("added")
+    public List<Movie> getRecentlyAddedMovies(){
+        return movieDao.getRecentlyAddedMovies();
     }
 
 }

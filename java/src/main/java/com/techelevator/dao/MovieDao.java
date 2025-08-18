@@ -8,7 +8,6 @@ public interface MovieDao {
 
     List<Movie> getMoviesByUserLikedGenre(int userId);
 
-
     void setMovieLikeStatus(int userId, int movieId, int status);
 
     Integer getMovieLikeStatus(int userId, int movieId);

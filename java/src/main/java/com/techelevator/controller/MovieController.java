@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
 public class MovieController {
@@ -47,42 +47,23 @@ public class MovieController {
         this.favoriteDao = favoriteDao;
     }
 
-    @GetMapping(path = "discover/movie?with_genres={genreId}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId) {
-        //holding container for restClient return
-        MovieDocs movieList = new MovieDocs();
-        //reach out to external api for list of movies
+    @GetMapping(path = "movies/search/{title}")
+    public List<Movie> getMoviesByTitle(@PathVariable("title") String title) {
 
         try {
-            movieList = restClient.get()
-                    .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}")
-                    .header("Authorization", "Bearer " + API_KEY)
+
+            String searchFor = API_MOVIE_DATABASE + "/search/movie?query=" + title + "&api_key=" + API_KEY;
+
+            MovieDocs found = restClient.get()
+                    .uri(searchFor)
                     .retrieve()
                     .body(MovieDocs.class);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+
+            return found.getResults();
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch movies from TMDB", e);
         }
-
-        return movieList.getResults();
-    }
-
-    @GetMapping(path = "discover/movie?with_genres={genreId}&page={pageNum}")
-    public List<Movie> getMoviesByGenreId(@PathVariable int genreId, int userId, int pageNum) {
-        //holding container for restClient return
-        MovieDocs movieList = new MovieDocs();
-        //reach out to external api for list of movies
-
-        try {
-            movieList = restClient.get()
-                    .uri(API_MOVIE_DATABASE + "discover/movie?with_genres={genreId}&page={pageNum}")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .retrieve()
-                    .body(MovieDocs.class);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-
-        return movieList.getResults();
     }
 
     @GetMapping(path = "movies/random")
@@ -125,7 +106,6 @@ public class MovieController {
                     .retrieve()
                     .body(MovieDocs.class);
 
-
             return randomPageData.getResults();
 
         } catch (Exception e) {
@@ -133,6 +113,15 @@ public class MovieController {
         }
     }
 
+/*    @PostMapping(path="/favorite")
+    public void addFavoriteMovie(Principal principal, @RequestParam int movieId ){
+
+        User targetUser= userDao.getUserByUsername(principal.getName());
+        int userId = targetUser.getId();
+        //int movieId = movie.getMovieId();
+        favoriteDao.addFavoriteMovie(userId, movieId);
+    }*/
+    
     @PutMapping("/movies/{movieId}/like")
     public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status) {
         User user = userDao.getUserByUsername(principal.getName());
@@ -198,24 +187,27 @@ public class MovieController {
         return favoriteMovies;
     }
 
+    @GetMapping(path="/movies/{movieId}/totalLikes")
+    public int getNumberLikes(@PathVariable int movieId){
+         return movieDao.getNumberLikes(movieId);
+    }
+
+    @GetMapping(path="/movies/{movieId}/totalDislikes")
+    public int getNumberDislikes(@PathVariable int movieId){
+        return movieDao.getNumberDislikes(movieId);
+    }
+
+    @GetMapping(path="/movies/{movieId}/totalIndifferents")
+    public int getNumberIndifferents(@PathVariable int movieId){
+        return movieDao.getNumberIndifferents(movieId);
+    }
+
     @GetMapping("/favorites/genres")
     public List<Integer> getUserFavoriteGenres(Principal principal) {
         User user = userDao.getUserByUsername(principal.getName());
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
     }
 
-    @GetMapping(path="/movies/{movieId}/totalLikes")
-    public int getNumberLikes(@PathVariable int movieId){
-        return movieDao.getNumberLikes(movieId);
-    }
-    @GetMapping(path="/movies/{movieId}/totalDislikes")
-    public int getNumberDislikes(@PathVariable int movieId){
-        return movieDao.getNumberDislikes(movieId);
-    }
-    @GetMapping(path="/movies/{movieId}/totalIndifferents")
-    public int getNumberIndifferents(@PathVariable int movieId){
-        return movieDao.getNumberIndifferents(movieId);
-    }
 }
 
 

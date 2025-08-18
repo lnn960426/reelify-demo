@@ -82,7 +82,7 @@ public class MovieController {
         try {
             String genreParam = genreIdList.stream()
                     .map(String::valueOf)
-                    .collect(Collectors.joining(","));
+                    .collect(Collectors.joining("|"));
 
             String urlFirstPage = API_MOVIE_DATABASE + "/discover/movie?api_key=" + API_KEY + "&with_genres=" + genreParam;
 

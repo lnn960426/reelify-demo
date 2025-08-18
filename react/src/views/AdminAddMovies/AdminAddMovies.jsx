@@ -9,9 +9,10 @@ export default function AdminAddMovies() {
         const [formData, setFormData] = useState({
           title: "",
           overview: "",
-          posterPath: "",
-          releaseDate: "",
-          voteAverage: ""
+          poster_Path: "",
+          release_Date: "",
+          vote_Average: "",
+          genre_id: "",
         });
       
         const [message, setMessage] = useState({ type: "", text: "" });
@@ -32,9 +33,10 @@ export default function AdminAddMovies() {
             const movieData = {
               title: formData.title.trim(),
               overview: formData.overview.trim() || null,
-              poster_path: formData.posterPath.trim() || null,
-              release_date: formData.releaseDate || null,
-              vote_average: formData.voteAverage ? parseFloat(formData.voteAverage) : null,
+              poster_path: formData.poster_Path.trim() || null,
+              release_date: formData.release_Date || null,
+              vote_average: formData.vote_Average ? parseFloat(formData.vote_Average) : null,
+              genre_id: formData.genre_id ? parseInt(formData.genre_id): null,
 
             };
       //Calls service function to send the movie data to the backend.
@@ -62,9 +64,10 @@ export default function AdminAddMovies() {
           setFormData({
             title: "",
             overview: "",
-            posterPath: "",
-            releaseDate: "",
-            voteAverage: ""
+            poster_Path: "",
+            release_Date: "",
+            vote_Average: "",
+            genre_id: ""
           });
         };
       
@@ -155,6 +158,17 @@ export default function AdminAddMovies() {
                       value={formData.voteAverage}
                       onChange={handleInputChange}
                     
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="genre_id">Genre ID</label>
+                    <input
+                    type="number"
+                    id="genre_id"
+                    name="genre_id"
+                    value={formData.genre_id}
+                    onChange={handleInputChange}
                     />
                   </div>
                 <div className={styles.btnContainer}>

@@ -14,8 +14,8 @@ export default {
     })
   },
 
-  createNewMovie() {
-    return axios.post("/movie");
+  createNewMovie(movieData) {
+    return axios.post("/movie", movieData);
   },
 
 

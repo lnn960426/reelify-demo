@@ -6,8 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JdbcMovieDao implements MovieDao{
@@ -175,5 +174,29 @@ public class JdbcMovieDao implements MovieDao{
         movie.setReleaseDate(results.getString("release_date"));
         movie.setVoteAverage(results.getDouble("vote_average"));
         return movie;
+    }
+
+    @Override
+    public Map<Integer, Integer> getMovieLikeStatuses(int userId, List<Integer> movieIds) {
+        if (movieIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        String sql = "SELECT movie_id, liked FROM users_movie " +
+                "WHERE user_id = ? AND movie_id IN (" +
+                String.join(",", Collections.nCopies(movieIds.size(), "?")) + ")";
+
+        Object[] params = new Object[movieIds.size() + 1];
+        params[0] = userId;
+        for (int i = 0; i < movieIds.size(); i++) {
+            params[i + 1] = movieIds.get(i);
+        }
+
+        Map<Integer, Integer> statuses = new HashMap<>();
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, params);
+        while (rs.next()) {
+            statuses.put(rs.getInt("movie_id"), rs.getInt("liked")); // -1, 0, 1
+        }
+        return statuses;
     }
 }

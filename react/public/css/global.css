@@ -239,3 +239,54 @@ tr {
 tr:nth-child(even) {
     background-color: rgba(136, 193, 231, 0.3);
 }
+
+
+#main-nav .nav-link a,
+#main-nav .nav-link a:visited{
+    color: #2f27ce;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+}
+
+#main-nav .nav-link a:hover {
+    background:transparent;
+    border: 2px solid #2f27ce;
+    color: #2f27ce;
+    box-shadow: none;
+}
+
+#main-nav .nav-link a::after{
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -10px;
+    height: 6px;
+    border-radius: 3px;
+    background:transparent;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .15s ease, background-color .15s ease, opacity .15s ease;
+    opacity: 0;
+}
+
+#main-nav .nav-link a.active,
+#main-nav .nav-link a.active:visited{
+    background: transparent !important;
+    color:#2f27ce;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: transparent;
+    font-weight: bold;
+}
+
+#main-nav .nav-link a.active::after{
+    background: #2f27ce;
+    transform: scaleX(1);
+    opacity: 1;
+}

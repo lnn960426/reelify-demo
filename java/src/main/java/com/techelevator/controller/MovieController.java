@@ -137,7 +137,7 @@ public class MovieController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "movie")
+    @PostMapping(path = "/movie")
     public void createNewMovie(@RequestBody Movie newMovie) {
         try {
             movieDao.addNewMovie(newMovie);

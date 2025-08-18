@@ -10,50 +10,82 @@ export default function BrowseMovies() {
 
     const [movies, setMovies] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [userVotes, setUserVotes] = useState({});
+
+    const voteMap = { "1": "like", "0": "meh", "-1": "dislike" };
 
     useEffect(() => {
-        MovieService.getRandomMoviesByUserGenres()
-            .then(response => {
-                setMovies(response.data)
-            })
-            .catch(error => {
-                console.log("Error Fetching Movies: ", error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchMovies();
     }, []);
 
-    function handleRefresh() {
+    function fetchMovies() {
         setLoading(true);
         MovieService.getRandomMoviesByUserGenres()
             .then(response => {
-                setMovies(response.data)
+                const movieList = response.data;
+                setMovies(movieList);
+
+                const movieIds = movieList.map(m => m.id);
+                if (movieIds.length > 0) {
+                    MovieService.getMovieLikeStatuses(movieIds)
+                        .then(voteRes => {
+                            const mappedVotes = {};
+                            for (const [id, voteValue] of Object.entries(voteRes.data)) {
+                                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
+                            }
+                            setUserVotes(mappedVotes);
+                        })
+                        .catch(err => console.error("Failed to fetch user votes:", err));
+                }
             })
-            .catch(error => {
-                console.log("Error Fetching Movies: ", error);
-            })
-            .finally(() => {
-                setLoading(false);
-                window.scrollTo(0, 0)
-            });
+            .catch(error => console.log("Error Fetching Movies: ", error))
+            .finally(() => setLoading(false));
+    }
+
+    function handleRefresh() {
+        fetchMovies();
+        window.scrollTo(0, 0);
     }
 
     function handleSearchSubmit(searchQuery) {
-
-        //if the user type in empty keyword to search, it will only refresh the page
         const keyword = (searchQuery || "").trim();
         if (!keyword) {
             handleRefresh();
             return;
         }
-
+    
         setLoading(true);
-        MovieService.getMovieByTitleSearch(keyword) //make sure the method name matches
-            .then(res => setMovies(res.data))
-            .catch(err => console.log("Search error:", err))
-            .finally(() => setLoading(false));
-    }
+
+MovieService.getMovieByTitleSearch(keyword)
+    .then(res => {
+        const movieList = res.data || [];
+        setMovies(movieList);  
+
+        const movieIds = movieList.map(m => m.id);
+        if (movieIds.length > 0) {
+            MovieService.getMovieLikeStatuses(movieIds)
+                .then(voteRes => {
+                    const mappedVotes = {};
+                    for (const [id, voteValue] of Object.entries(voteRes.data)) {
+                        mappedVotes[id] = voteMap[String(voteValue)] ?? null;
+                    }
+                    setUserVotes(mappedVotes);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch user votes:", err);
+                    setUserVotes({});
+                });
+        } else {
+            setUserVotes({});
+        }
+    })
+    .catch(err => {
+        console.error("Search error:", err);
+        setMovies([]);
+        setUserVotes({});
+    })
+    .finally(() => setLoading(false));
+}
 
     if (isLoading) {
         return (
@@ -96,6 +128,7 @@ export default function BrowseMovies() {
                         <MovieCard
                             key={movie.id}
                             movie={movie}
+                            userVote={userVotes[movie.id] ?? null}
                         />
                     ))}
                 </div>

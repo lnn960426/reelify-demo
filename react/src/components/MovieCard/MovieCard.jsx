@@ -11,15 +11,15 @@ import defaultPoster from "../../assets/movieDefaultPoster.jpg"
 import { UserContext } from "../../context/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function MovieCard({ movie, requireAuthForActions = false }) {
+export default function MovieCard({ movie, requireAuthForActions = false, userVote = null }) {
 
     const { user } = useContext(UserContext);
     const authedUser = Boolean(user?.token || user?.id || user?.username);
     const navigate = useNavigate();
     const location = useLocation();
-    const gate =() => {
-        if(requireAuthForActions && !authedUser){
-            navigate("/register", {state: {from:location.pathname + location.search}});
+    const gate = () => {
+        if (requireAuthForActions && !authedUser) {
+            navigate("/register", { state: { from: location.pathname + location.search } });
             return true;
         }
         return false;
@@ -28,35 +28,38 @@ export default function MovieCard({ movie, requireAuthForActions = false }) {
     const imageBase = "https://image.tmdb.org/t/p/w500";
 
     const [isFavorited, setIsFavorite] = useState(Boolean(movie.favoritedByUser));
-    const [isVote, setIsVote] = useState(movie.myReaction ?? null);
+    const [isVote, setIsVote] = useState(userVote);
 
     const [counts, setCounts] = useState({ like: 0, meh: 0, dislike: 0 });
 
     function fetchCounts() {
-    Promise.all([
-        MovieService.getLikes(movie.id),
-        MovieService.getIndifferents(movie.id),
-        MovieService.getDislikes(movie.id)
-    ])
-    .then(([likesRes, mehsRes, dislikesRes]) => {
-        setCounts({
-            like: likesRes.data ?? 0,
-            meh: mehsRes.data ?? 0,
-            dislike: dislikesRes.data ?? 0
-        });
-    })
-    .catch((err) => {
-        console.error("Failed to fetch counts:", err);
-        setCounts({ like: 0, meh: 0, dislike: 0 });
-    });
-}
+        Promise.all([
+            MovieService.getLikes(movie.id),
+            MovieService.getIndifferents(movie.id),
+            MovieService.getDislikes(movie.id)
+        ])
+            .then(([likesRes, mehsRes, dislikesRes]) => {
+                setCounts({
+                    like: likesRes.data ?? 0,
+                    meh: mehsRes.data ?? 0,
+                    dislike: dislikesRes.data ?? 0
+                });
+            })
+            .catch((err) => {
+                console.error("Failed to fetch counts:", err);
+                setCounts({ like: 0, meh: 0, dislike: 0 });
+            });
+    }
+    useEffect(() => {
+        setIsVote(userVote);
+    }, [userVote]);
 
     useEffect(() => {
-        fetchCounts(); 
+        fetchCounts();
     }, [movie.id]);
 
     function handleFavorite() {
-        if(gate()) return;
+        if (gate()) return;
         if (isFavorited) return;
         setIsFavorite(true);
 
@@ -71,7 +74,7 @@ export default function MovieCard({ movie, requireAuthForActions = false }) {
     }
 
     function handleUnfavorite() {
-        if(gate()) return;
+        if (gate()) return;
         if (!isFavorited) return;
         setIsFavorite(false);
 
@@ -86,14 +89,14 @@ export default function MovieCard({ movie, requireAuthForActions = false }) {
     }
 
     function handleVote(next) {
-        if(gate()) return;
+        if (gate()) return;
         const prevVote = isVote;
         const finalVote = prevVote === next ? null : next;
         setIsVote(finalVote);
-    
+
         const statusMap = { like: 1, meh: 0, dislike: -1, null: null };
         const statusValue = finalVote == null ? null : statusMap[finalVote];
-    
+
         MovieService.updateMovieLikeStatus(movie.id, statusValue)
             .then(() => {
                 Promise.all([
@@ -101,16 +104,16 @@ export default function MovieCard({ movie, requireAuthForActions = false }) {
                     MovieService.getIndifferents(movie.id),
                     MovieService.getDislikes(movie.id)
                 ])
-                .then(([likesRes, mehsRes, dislikesRes]) => {
-                    setCounts({
-                        like: likesRes.data,
-                        meh: mehsRes.data,
-                        dislike: dislikesRes.data
+                    .then(([likesRes, mehsRes, dislikesRes]) => {
+                        setCounts({
+                            like: likesRes.data,
+                            meh: mehsRes.data,
+                            dislike: dislikesRes.data
+                        });
+                    })
+                    .catch((err) => {
+                        console.error("Failed to fetch updated counts:", err);
                     });
-                })
-                .catch((err) => {
-                    console.error("Failed to fetch updated counts:", err);
-                });
             })
             .catch((e) => {
                 console.error("Failed to vote:", e);
@@ -142,7 +145,7 @@ export default function MovieCard({ movie, requireAuthForActions = false }) {
                     className={`${styles.btn} ${styles.meh} ${isVote === "meh" ? styles.active : ""}`}
                     onClick={() => handleVote("meh")}
                 >
-                    <img src={isVote === "meh" ? mehActiveIcon : mehIcon}  alt="Meh" className={styles.icon} />
+                    <img src={isVote === "meh" ? mehActiveIcon : mehIcon} alt="Meh" className={styles.icon} />
                     <span className={styles.count}> {counts.meh > 0 ? counts.meh : ""}</span>
                 </button>
 

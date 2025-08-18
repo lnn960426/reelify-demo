@@ -47,6 +47,10 @@ export default {
 
   getIndifferents(movieId) {
     return axios.get(`/movies/${movieId}/totalIndifferents`);
-  }
+  },
+
+  getMovieLikeStatuses(movieIds) {
+    return axios.post("/movies/likeStatuses", movieIds);
+}
 
 }

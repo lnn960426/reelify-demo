@@ -82,7 +82,7 @@ export default function AdminAccountManagement() {
       )}
 
       
-      <div className={styles.formContainer}>
+      <div className={styles.formControl}>
         <h2>Add New User</h2>
         <form onSubmit={handleUserSubmit} className={styles.form}>
                   <label htmlFor="username">Username</label>          
@@ -94,15 +94,17 @@ export default function AdminAccountManagement() {
             onChange={handleInputChange}
             required
           />
-     <label htmlFor="email">Email</label>          
+       <div className={styles.formControl}>
+          <label htmlFor="password" className={styles.password}>Password</label>
           <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={userForm.email}
-            onChange={handleInputChange}
-          
-          />
+            type="password"
+            id="password"
+            placeholder="Password"
+            value={userForm.password}
+            required
+            onChange={handleInputChange} />
+        </div>
+
           <select name="role" value={userForm.role} onChange={handleInputChange}>
             <option value="user">User</option>
             <option value="admin">Admin</option>

@@ -7,6 +7,7 @@ import com.techelevator.model.GenreDto;
 import com.techelevator.model.RegisterUserDto;
 import com.techelevator.model.User;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,22 @@ public class UserController {
         return users;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/{userId}")
+    public void deleteUser(@PathVariable int userId) {
+        try {
+            userDao.deleteUser(userId);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public User createUser(@RequestBody RegisterUserDto newUser) {
+        return userDao.createUser(newUser);
+    }
+
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     public User getById(@PathVariable int userId, Principal principal) {
         User user = null;
@@ -70,6 +87,8 @@ public class UserController {
         return user;
     }
 
+
+
     @GetMapping(path = "/genre")
     public List<String> getUserGenres(Principal principal){
         User user = userDao.getUserByUsername(principal.getName());
@@ -81,6 +100,8 @@ public class UserController {
         }
         return genres;
     }
+
+
 
     @PutMapping(path = "/genre")
     public void addGenre(@RequestParam String genres, Principal principal) {

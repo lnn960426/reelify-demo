@@ -94,7 +94,7 @@ export default function MovieCard({ movie, requireAuthForActions = false, userVo
         const finalVote = prevVote === next ? null : next;
         setIsVote(finalVote);
 
-        const statusMap = { like: 1, meh: 0, dislike: -1, null: null };
+        const statusMap = { like: 1, meh: 2, dislike: -1, null: null };
         const statusValue = finalVote == null ? null : statusMap[finalVote];
 
         MovieService.updateMovieLikeStatus(movie.id, statusValue)

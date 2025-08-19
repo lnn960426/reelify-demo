@@ -24,11 +24,11 @@ export default function AdminAccountManagement() {
   const fetchUsers = async () => {
     try {
       const res = await AuthService.getAllUsers();
-      console.log("Fetched users:", res.data); 
+      console.log("Fetched users:", res.data);
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching users:", err);
-      setUsersLoading (false);
+      setUsersLoading(false);
     }
   };
 
@@ -43,6 +43,7 @@ export default function AdminAccountManagement() {
     try {
       await AuthService.register(userForm);
       setMessage({ type: "success", text: "User added successfully!" });
+      window.scrollTo({top:0, behavior:'smooth'});
       setTimeout(() => {
         resetForm();
         fetchUsers(); // refresh user list
@@ -50,6 +51,8 @@ export default function AdminAccountManagement() {
     } catch (error) {
       console.error("Error adding user:", error);
       setMessage({ type: "error", text: "Failed to add user." });
+      window.scrollTo({top:0, behavior:'smooth'});
+
     }
   };
 
@@ -63,17 +66,24 @@ export default function AdminAccountManagement() {
     try {
       await AuthService.deleteUser(user_Id);
       setMessage({ type: "success", text: "User deleted successfully!" });
+      window.scrollTo({top:0, behavior:'smooth'});
+
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
       setMessage({ type: "error", text: "Failed to delete user." });
+      window.scrollTo({top:0, behavior:'smooth'});
+
     }
   };
 
 
   return (
     <div className="container">
-      <h1 className={styles.header}>Admin User Account Management</h1>
+      <div className={styles.header}>
+        <h1>User Management Panel</h1>
+        <p>Deleting the User from the database</p>
+      </div>
 
       {message.text && (
         <div className={`${styles.message} ${styles[message.type]}`}>
@@ -81,49 +91,25 @@ export default function AdminAccountManagement() {
         </div>
       )}
 
-      
-      <div className={styles.formControl}>
-        <h2>Add New User</h2>
-        <form onSubmit={handleUserSubmit} className={styles.form}>
-                  <label htmlFor="username">Username</label>          
-                  <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={userForm.username}
-            onChange={handleInputChange}
-            required
-          />
-       <div className={styles.formControl}>
-          <label htmlFor="password" className={styles.password}>Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={userForm.password}
-            required
-            onChange={handleInputChange} />
-        </div>
-
-          <select name="role" value={userForm.role} onChange={handleInputChange}>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-          <>
-          <button type="submit">Add User</button>
-          <button type="button" onClick={resetForm}>Reset</button>
-          </>
-        </form>
-      </div>
-
       {/*delete function*/}
 
       <div className={styles.formContainer}>
-        <h2>Existing Users</h2>
         <ul className={styles.userList}>
+
+          <li className={styles.userListHeader}>
+            <div>
+              <span> USER LIST</span>
+            </div>
+            <div>
+            </div>
+
+          </li>
+
           {users.map((user) => (
             <li key={user.id}>
-              {user.username} ({user.role})
+              <div>
+                <span className={styles.username}> {user.username}</span>
+              </div>
               <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
             </li>
           ))}

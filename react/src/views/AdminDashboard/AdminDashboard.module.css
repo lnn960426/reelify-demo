@@ -37,12 +37,13 @@
 }
 
 .tabBtn:hover {
-    background-color: #eaf0ff;
+    background-color: #4b3fff;;
+    color: white;
 }
 .active {
-    background-color: #2b6cff;
+    background-color:rgb(47, 39, 206);
     color: #fff;
-    border-color: #2b6cff;
+    border-color:rgb(47, 39, 206);
 }
 
 .panel{

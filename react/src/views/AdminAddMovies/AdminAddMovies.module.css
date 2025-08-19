@@ -13,6 +13,7 @@
   color: black;
   padding: 30px;
   text-align: center;
+  border-radius: 1.5rem;
 
 }
 
@@ -94,22 +95,22 @@ input[type="date"] {
   transform: translateY(1px);
 }
 
-
 .message {
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  font-weight: 500;
-  text-align: center;
-  font-size: 1.5rem;
-  color: red;
-}
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+ }
 
-.message.success {
-  background: #d1edff;
-  color: #3b9e43e1;
-  border: 1px solid #bee5eb;
-}
+.success {
+  background-color: #e6ffed;
+  color: #267a3e;
+ }
+
+ .error {
+  background-color: #ffecec;
+  color: #c0392b;
+ }
 
   .idSelect{
     width: 100%;

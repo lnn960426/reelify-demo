@@ -19,8 +19,17 @@ export default function AdminAddMovies() {
     setGenreIds(selectedValues);
   }
 
+  function resetForm() {
+    setTitle('');
+    setOverview('');
+    setPosterPath('');
+    setReleaseDate('');
+    setVoteAverage('');
+    setGenreIds([]);
+  }
+
   function handleSubmit(event) {
-    //event.preventDefault();
+    event.preventDefault();
 
     MovieService.createNewMovie({
       title,
@@ -30,18 +39,23 @@ export default function AdminAddMovies() {
       vote_average,
       genre_ids
     })
-    .then(() => {
-      console.log("Movie added");
-    }).catch((error) => {
-      // Handle different error scenarios
-    if (error.response?.status === 400) {
-      setMessage({ type: 'error', text: 'Invalid movie data. Please check your inputs.' });
-    } else if (error.response?.status === 409) {
-      setMessage({ type: 'error', text: 'Movie already exists in the database.' });
-    } else {
-      setMessage({ type: 'error', text: 'Failed to add movie. Please try again.' });
-    }
-    })
+
+      .then(() => {
+        setMessage({ type: "success", text: "Movie added successfully!" });
+        window.scrollTo({top:0, behavior:'smooth'});
+        resetForm();
+
+      }).catch((error) => {
+        // Handle different error scenarios
+        if (error.response?.status === 400) {
+          setMessage({ type: 'error', text: 'Invalid movie data. Please check your inputs.' });
+        } else if (error.response?.status === 409) {
+          setMessage({ type: 'error', text: 'Movie already exists in the database.' });
+        } else {
+          setMessage({ type: 'error', text: 'Failed to add movie. Please try again.' });
+        }
+        window.scrollTo({top:0, behavior:'smooth'});
+      })
   }
 
 
@@ -52,9 +66,8 @@ export default function AdminAddMovies() {
 
       <div className="container">
         <div className={styles.header}>
-          <h1>Movie Admin Panel</h1>
+          <h1>Movie Management Panel</h1>
           <p>Add a new movie to the database</p>
-
         </div>
 
 

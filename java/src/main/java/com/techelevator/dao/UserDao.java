@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import com.techelevator.exception.DaoException;
 import com.techelevator.model.GenreDto;
 import com.techelevator.model.RegisterUserDto;
 import com.techelevator.model.User;
@@ -17,9 +18,12 @@ public interface UserDao {
 
     User createUser(RegisterUserDto user);
 
+    void deleteUser(int userId);
+
     List<String> getUserGenres(User user);
 
     void addGenre(User user, List<String> genres, List<Integer> genreIdList);
 
     void deleteGenre(User user, String genre, List<Integer> genreIdList);
+
 }

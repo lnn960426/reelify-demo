@@ -52,7 +52,7 @@ export default function AdminAddMovies() {
 
       <div className="container">
         <div className={styles.header}>
-          <h1>Movie Admin Panel</h1>
+          <h1>Movie Management Panel</h1>
           <p>Add a new movie to the database</p>
 
         </div>

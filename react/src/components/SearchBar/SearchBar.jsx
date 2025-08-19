@@ -23,7 +23,7 @@ export default function SearchBar({ onSearch }) {
                 <input
                     type="text"
                     name="search"
-                    placeholder="Search movie title..."
+                    placeholder="Search movie by keyword..."
                     className={styles.input}
                     value={searchQuery}
                     onChange={handleInputChange}

@@ -20,7 +20,7 @@ export default function AdminAddMovies() {
   }
 
   function handleSubmit(event) {
-    event.preventDefault();
+    //event.preventDefault();
 
     MovieService.createNewMovie({
       title,

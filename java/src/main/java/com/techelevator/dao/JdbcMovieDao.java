@@ -64,8 +64,6 @@ public class JdbcMovieDao implements MovieDao{
         }catch (DaoException e) {
             throw new DaoException("An error occurred updating database movie: ", e);
         }
-
-        String insertIntoUsersMovie = "INSERT INTO users_movie(movie_id, user_id, liked, favorited) VALUES (?,?,?,?);";
     }
     @Override
     public void setMovieLikeStatus(int userId, int movieId, int status){

@@ -68,10 +68,10 @@ public class UserController {
     }
 
 
-    @PostMapping
+/*    @PostMapping
     public User createUser(@RequestBody RegisterUserDto newUser) {
         return userDao.createUser(newUser);
-    }
+    }*/
 
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     public User getById(@PathVariable int userId, Principal principal) {

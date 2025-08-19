@@ -49,17 +49,6 @@ export default function AdminAddMovies() {
   return (
 
     <>
-      <header>
-        <NavLink
-          to="/admin/account-management"
-          className={({ isActive }) =>
-            isActive ? `${styles.linkButton} ${styles.active}` : styles.linkButton
-          }
-        >
-          Account Management
-        </NavLink>
-      </header>
-
 
       <div className="container">
         <div className={styles.header}>

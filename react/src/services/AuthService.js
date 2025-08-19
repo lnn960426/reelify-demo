@@ -27,4 +27,5 @@ export default {
   deleteUser(userId) {
     return axios.delete(`/users/${userId}`);
   }
-}
+
+};

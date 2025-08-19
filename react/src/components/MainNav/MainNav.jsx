@@ -51,8 +51,8 @@ export default function MainNav() {
 
                  {user.role === 'ADMIN' && (
                          <div className="nav-link">
-                         <NavLink to="/admin/add-movies">
-                           Dashboard
+                         <NavLink to="/admin">
+                           Admin
                          </NavLink>
                        </div>
                  )}

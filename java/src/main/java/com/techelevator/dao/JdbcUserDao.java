@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.GenreDto;
 import com.techelevator.model.RegisterUserDto;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -74,6 +75,39 @@ public class JdbcUserDao implements UserDao {
             throw new DaoException("Unable to connect to server or database", e);
         }
         return user;
+    }
+
+    @Override
+    public void deleteUser(int userId) throws DaoException {
+        String genreSql = "DELETE FROM users_genre WHERE user_id = ?"; //delete user from users_genre
+        try {
+            int rowsAffected = jdbcTemplate.update(genreSql, userId);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        String movieSql = "DELETE FROM users_movie WHERE user_id = ?"; //delete user from users_movie
+        try {
+            int rowsAffected = jdbcTemplate.update(movieSql, userId);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        String userSql = "DELETE FROM users WHERE user_id = ?";  //delete user from users
+        try {
+            int rowsAffected = jdbcTemplate.update(userSql, userId);
+            if (rowsAffected == 0) {
+                throw new DaoException("No user found with id " + userId);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
     }
 
     public List<String> getUserGenres(User user){

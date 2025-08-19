@@ -79,9 +79,27 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void deleteUser(int userId) throws DaoException {
-        String sql = "DELETE FROM users WHERE user_id = ?";  // adjust column/table names
+        String genreSql = "DELETE FROM users_genre WHERE user_id = ?"; //delete user from users_genre
         try {
-            int rowsAffected = jdbcTemplate.update(sql, userId);
+            int rowsAffected = jdbcTemplate.update(genreSql, userId);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        String movieSql = "DELETE FROM users_movie WHERE user_id = ?"; //delete user from users_movie
+        try {
+            int rowsAffected = jdbcTemplate.update(movieSql, userId);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        String userSql = "DELETE FROM users WHERE user_id = ?";  //delete user from users
+        try {
+            int rowsAffected = jdbcTemplate.update(userSql, userId);
             if (rowsAffected == 0) {
                 throw new DaoException("No user found with id " + userId);
             }

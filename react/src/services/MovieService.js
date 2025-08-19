@@ -21,7 +21,6 @@ export default {
     return axios.post("/movie", movieData);
   },
 
-
   updateMovieFavoriteStatus(movieId, favorited) {
     return axios.put(`/movies/${movieId}/favorite`, null, {
       params: { favorited: favorited }

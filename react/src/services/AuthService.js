@@ -19,7 +19,6 @@ export default {
     return axios.get(`/users/${userId}`);
   },
 
-
   getAllUsers() {
     return axios.get('/users');
   },
@@ -27,6 +26,6 @@ export default {
   // Delete a user by ID (admin only)
   deleteUser(userId) {
     return axios.delete(`/users/${userId}`);
-  },
+  }
 
 };

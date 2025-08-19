@@ -95,17 +95,13 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/genre")
-    public void deleteGenre(@RequestParam  String genre, Principal prinicipal){
-        User user = userDao.getUserByUsername(prinicipal.getName());
+    public void deleteGenre(@RequestParam  String genre, Principal principal){
+        User user = userDao.getUserByUsername(principal.getName());
         List<Integer> genreIdList = favoriteDao.getFavoriteGenresByUserId(user.getId());
         try{
             userDao.deleteGenre(user, genre, genreIdList);
         }catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-
     }
-
-
-
 }

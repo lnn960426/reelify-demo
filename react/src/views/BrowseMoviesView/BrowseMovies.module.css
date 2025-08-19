@@ -17,8 +17,6 @@
    display: flex;
    flex-direction: column;
    align-items: stretch;
-
-
 }
 
 .title {
@@ -34,6 +32,23 @@
     
 }
 
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 0.5rem;
+}
+
+.searchLabel {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #433bff;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+
+
 @keyframes spin {
     to {transform: rotate(360deg);}
     
@@ -47,6 +62,7 @@
     transform-origin: center;
 
 }
+
 
 .refreshButton{
     display: inline-flex;

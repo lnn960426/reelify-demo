@@ -13,7 +13,7 @@ public interface MovieDao {
 
     Integer getMovieLikeStatus(int userId, int movieId);
     
-    void addNewMovie(Movie movie);
+    void addNewMovie(Movie movie, int userId);
 
     public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited);
 
@@ -27,5 +27,7 @@ public interface MovieDao {
 
     public int getNumberLikes(int movieId);
 
+    public List<Movie> getRecentlyAddedMovies();
+    
     public Map<Integer, Integer> getMovieLikeStatuses(int userId, List<Integer> movieIds);
 }

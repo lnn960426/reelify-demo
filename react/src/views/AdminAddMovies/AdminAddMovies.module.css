@@ -111,6 +111,17 @@ input[type="date"] {
   border: 1px solid #bee5eb;
 }
 
+  .idSelect{
+    width: 100%;
+    max-width: 620px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    background:#fff;
+    outline: none;
+  }
+
 .linkButton {
   display: inline-block;
   padding: 1rem 2rem;

@@ -212,6 +212,7 @@ public class MovieController {
     public List<Movie> getRecentlyAddedMovies() {
         return movieDao.getRecentlyAddedMovies();
     }
+
     @PostMapping("/movies/likeStatuses")
     public Map<Integer, Integer> getMovieLikeStatuses(
             Principal principal,

@@ -52,14 +52,18 @@ export default function RegisterView() {
           // if on token will catch a error
           if (!token || !user) throw new Error ('Login succeeded but missing token/user');
 
+          const raw = user?.authorities?.[0]?.name || 'ROLE_USER';
+          const role = raw.startsWith('ROLE_') ? raw.substring(5) :raw;
+
           //put token in local storage
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('authToken', token);
+          localStorage.setItem('role', role);
 
           axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
           //change the status of nav bar
-          setUser(user);
+          setUser({...user, role, token});
 
           setNotification({ type: 'success', message: 'Registration successful' });
           navigate('/');

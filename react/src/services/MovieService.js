@@ -55,6 +55,12 @@ export default {
 
   getMovieLikeStatuses(movieIds) {
     return axios.post("/movies/likeStatuses", movieIds);
-  }
+  },
+
+  getMoviesFavoriteStatuses(movieIds) {
+    return axios.post("/movies/favorites", movieIds);
+}
+
+
 
 }

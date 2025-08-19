@@ -72,10 +72,6 @@ export default function RegisterView() {
     }
   }
 
-  useEffect(() => {
-    console.log(favoriteGenre);
-  }, [favoriteGenre]);
-
 
   function handleRemoveGenre(g) {
     setFavoriteGenre(prev => prev.filter(x => x !== g));

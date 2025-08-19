@@ -24,6 +24,7 @@ public class Movie {
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;
 
+
     public int getMovieId() {
         return movieId;
     }

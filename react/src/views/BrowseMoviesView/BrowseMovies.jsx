@@ -38,8 +38,8 @@ export default function BrowseMovies() {
                         .catch(err => console.error("Failed to fetch user votes:", err));
                 }
             })
-            .catch(error => console.log("Error Fetching Movies: ", error))
-            .finally(() => setLoading(false));
+            .catch(error => {console.log("Error Fetching Movies: ", error)})
+            .finally(() => {setLoading(false)});
     }
 
     function handleRefresh() {
@@ -53,39 +53,39 @@ export default function BrowseMovies() {
             handleRefresh();
             return;
         }
-    
+
         setLoading(true);
 
-MovieService.getMovieByTitleSearch(keyword)
-    .then(res => {
-        const movieList = res.data || [];
-        setMovies(movieList);  
+        MovieService.getMovieByTitleSearch(keyword)
+            .then(res => {
+                const movieList = res.data || [];
+                setMovies(movieList);
 
-        const movieIds = movieList.map(m => m.id);
-        if (movieIds.length > 0) {
-            MovieService.getMovieLikeStatuses(movieIds)
-                .then(voteRes => {
-                    const mappedVotes = {};
-                    for (const [id, voteValue] of Object.entries(voteRes.data)) {
-                        mappedVotes[id] = voteMap[String(voteValue)] ?? null;
-                    }
-                    setUserVotes(mappedVotes);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch user votes:", err);
+                const movieIds = movieList.map(m => m.id);
+                if (movieIds.length > 0) {
+                    MovieService.getMovieLikeStatuses(movieIds)
+                        .then(voteRes => {
+                            const mappedVotes = {};
+                            for (const [id, voteValue] of Object.entries(voteRes.data)) {
+                                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
+                            }
+                            setUserVotes(mappedVotes);
+                        })
+                        .catch(err => {
+                            console.error("Failed to fetch user votes:", err);
+                            setUserVotes({});
+                        });
+                } else {
                     setUserVotes({});
-                });
-        } else {
-            setUserVotes({});
-        }
-    })
-    .catch(err => {
-        console.error("Search error:", err);
-        setMovies([]);
-        setUserVotes({});
-    })
-    .finally(() => setLoading(false));
-}
+                }
+            })
+            .catch(err => {
+                console.error("Search error:", err);
+                setMovies([]);
+                setUserVotes({});
+            })
+            .finally(() => setLoading(false));
+    }
 
     if (isLoading) {
         return (

@@ -2,17 +2,15 @@ import MovieService from "../../services/MovieService";
 import { useState, useEffect } from "react";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import styles from "./BrowseMovies.module.css";
-import { UserContext } from "../../context/UserContext"
 import refreshButton from "../../assets/RefreshButton.svg";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
 export default function BrowseMovies() {
-
     const [movies, setMovies] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [userVotes, setUserVotes] = useState({});
 
-    const voteMap = { "1": "like", "0": "meh", "-1": "dislike" };
+    const voteMap = { "1": "like", "2": "meh", "-1": "dislike" }; // 2 = meh now
 
     useEffect(() => {
         fetchMovies();
@@ -20,26 +18,47 @@ export default function BrowseMovies() {
 
     function fetchMovies() {
         setLoading(true);
+
         MovieService.getRandomMoviesByUserGenres()
             .then(response => {
-                const movieList = response.data;
-                setMovies(movieList);
-
-                const movieIds = movieList.map(m => m.id);
-                if (movieIds.length > 0) {
-                    MovieService.getMovieLikeStatuses(movieIds)
-                        .then(voteRes => {
-                            const mappedVotes = {};
-                            for (const [id, voteValue] of Object.entries(voteRes.data)) {
-                                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
-                            }
-                            setUserVotes(mappedVotes);
-                        })
-                        .catch(err => console.error("Failed to fetch user votes:", err));
-                }
+                const movieList = response.data || [];
+                handleMovieData(movieList);
             })
-            .catch(error => {console.log("Error Fetching Movies: ", error)})
-            .finally(() => {setLoading(false)});
+            .catch(error => {
+                console.error("Error fetching movies:", error);
+                setMovies([]);
+                setUserVotes({});
+                setLoading(false);
+            });
+    }
+
+    function handleMovieData(movieList) {
+        const movieIds = movieList.map(m => m.id);
+
+        Promise.all([
+            movieIds.length > 0 ? MovieService.getMovieLikeStatuses(movieIds) : Promise.resolve({ data: {} }),
+            movieIds.length > 0 ? MovieService.getMoviesFavoriteStatuses(movieIds) : Promise.resolve({ data: {} })
+        ])
+        .then(([voteRes, favRes]) => {
+            const mappedVotes = {};
+            for (const [id, voteValue] of Object.entries(voteRes.data)) {
+                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
+            }
+            setUserVotes(mappedVotes);
+
+            const moviesWithFav = movieList.map(m => ({
+                ...m,
+                favoritedByUser: !!favRes.data[m.id]
+            }));
+
+            setMovies(moviesWithFav);
+        })
+        .catch(err => {
+            console.error("Failed to fetch votes or favorites:", err);
+            setMovies(movieList);
+            setUserVotes({});
+        })
+        .finally(() => setLoading(false));
     }
 
     function handleRefresh() {
@@ -59,32 +78,14 @@ export default function BrowseMovies() {
         MovieService.getMovieByTitleSearch(keyword)
             .then(res => {
                 const movieList = res.data || [];
-                setMovies(movieList);
-
-                const movieIds = movieList.map(m => m.id);
-                if (movieIds.length > 0) {
-                    MovieService.getMovieLikeStatuses(movieIds)
-                        .then(voteRes => {
-                            const mappedVotes = {};
-                            for (const [id, voteValue] of Object.entries(voteRes.data)) {
-                                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
-                            }
-                            setUserVotes(mappedVotes);
-                        })
-                        .catch(err => {
-                            console.error("Failed to fetch user votes:", err);
-                            setUserVotes({});
-                        });
-                } else {
-                    setUserVotes({});
-                }
+                handleMovieData(movieList);
             })
             .catch(err => {
                 console.error("Search error:", err);
                 setMovies([]);
                 setUserVotes({});
-            })
-            .finally(() => setLoading(false));
+                setLoading(false);
+            });
     }
 
     if (isLoading) {
@@ -107,8 +108,6 @@ export default function BrowseMovies() {
         );
     }
 
-
-
     return (
         <div className="container">
             <div id="browse-movie" className={styles.wrapper}>
@@ -116,12 +115,10 @@ export default function BrowseMovies() {
                     <h2 className={styles.title}>Movie Recommendation Just For You</h2>
                     <SearchBar onSearch={handleSearchSubmit} />
                     <button className={styles.refreshButton} onClick={handleRefresh}>
-                        <img src={refreshButton} alt="refreshButton" className={styles.icon}></img>
+                        <img src={refreshButton} alt="refreshButton" className={styles.icon} />
                         Show me more
                     </button>
-
                 </div>
-
 
                 <div className={styles.movieGrid}>
                     {movies.map(movie => (
@@ -135,11 +132,10 @@ export default function BrowseMovies() {
 
                 <div className={styles.footerButton}>
                     <button className={styles.refreshButton} onClick={handleRefresh}>
-                        <img src={refreshButton} alt="refreshButton" className={styles.icon}></img>
+                        <img src={refreshButton} alt="refreshButton" className={styles.icon} />
                         Nothing interesting? Get a new list
                     </button>
                 </div>
-
             </div>
         </div>
     );

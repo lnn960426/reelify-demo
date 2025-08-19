@@ -15,10 +15,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -155,7 +152,7 @@ public class MovieController {
     }
 
     @GetMapping("/movies/{movieId}/favorite")
-    public Integer getMovieFavoriteStatus(Principal principal, @PathVariable int movieId) {
+    public Boolean getMovieFavoriteStatus(Principal principal, @PathVariable int movieId) {
         User user = userDao.getUserByUsername(principal.getName());
         return movieDao.getMovieFavoriteStatus(user.getId(), movieId);
     }
@@ -222,6 +219,17 @@ public class MovieController {
 
         User user = userDao.getUserByUsername(principal.getName());
         return movieDao.getMovieLikeStatuses(user.getId(), movieIds);
+    }
+
+    @PostMapping("/movies/favorites")
+    public Map<Integer, Boolean> getFavoritesStatus(Principal principal, @RequestBody List<Integer> movieIds) {
+        User user = userDao.getUserByUsername(principal.getName());
+        Map<Integer, Boolean> result = new HashMap<>();
+        for (int id : movieIds) {
+            Boolean fav = movieDao.getMovieFavoriteStatus(user.getId(), id);
+            result.put(id, fav != null && fav);
+        }
+        return result;
     }
 
 }

@@ -101,13 +101,13 @@ public class JdbcMovieDao implements MovieDao{
     }
 
     @Override
-    public Integer getMovieFavoriteStatus(int userId, int movieId) {
+    public Boolean getMovieFavoriteStatus(int userId, int movieId) {
         String sql = "SELECT favorited FROM users_movie WHERE user_id = ? AND movie_id = ?";
         return jdbcTemplate.query(sql, rs -> {
             if(rs.next()) {
-                return rs.getInt("favorited");
+                return rs.getBoolean("favorited");
             }
-            return null;
+            return false;
         }, userId, movieId);
     }
 
@@ -157,7 +157,7 @@ public class JdbcMovieDao implements MovieDao{
         String sql = "SELECT liked FROM users_movie WHERE movie_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
         while (results.next()){
-            if (results.getInt("liked") == 0){
+            if (results.getInt("liked") == 2){
                 totalIndifferents += 1;
             }
         }
@@ -209,7 +209,7 @@ public class JdbcMovieDao implements MovieDao{
         Map<Integer, Integer> statuses = new HashMap<>();
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, params);
         while (rs.next()) {
-            statuses.put(rs.getInt("movie_id"), rs.getInt("liked")); // -1, 0, 1
+            statuses.put(rs.getInt("movie_id"), rs.getInt("liked")); // -1, 2, 1
         }
         return statuses;
     }

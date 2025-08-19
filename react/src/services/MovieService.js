@@ -2,20 +2,14 @@ import axios from 'axios';
 
 export default {
 
-  getRandomMoviesByUserGenres(userId) {
-    return axios.get("/movies/random", {
-      params: { userId: userId }
-    });
-  },
-
-
-    
   getMovieByTitleSearch(title){
     return axios.get(`/movies/search/${title}`, null,
     {params: { title: title}})
   },
 
-
+  getRandomMoviesByUserGenres() {
+    return axios.get("/movies/random")
+  },
 
   updateMovieLikeStatus(movieId, status) {
     return axios.put(`/movies/${movieId}/like`, null, {
@@ -53,8 +47,10 @@ export default {
 
   getIndifferents(movieId) {
     return axios.get(`/movies/${movieId}/totalIndifferents`);
-  }
+  },
 
-
+  getMovieLikeStatuses(movieIds) {
+    return axios.post("/movies/likeStatuses", movieIds);
 }
 
+}

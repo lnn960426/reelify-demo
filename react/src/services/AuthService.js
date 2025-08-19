@@ -29,4 +29,8 @@ getAllUsers() {
 deleteUser(userId) {
   return axios.delete(`/users/${userId}`);
 },
+
+register(user) {
+  return axios.post('/users', user);
 }
+};

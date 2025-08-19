@@ -43,6 +43,7 @@ export default function AdminAccountManagement() {
     try {
       await AuthService.register(userForm);
       setMessage({ type: "success", text: "User added successfully!" });
+      window.scrollTo({top:0, behavior:'smooth'});
       setTimeout(() => {
         resetForm();
         fetchUsers(); // refresh user list
@@ -50,6 +51,8 @@ export default function AdminAccountManagement() {
     } catch (error) {
       console.error("Error adding user:", error);
       setMessage({ type: "error", text: "Failed to add user." });
+      window.scrollTo({top:0, behavior:'smooth'});
+
     }
   };
 
@@ -63,10 +66,14 @@ export default function AdminAccountManagement() {
     try {
       await AuthService.deleteUser(user_Id);
       setMessage({ type: "success", text: "User deleted successfully!" });
+      window.scrollTo({top:0, behavior:'smooth'});
+
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
       setMessage({ type: "error", text: "Failed to delete user." });
+      window.scrollTo({top:0, behavior:'smooth'});
+
     }
   };
 

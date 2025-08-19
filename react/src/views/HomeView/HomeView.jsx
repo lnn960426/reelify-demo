@@ -95,13 +95,15 @@ export default function HomeView() {
             <p className={styles.ctaSubtitle}>
             Explore a curated feed of films chosen from your favorite genres—fresh titles every time you browse
             </p>
+
+            {(!user || user.role !== "ADMIN") &&(
             <NavLink
             to={authedUser ? "/browseMovies" : "/register"}
             className={styles.registerBtn}
             >
               {authedUser ? "Browse Now" : "Register Now"}
             </NavLink>
-           
+           )}
           </div>
         </div>
       </section>

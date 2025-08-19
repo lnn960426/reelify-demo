@@ -1,4 +1,40 @@
+.mainContent {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
 
+.displaySection{
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+}
+
+.displayTitle {
+    font-size: clamp(2rem, 3vw + 1rem, 3.25rem);
+    font-weight: 800;
+    line-height: 1.5;
+    margin: 0 0 0 0.75rem;
+
+}
+
+.displaySubtitle {
+    font-size: clamp(1rem, 1vw + 0.75rem, 1.25rem);
+    color: #666;
+    margin: 0 0 1.5rem;
+}
+
+
+.errorImg img{
+max-width: 100%;
+height: auto;
+max-height: 500px;
+display: block;
+margin: 0 auto;
+object-fit: contain;
+}
 
 
 

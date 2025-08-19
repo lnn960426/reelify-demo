@@ -11,7 +11,7 @@ import Footer from './components/Footer/Footer';
 import BrowseMovies from './views/BrowseMoviesView/BrowseMovies';
 import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies'; 
 import AdminAccountManagement from './views/AdminAccountManagement/AdminAccountManagement'; 
-
+import ErrorPage from './views/ErrorPage/ErrorPage';
 
 
 
@@ -61,7 +61,9 @@ export default function App() {
                 </ProtectedRoute>
               }
               />
-          
+
+              <Route path="*" element={<ErrorPage />} />
+            
               </Routes>
           </main>
       </div>

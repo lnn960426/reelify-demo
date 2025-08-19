@@ -113,11 +113,11 @@ export default function BrowseMovies() {
             <div id="browse-movie" className={styles.wrapper}>
                 <div className={styles.titleSection}>
                     <h2 className={styles.title}>Movie Recommendations Just For You</h2>
+                    
                     <div className={styles.searchContainer}>
                         <label htmlFor="movie-search" className={styles.searchLabel}>
                             <span className={styles.searchLabelText}>
-                                Looking for a<br />
-                                specific movie?
+                                Looking for a specific movie?
                             </span>
                         </label>
                         <SearchBar id="movie-search" onSearch={handleSearchSubmit} />

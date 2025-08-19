@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-@PreAuthorize("isAuthenticated()")
+
 @RequestMapping( path = "/users")
 public class UserController {
 
@@ -67,7 +67,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping
     public User createUser(@RequestBody RegisterUserDto newUser) {
         return userDao.createUser(newUser);

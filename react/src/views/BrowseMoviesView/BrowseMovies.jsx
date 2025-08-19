@@ -39,26 +39,26 @@ export default function BrowseMovies() {
             movieIds.length > 0 ? MovieService.getMovieLikeStatuses(movieIds) : Promise.resolve({ data: {} }),
             movieIds.length > 0 ? MovieService.getMoviesFavoriteStatuses(movieIds) : Promise.resolve({ data: {} })
         ])
-        .then(([voteRes, favRes]) => {
-            const mappedVotes = {};
-            for (const [id, voteValue] of Object.entries(voteRes.data)) {
-                mappedVotes[id] = voteMap[String(voteValue)] ?? null;
-            }
-            setUserVotes(mappedVotes);
+            .then(([voteRes, favRes]) => {
+                const mappedVotes = {};
+                for (const [id, voteValue] of Object.entries(voteRes.data)) {
+                    mappedVotes[id] = voteMap[String(voteValue)] ?? null;
+                }
+                setUserVotes(mappedVotes);
 
-            const moviesWithFav = movieList.map(m => ({
-                ...m,
-                favoritedByUser: !!favRes.data[m.id]
-            }));
+                const moviesWithFav = movieList.map(m => ({
+                    ...m,
+                    favoritedByUser: !!favRes.data[m.id]
+                }));
 
-            setMovies(moviesWithFav);
-        })
-        .catch(err => {
-            console.error("Failed to fetch votes or favorites:", err);
-            setMovies(movieList);
-            setUserVotes({});
-        })
-        .finally(() => setLoading(false));
+                setMovies(moviesWithFav);
+            })
+            .catch(err => {
+                console.error("Failed to fetch votes or favorites:", err);
+                setMovies(movieList);
+                setUserVotes({});
+            })
+            .finally(() => setLoading(false));
     }
 
     function handleRefresh() {
@@ -112,8 +112,16 @@ export default function BrowseMovies() {
         <div className="container">
             <div id="browse-movie" className={styles.wrapper}>
                 <div className={styles.titleSection}>
-                    <h2 className={styles.title}>Movie Recommendation Just For You</h2>
-                    <SearchBar onSearch={handleSearchSubmit} />
+                    <h2 className={styles.title}>Movie Recommendations Just For You</h2>
+                    <div className={styles.searchContainer}>
+                        <label htmlFor="movie-search" className={styles.searchLabel}>
+                            <span className={styles.searchLabelText}>
+                                Looking for a<br />
+                                specific movie?
+                            </span>
+                        </label>
+                        <SearchBar id="movie-search" onSearch={handleSearchSubmit} />
+                    </div>
                     <button className={styles.refreshButton} onClick={handleRefresh}>
                         <img src={refreshButton} alt="refreshButton" className={styles.icon} />
                         Show me more

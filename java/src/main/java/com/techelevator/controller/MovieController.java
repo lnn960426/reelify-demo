@@ -163,40 +163,42 @@ public class MovieController {
         int userId = user.getId();
 
         List<Integer> favoriteIds = movieDao.getFavoriteMovieIdsByUser(userId);
-
-        if (favoriteIds.isEmpty()) {
-            return new ArrayList<>();
-        }
         List<Movie> favoriteMovies = new ArrayList<>();
 
-        try {
-            for (Integer movieId : favoriteIds) {
-                String url = API_MOVIE_DATABASE + "/movie/" + movieId + "?api_key=" + API_KEY;
-
-                Movie movie = restClient.get()
-                        .uri(url)
-                        .retrieve()
-                        .body(Movie.class);
-
+        for (Integer movieId : favoriteIds) {
+            Movie movie = movieDao.getMovieById(movieId);
+            if (movie != null) {
                 favoriteMovies.add(movie);
+            } else {
+                try {
+                    String url = API_MOVIE_DATABASE + "/movie/" + movieId + "?api_key=" + API_KEY;
+                    movie = restClient.get()
+                            .uri(url)
+                            .retrieve()
+                            .body(Movie.class);
+                    favoriteMovies.add(movie);
+                } catch (Exception e) {
+                    System.err.println("Skipping favorite movieId " + movieId + " due to TMDB fetch failure");
+                }
             }
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch favorites TMDB", e);
         }
 
         return favoriteMovies;
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(path="/movies/{movieId}/totalLikes")
     public int getNumberLikes(@PathVariable int movieId){
          return movieDao.getNumberLikes(movieId);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(path="/movies/{movieId}/totalDislikes")
     public int getNumberDislikes(@PathVariable int movieId){
         return movieDao.getNumberDislikes(movieId);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(path="/movies/{movieId}/totalIndifferents")
     public int getNumberIndifferents(@PathVariable int movieId){
         return movieDao.getNumberIndifferents(movieId);
@@ -208,6 +210,7 @@ public class MovieController {
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("added")
     public List<Movie> getRecentlyAddedMovies() {
         return movieDao.getRecentlyAddedMovies();

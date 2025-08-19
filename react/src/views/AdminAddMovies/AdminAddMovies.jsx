@@ -8,10 +8,10 @@ export default function AdminAddMovies() {
 
   const [title, setTitle] = useState('');
   const [overview, setOverview] = useState('');
-  const [posterPath, setPosterPath] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
-  const [voteAverage, setVoteAverage] = useState(null);
-  const [genreIds, setGenreIds] = useState([]);
+  const [poster_path, setPosterPath] = useState('');
+  const [release_date, setReleaseDate] = useState('');
+  const [vote_average, setVoteAverage] = useState(null);
+  const [genre_ids, setGenreIds] = useState([]);
   const [message, setMessage] = useState({ type: "", text: "" });
 
   function handleChange(event) {
@@ -25,10 +25,10 @@ export default function AdminAddMovies() {
     MovieService.createNewMovie({
       title,
       overview,
-      posterPath,
-      releaseDate,
-      voteAverage,
-      genreIds
+      poster_path,
+      release_date,
+      vote_average,
+      genre_ids
     })
     .then(() => {
       console.log("Movie added");
@@ -43,10 +43,6 @@ export default function AdminAddMovies() {
     }
     })
   }
-
-  useEffect(() => {
-    console.log(genreIds);
-  }, [genreIds]);
 
 
 
@@ -108,7 +104,7 @@ export default function AdminAddMovies() {
                 type="text"
                 id="posterPath"
                 name="posterPath"
-                value={posterPath}
+                value={poster_path}
                 onChange={(event) => setPosterPath(event.target.value)}
               />
             </div>
@@ -120,7 +116,7 @@ export default function AdminAddMovies() {
                   type="date"
                   id="releaseDate"
                   name="releaseDate"
-                  value={releaseDate}
+                  value={release_date}
                   onChange={(event) => setReleaseDate(event.target.value)}
                 />
 
@@ -134,7 +130,7 @@ export default function AdminAddMovies() {
                 step="0.1"
                 id="voteAverage"
                 name="voteAverage"
-                value={voteAverage}
+                value={vote_average}
                 onChange={(event) => setVoteAverage(parseFloat(event.target.value))}
 
               />
@@ -148,7 +144,7 @@ export default function AdminAddMovies() {
                 multiple
                 size={8}
                 className={styles.idSelect}
-                value={genreIds}
+                value={genre_ids}
                 onChange={handleChange}
               >
                 <option value="28">Action</option>

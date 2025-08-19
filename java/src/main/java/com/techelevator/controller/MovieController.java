@@ -212,8 +212,9 @@ public class MovieController {
     }
 
     @GetMapping("added")
-    public List<Movie> getRecentlyAddedMovies(){
+    public List<Movie> getRecentlyAddedMovies() {
         return movieDao.getRecentlyAddedMovies();
+    }
     @PostMapping("/movies/likeStatuses")
     public Map<Integer, Integer> getMovieLikeStatuses(
             Principal principal,

@@ -30,7 +30,6 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-
 @RequestMapping( path = "/users")
 public class UserController {
 
@@ -66,7 +65,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-
 
     @PostMapping
     public User createUser(@RequestBody RegisterUserDto newUser) {

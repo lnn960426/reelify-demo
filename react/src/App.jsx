@@ -9,9 +9,10 @@ import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer/Footer';
 import BrowseMovies from './views/BrowseMoviesView/BrowseMovies';
-import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies'; 
-import AdminAccountManagement from './views/AdminAccountManagement/AdminAccountManagement'; 
-
+import AdminAddMovies from './views/AdminAddMovies/AdminAddMovies';
+import AdminAccountManagement from './views/AdminAccountManagement/AdminAccountManagement';
+import ErrorPage from './views/ErrorPage/ErrorPage';
+import AdminDashboard from './views/AdminDashboard/AdminDashboard';
 
 
 
@@ -19,51 +20,63 @@ export default function App() {
 
   return (
     <BrowserRouter>
-    <ScrollToTop />
+      <ScrollToTop />
       <div id="app">
-          <MainNav />
-          <main id="main-content">
-            <Routes>
-              <Route path="/" element={<HomeView />} />
-              <Route 
-              path="/browseMovies" 
+        <MainNav />
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<HomeView />} />
+            <Route
+              path="/browseMovies"
               element={
                 <ProtectedRoute roles={['USER']}>
-              <BrowseMovies />
-              </ProtectedRoute>
-            } />
-            
-              <Route path="/login" element={<LoginView />} />
-              <Route path="/logout" element={<LogoutView />} />
-              <Route path="/register" element={<RegisterView />} />
-              <Route
-                path="/userProfile"
-                element={
-                  <ProtectedRoute roles={['USER']}>
-                    <UserProfileView />
-                  </ProtectedRoute>
-                }
-              />
-              <Route 
+                  <BrowseMovies />
+                </ProtectedRoute>
+              } />
+
+            <Route path="/login" element={<LoginView />} />
+            <Route path="/logout" element={<LogoutView />} />
+            <Route path="/register" element={<RegisterView />} />
+            <Route
+              path="/userProfile"
+              element={
+                <ProtectedRoute roles={['USER']}>
+                  <UserProfileView />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute roles={['ADMIN']}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
               path="/admin/add-movies"
               element={
                 <ProtectedRoute roles={['ADMIN']}>
                   <AdminAddMovies />
                 </ProtectedRoute>
               }
-              />
+            />
 
-            <Route 
+            <Route
               path="/admin/account-management"
               element={
                 <ProtectedRoute roles={['ADMIN']}>
                   <AdminAccountManagement />
                 </ProtectedRoute>
               }
-              />
-          
-              </Routes>
-          </main>
+            />
+
+            <Route path="*" element={<ErrorPage />} />
+
+          </Routes>
+        </main>
       </div>
       <Footer />
     </BrowserRouter>

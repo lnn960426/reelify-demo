@@ -45,7 +45,7 @@ export default function LoginView() {
 
         // Navigate to the home page for user, add movie page for admin
         if(role === 'ADMIN'){
-          navigate('/admin/add-movies');
+          navigate('/admin');
         } else {
           navigate('/')
         };

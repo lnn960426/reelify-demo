@@ -107,7 +107,7 @@ public class JdbcMovieDao implements MovieDao{
             if(rs.next()) {
                 return rs.getBoolean("favorited");
             }
-            return false; // default false
+            return false;
         }, userId, movieId);
     }
 

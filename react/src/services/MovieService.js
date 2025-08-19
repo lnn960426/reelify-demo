@@ -2,9 +2,9 @@ import axios from 'axios';
 
 export default {
 
-  getMovieByTitleSearch(title){
+  getMovieByTitleSearch(title) {
     return axios.get(`/movies/search/${title}`, null,
-    {params: { title: title}})
+      { params: { title: title } })
   },
 
   getRandomMoviesByUserGenres() {
@@ -38,7 +38,7 @@ export default {
 
   getLikes(movieId) {
     return axios.get(`/movies/${movieId}/totalLikes`);
-    
+
   },
 
   getDislikes(movieId) {
@@ -49,8 +49,12 @@ export default {
     return axios.get(`/movies/${movieId}/totalIndifferents`);
   },
 
+  getRecentlyAddedMovies() {
+    return axios.get("/added");
+  },
+
   getMovieLikeStatuses(movieIds) {
     return axios.post("/movies/likeStatuses", movieIds);
-}
+  }
 
 }

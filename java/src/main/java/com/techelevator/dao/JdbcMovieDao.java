@@ -38,31 +38,35 @@ public class JdbcMovieDao implements MovieDao{
 
     @Override
     public void addNewMovie(Movie movie, int userId) {
-        String movieSql = "INSERT INTO movie(title, overview, poster_path, release_date, vote_average) " +
-                "VALUES (?, ?, ?, ?, ?) RETURNING movie_id;";
-        List<Integer> genreIds = movie.getGenreIds();
-        int newMovieId;
+        Integer maxLocalId = jdbcTemplate.queryForObject(
+                "SELECT MIN(movie_id) FROM movie WHERE movie_id < 0",
+                Integer.class
+        );
+        int newMovieId = (maxLocalId != null ? maxLocalId : 0) - 1;
 
+        String movieSql = "INSERT INTO movie(movie_id, title, overview, poster_path, release_date, vote_average) " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
         try {
-            newMovieId = jdbcTemplate.queryForObject(movieSql,
-                    int.class,
+            jdbcTemplate.update(movieSql,
+                    newMovieId,
                     movie.getTitle(),
                     movie.getOverview(),
                     movie.getPosterPath(),
                     movie.getReleaseDate(),
-                    movie.getVoteAverage());
+                    movie.getVoteAverage()
+            );
         } catch (DaoException e) {
             throw new DaoException("An error occurred updating database movie: ", e);
         }
 
+        List<Integer> genreIds = movie.getGenreIds();
         String movieGenreSql = "INSERT INTO movie_genre(movie_id, genre_id) VALUES (?,?);";
-
-        try{
-            for(Integer id : genreIds){
+        try {
+            for (Integer id : genreIds) {
                 jdbcTemplate.update(movieGenreSql, newMovieId, id);
             }
-        }catch (DaoException e) {
-            throw new DaoException("An error occurred updating database movie: ", e);
+        } catch (DaoException e) {
+            throw new DaoException("An error occurred updating database movie genres: ", e);
         }
     }
     @Override
@@ -212,5 +216,17 @@ public class JdbcMovieDao implements MovieDao{
             statuses.put(rs.getInt("movie_id"), rs.getInt("liked")); // -1, 2, 1
         }
         return statuses;
+    }
+
+    @Override
+    public Movie getMovieById(int movieId) {
+        String sql = "SELECT * FROM movie WHERE movie_id = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, movieId);
+
+        if (results.next()) {
+            return mapRowToMovie(results);
+        } else {
+            return null;
+        }
     }
 }

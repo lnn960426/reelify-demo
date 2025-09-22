@@ -1,31 +1,30 @@
-# ---------- Build stage ----------
+# ---- Stage 1: build the jar ----
 FROM eclipse-temurin:21-jdk AS build
-
-# Work inside a clean build directory
 WORKDIR /build
 
-# Copy Maven Wrapper + pom first to leverage Docker layer cache
-COPY java/mvnw java/pom.xml java/.mvn/ ./
+# Copy Maven wrapper & pom first for better layer caching
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
 RUN chmod +x mvnw
 
-# Copy the module source (your project lives under repo/java)
-COPY java/ ./
+# Copy sources
+COPY src/ src/
 
-# Build the fat jar (skip tests for faster CI)
-RUN ./mvnw -DskipTests package
+# Build (skip tests to speed up CI)
+RUN ./mvnw -q -DskipTests package
 
-# ---------- Runtime stage ----------
+# ---- Stage 2: runtime image ----
 FROM eclipse-temurin:21-jre
-
-# App directory inside the runtime image
 WORKDIR /app
 
-# Copy the built jar from the build stage
+# Copy the built jar (name-agnostic)
 COPY --from=build /build/target/*.jar /app/app.jar
 
-# Render provides PORT env var; Spring Boot will bind to 8080 by default
-ENV PORT=8080
+# Expose Spring Boot default port
 EXPOSE 8080
 
-# Start the application
+# Some sensible JVM defaults in containers
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0"
+
+# Run the app
 ENTRYPOINT ["java","-jar","/app/app.jar"]

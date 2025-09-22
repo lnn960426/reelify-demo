@@ -19,7 +19,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://reelify-demo.onrender.com/"
+})
 @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
 public class MovieController {

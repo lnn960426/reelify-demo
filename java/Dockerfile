@@ -10,8 +10,8 @@ RUN chmod +x mvnw
 # Copy sources
 COPY src/ src/
 
-# Build (skip tests to speed up CI)
-RUN ./mvnw -q -DskipTests package
+# Skip compiling & running tests during Docker build
+RUN ./mvnw -q -Dmaven.test.skip=true package
 
 # ---- Stage 2: runtime image ----
 FROM eclipse-temurin:21-jre

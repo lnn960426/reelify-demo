@@ -1,63 +1,62 @@
 import axios from 'axios';
+import api from './api';
 
 export default {
 
   getMovieByTitleSearch(title) {
-    return axios.get(`/movies/search/${title}`, null,
-      { params: { title: title } })
+    return api.get(`/movies/search/${encodeURIComponent(title)}`);
   },
 
   getRandomMoviesByUserGenres() {
-    return axios.get("/movies/random")
+    return api.get("/movies/random")
   },
 
   updateMovieLikeStatus(movieId, status) {
-    return axios.put(`/movies/${movieId}/like`, null, {
-      params: { status: status }
+    return api.put(`/movies/${movieId}/like`, null, { params: { status: status }
     })
   },
 
   createNewMovie(movieData) {
-    return axios.post("/movie", movieData);
+    return api.post("/movie", movieData);
   },
 
   updateMovieFavoriteStatus(movieId, favorited) {
-    return axios.put(`/movies/${movieId}/favorite`, null, {
+    return api.put(`/movies/${movieId}/favorite`, null, {
       params: { favorited: favorited }
     })
   },
 
   getFavorites() {
-    return axios.get("/favorites");
+    return api.get("/favorites");
   },
 
   getFavoriteGenres() {
-    return axios.get("/favorites/genres");
+    return api.get("/favorites/genres");
   },
 
   getLikes(movieId) {
-    return axios.get(`/movies/${movieId}/totalLikes`);
+    return api.get(`/movies/${movieId}/totalLikes`);
 
   },
 
   getDislikes(movieId) {
-    return axios.get(`/movies/${movieId}/totalDislikes`);
+    return api.get(`/movies/${movieId}/totalDislikes`);
   },
 
   getIndifferents(movieId) {
-    return axios.get(`/movies/${movieId}/totalIndifferents`);
+    return api.get(`/movies/${movieId}/totalIndifferents`);
   },
 
   getRecentlyAddedMovies() {
-    return axios.get("/added");
+    return api.get("/added");
   },
 
   getMovieLikeStatuses(movieIds) {
-    return axios.post("/movies/likeStatuses", movieIds);
+    return api.post("/movies/likeStatuses", movieIds);
   },
 
   getMoviesFavoriteStatuses(movieIds) {
-    return axios.post("/movies/favorites", movieIds);
+    return api.post("/movies/favorites", movieIds);
 }
 
 

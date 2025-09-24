@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from './api';
 
 /**
  * This service class is used to interact with the server's Authentication API.
@@ -8,24 +9,24 @@ import axios from 'axios';
 export default {
 
   login(user) {
-    return axios.post('/login', user);
+    return api.post('/login', user);
   },
 
   register(user) {
-    return axios.post('/register', user);
+    return api.post('/register', user);
   },
 
   getUserProfile(userId) {
-    return axios.get(`/users/${userId}`);
+    return api.get(`/users/${userId}`);
   },
 
   getAllUsers() {
-    return axios.get('/users');
+    return api.get('/users');
   },
 
   // Delete a user by ID (admin only)
   deleteUser(userId) {
-    return axios.delete(`/users/${userId}`);
+    return api.delete(`/users/${userId}`);
   }
 
 };

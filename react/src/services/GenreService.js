@@ -1,12 +1,13 @@
 import axios from 'axios';
+import api from './api';
 
-export default{
+export default {
 
-    addGenre(genreParam){
-        return axios.put(`/users/genre?genres=${genreParam}`);
+    addGenre(genreParam) {
+        return api.put(`/users/genre?genres=${encodeURIComponent(genreParam)}`);
     },
 
     deleteGenre(genre){
-        return axios.delete(`/users/genre?genre=${genre}`);
+        return api.delete(`/users/genre?genre=${encodeURIComponent(genre)}`);
     }
 }

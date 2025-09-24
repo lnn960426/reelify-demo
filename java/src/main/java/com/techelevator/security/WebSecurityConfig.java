@@ -51,14 +51,14 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> { }) // enable CORS using the bean below
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler))
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint) //401
+                        .accessDeniedHandler(jwtAccessDeniedHandler))   //403
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // allow preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // public endpoints
-                        .requestMatchers("/", "/health", "/register", "/login").permitAll()
+                        .requestMatchers("/", "/register", "/login","/error").permitAll()
                         // everything else requires auth
                         .anyRequest().authenticated()
                 )
@@ -74,7 +74,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        // IMPORTANT: put your FRONTEND origins here (not the backend URL)
+        // IMPORTANT: put FRONTEND origins here (not the backend URL)
         cfg.setAllowedOrigins(List.of(
                 "https://reelify-demo.onrender.com",
                 "http://localhost:5173"

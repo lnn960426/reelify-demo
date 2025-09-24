@@ -23,7 +23,7 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       localStorage.removeItem('role');
-      if (typeof window !== 'undefined') window.location.href = '/login';
+            delete api.defaults.headers.common.Authorization;
     }
     return Promise.reject(err);
   }

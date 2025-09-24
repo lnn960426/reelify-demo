@@ -15,8 +15,12 @@ export default function HomeView() {
   const authedUser = Boolean(user?.token || user?.id || user?.username);
 
   useEffect(() => {
+    if (authedUser) {
     fetchMoviesWithStatus();
-  }, []);
+  } else {
+    setMovies([]);
+  }
+  }, [authedUser]);
 
   function fetchMoviesWithStatus() {
     MovieService.getRecentlyAddedMovies()

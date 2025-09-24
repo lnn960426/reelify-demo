@@ -71,7 +71,7 @@ public class JdbcMovieDao implements MovieDao{
     }
     @Override
     public void setMovieLikeStatus(int userId, int movieId, int status){
-
+        ensureMovieExists(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, liked) " +
                 "VALUES (?, ?, ?) " +
                 "ON CONFLICT (user_id, movie_id) " +
@@ -95,7 +95,7 @@ public class JdbcMovieDao implements MovieDao{
 
     @Override
     public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited){
-
+        ensureMovieExists(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, favorited) " +
                 "VALUES (?, ?, ?) " +
                 "ON CONFLICT (user_id, movie_id) " +
@@ -227,6 +227,22 @@ public class JdbcMovieDao implements MovieDao{
             return mapRowToMovie(results);
         } else {
             return null;
+        }
+    }
+
+    private void ensureMovieExists(int movieId) {
+        Integer exists = jdbcTemplate.query(
+                "SELECT 1 FROM movie WHERE movie_id = ? LIMIT 1",
+                rs -> rs.next() ? 1 : null,
+                movieId
+        );
+        if (exists == null) {
+            jdbcTemplate.update(
+                    "INSERT INTO movie (movie_id, title, overview, poster_path, release_date, vote_average) " +
+                        "VALUES (?,?,NULL,NULL,NULL,NULL) " +
+                            "ON CONFLICT (movie_id) DO NOTHING",
+                    movieId,"(external)"
+            );
         }
     }
 }

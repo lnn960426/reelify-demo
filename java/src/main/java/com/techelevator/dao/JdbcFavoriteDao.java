@@ -1,6 +1,9 @@
 package com.techelevator.dao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Movie;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -26,22 +29,46 @@ public class JdbcFavoriteDao implements FavoriteDao {
 
    @Override
     public void addFavoriteMovie(int userId, int movieId){
+       try{
+        ensureMovieExists(movieId);
 
-        String setFavoriteSql = "INSERT INTO users_movie (movie_id, user_id, liked, favorited) " +
-                "VALUES (?, ?, ?, ?)";
-        String getLikeSettingSql = "SELECT liked FROM users_movie WHERE user_id=? AND movie_id=?;";
+       Integer liked = jdbcTemplate.query(
+               "SELECT liked FROM users_movie WHERE user_id = ? AND movie_id = ?",
+               rs -> rs.next() ? rs.getInt(1) : 0,
+               userId, movieId
+       );
 
-        try{
-            int liked = jdbcTemplate.queryForObject(getLikeSettingSql, int.class, userId, movieId);
-            jdbcTemplate.update(setFavoriteSql,
-                    movieId,
-                    userId,
-                    liked,
-                    true
-                    );
+       String sql = "INSERT INTO users_movie (movie_id, user_id, liked, favorited) " +
+               "VALUES (?, ?, ?, TRUE) " +
+               "ON CONFLICT (movie_id, user_id) DO UPDATE SET favorited = TRUE";
 
-            }catch(DaoException e){
-                throw new DaoException("There was an error connecting with the database: ",e);
+       jdbcTemplate.update(sql, movieId, userId, liked);
+
+   } catch (
+    CannotGetJdbcConnectionException e) {
+        throw new DaoException("Unable to connect to server or database", e);
+    } catch (
+    DataIntegrityViolationException e) {
+        throw new DaoException("Data integrity violation while setting favorite", e);
+    } catch (
+    DataAccessException e) {
+        throw new DaoException("Database error while setting favorite", e);
+    }
+}
+
+    private void ensureMovieExists(int movieId) {
+        Integer exists = jdbcTemplate.query(
+                "SELECT 1 FROM movie WHERE movie_id = ? LIMIT 1",
+                rs -> rs.next() ? 1 : null,
+                movieId
+        );
+        if (exists == null) {
+            jdbcTemplate.update(
+                    "INSERT INTO movie (movie_id, title, overview, poster_path, release_date, vote_average) " +
+                            "VALUES (?,?,NULL,NULL,NULL,NULL) " +
+                            "ON CONFLICT (movie_id) DO NOTHING",
+                    movieId,"(external)"
+            );
         }
     }
 }

@@ -59,6 +59,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // public endpoints
                         .requestMatchers("/", "/register", "/login","/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/added").permitAll()
                         // everything else requires auth
                         .anyRequest().authenticated()
                 )

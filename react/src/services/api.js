@@ -1,5 +1,4 @@
 import axios from 'axios';
-import router from '../router';
 
 //Use backend URL from environment variable or default to localhost
 const api = axios.create({

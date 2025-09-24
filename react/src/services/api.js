@@ -8,25 +8,9 @@ const api = axios.create({
 
 //Attach the token to every request if it exists
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  const token = localStorage.getItem('authToken');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
-
-//Handle 401 errors globally
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err?.response?.status === 401) {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('role');
-            delete api.defaults.headers.common.Authorization;
-    }
-    return Promise.reject(err);
-  }
-);
 
 export default api;

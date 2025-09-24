@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UserContext } from './UserContext';
 import axios from 'axios';
+import api from '../services/api';
 
 export default function UserProvider({ children }) {
   const [user, setUser] = useState(() => getUserAndTokenFromStorage());
@@ -12,7 +13,7 @@ export default function UserProvider({ children }) {
 
     if (user && token) {
       // Set the token in the axios default headers
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Set the user to the user state
       return {...user, token, role };
     }

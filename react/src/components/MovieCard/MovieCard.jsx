@@ -17,9 +17,10 @@ export default function MovieCard({ movie, requireAuthForActions = false, userVo
     const authedUser = Boolean(user?.token || user?.id || user?.username);
     const navigate = useNavigate();
     const location = useLocation();
+
     const gate = () => {
         if (requireAuthForActions && !authedUser) {
-            navigate("/register", { state: { from: location.pathname + location.search } });
+           navigate("/register", { state: { from: location.pathname + location.search } });
             return true;
         }
         return false;

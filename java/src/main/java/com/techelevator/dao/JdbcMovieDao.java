@@ -74,7 +74,7 @@ public class JdbcMovieDao implements MovieDao{
         }
     }
     @Override
-    public void setMovieLikeStatus(int userId, int movieId, int status){
+    public void setMovieLikeStatus(int userId, int movieId, Integer status){
         hydrator.hydrateIfNeeded(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, liked) " +
                 "VALUES (?, ?, ?) " +
@@ -83,6 +83,7 @@ public class JdbcMovieDao implements MovieDao{
 
         jdbcTemplate.update(sql, userId, movieId, status);
     }
+
 
     @Override
     public Integer getMovieLikeStatus(int userId, int movieId) {

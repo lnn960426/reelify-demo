@@ -6,21 +6,19 @@ import ProfileIcon from '../../assets/Profile.svg';
 import BrowseMoviesIcon from '../../assets/BrowseMovie.svg';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import MovieService from '../../services/MovieService';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function HomeView() {
+  const nagigate = useNavigate();
   const { user } = useContext(UserContext);
   const [movies, setMovies] = useState([]);
   const [userVotes, setUserVotes] = useState({});
   const authedUser = Boolean(user?.token || user?.id || user?.username);
 
   useEffect(() => {
-    if (authedUser) {
     fetchMoviesWithStatus();
-  } else {
-    setMovies([]);
-  }
   }, [authedUser]);
+
 
   function fetchMoviesWithStatus() {
     MovieService.getRecentlyAddedMovies()
@@ -118,7 +116,7 @@ export default function HomeView() {
             <MovieCard
               key={m.id}
               movie={m}
-              requireAuthForActions
+              requireAuthForActions = {!authedUser}
               userVote={userVotes[m.id] ?? null}
             />
           ))}

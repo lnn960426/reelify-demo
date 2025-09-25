@@ -236,6 +236,15 @@ public class JdbcMovieDao implements MovieDao{
         }
     }
 
+    @Override
+    public void clearMovieLikeStatus(int userId, int movieId){
+        hydrator.hydrateIfNeeded(movieId);
+        String sql =
+                "INSERT INTO users_movie (user_id, movie_id, liked) VALUES (?, ?, NULL) " +
+                        "ON CONFLICT (user_id, movie_id) DO UPDATE SET liked = NULL";
+        jdbcTemplate.update(sql, userId, movieId);
+    }
+
     /*private void ensureMovieExists(int movieId) {
         Integer exists = jdbcTemplate.query(
                 "SELECT 1 FROM movie WHERE movie_id = ? LIMIT 1",

@@ -32,4 +32,6 @@ public interface MovieDao {
     public Map<Integer, Integer> getMovieLikeStatuses(int userId, List<Integer> movieIds);
 
     public Movie getMovieById(int movieId);
+
+    void clearMovieLikeStatus(int userId, int movieId);
 }

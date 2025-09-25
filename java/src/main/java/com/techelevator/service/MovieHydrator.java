@@ -33,6 +33,9 @@ public class MovieHydrator {
 
     @Transactional
     public void hydrateIfNeeded(int movieId) {
+        //make sure not to conflict the movie that's manually add
+
+        if(movieId < 0) return;
         // 1) Check if we already have a non-placeholder title.
         String titleInDb = jdbc.query(
                 "SELECT title FROM movie WHERE movie_id = ?",

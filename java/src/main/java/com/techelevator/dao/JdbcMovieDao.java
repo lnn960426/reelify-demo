@@ -173,12 +173,9 @@ public class JdbcMovieDao implements MovieDao{
     }
 
     public List<Movie> getRecentlyAddedMovies(){
-        String getMoviesSql = "INSERT INTO users_movie (movie_id, user_id, liked, favorited) " +
-                "VALUES (?, ?, ?, TRUE) " +
-                "ON CONFLICT (movie_id, user_id) " +
-                "DO UPDATE SET favorited = TRUE";
-
         List<Movie> movies = new ArrayList<>();
+        //only admin add movie will display
+        String getMoviesSql = "SELECT * FROM movie WHERE movie_id < 0 ORDER BY movie_id DESC";
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(getMoviesSql);
             while(results.next()){

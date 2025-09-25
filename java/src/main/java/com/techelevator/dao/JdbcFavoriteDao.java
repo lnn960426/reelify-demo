@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Movie;
+import com.techelevator.service.MovieHydrator;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -16,9 +17,12 @@ import java.util.List;
 public class JdbcFavoriteDao implements FavoriteDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final MovieHydrator hydrator;
 
-    public JdbcFavoriteDao(JdbcTemplate jdbcTemplate) {
+    public JdbcFavoriteDao(JdbcTemplate jdbcTemplate, MovieHydrator hydrator) {
+
         this.jdbcTemplate = jdbcTemplate;
+        this.hydrator = hydrator;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class JdbcFavoriteDao implements FavoriteDao {
    @Override
     public void addFavoriteMovie(int userId, int movieId){
        try{
-        ensureMovieExists(movieId);
+           hydrator.hydrateIfNeeded(movieId);
 
        Integer liked = jdbcTemplate.query(
                "SELECT liked FROM users_movie WHERE user_id = ? AND movie_id = ?",
@@ -56,7 +60,7 @@ public class JdbcFavoriteDao implements FavoriteDao {
     }
 }
 
-    private void ensureMovieExists(int movieId) {
+    /*private void ensureMovieExists(int movieId) {
         Integer exists = jdbcTemplate.query(
                 "SELECT 1 FROM movie WHERE movie_id = ? LIMIT 1",
                 rs -> rs.next() ? 1 : null,
@@ -70,5 +74,5 @@ public class JdbcFavoriteDao implements FavoriteDao {
                     movieId,"(external)"
             );
         }
-    }
+    }*/
 }

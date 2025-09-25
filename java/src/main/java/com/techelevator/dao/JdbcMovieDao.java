@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Movie;
+import com.techelevator.service.MovieHydrator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,12 @@ import java.util.*;
 public class JdbcMovieDao implements MovieDao{
 
     private final JdbcTemplate jdbcTemplate;
+    private final MovieHydrator hydrator;
 
-    public JdbcMovieDao(JdbcTemplate jdbcTemplate){
+    public JdbcMovieDao(JdbcTemplate jdbcTemplate, MovieHydrator hydrator){
+
         this.jdbcTemplate = jdbcTemplate;
+        this.hydrator = hydrator;
     }
 
     @Override
@@ -71,7 +75,7 @@ public class JdbcMovieDao implements MovieDao{
     }
     @Override
     public void setMovieLikeStatus(int userId, int movieId, int status){
-        ensureMovieExists(movieId);
+        hydrator.hydrateIfNeeded(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, liked) " +
                 "VALUES (?, ?, ?) " +
                 "ON CONFLICT (user_id, movie_id) " +
@@ -95,7 +99,7 @@ public class JdbcMovieDao implements MovieDao{
 
     @Override
     public void setMovieFavoriteStatus(int userId, int movieId, boolean favorited){
-        ensureMovieExists(movieId);
+        hydrator.hydrateIfNeeded(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, favorited) " +
                 "VALUES (?, ?, ?) " +
                 "ON CONFLICT (user_id, movie_id) " +
@@ -230,7 +234,7 @@ public class JdbcMovieDao implements MovieDao{
         }
     }
 
-    private void ensureMovieExists(int movieId) {
+    /*private void ensureMovieExists(int movieId) {
         Integer exists = jdbcTemplate.query(
                 "SELECT 1 FROM movie WHERE movie_id = ? LIMIT 1",
                 rs -> rs.next() ? 1 : null,
@@ -245,4 +249,6 @@ public class JdbcMovieDao implements MovieDao{
             );
         }
     }
+    */
+
 }

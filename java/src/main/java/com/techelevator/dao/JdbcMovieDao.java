@@ -74,7 +74,7 @@ public class JdbcMovieDao implements MovieDao{
         }
     }
     @Override
-    public void setMovieLikeStatus(int userId, int movieId, Integer status){
+    public void setMovieLikeStatus(int userId, int movieId, int status){
         hydrator.hydrateIfNeeded(movieId);
         String sql = "INSERT INTO users_movie (user_id, movie_id, liked) " +
                 "VALUES (?, ?, ?) " +

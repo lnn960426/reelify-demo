@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "/")
 public class MovieController {
 
@@ -118,7 +118,7 @@ public class MovieController {
         //int movieId = movie.getMovieId();
         favoriteDao.addFavoriteMovie(userId, movieId);
     }*/
-    
+
     @PutMapping("/movies/{movieId}/like")
     public void setMovieLikeStatus(Principal principal, @PathVariable int movieId, @RequestParam int status) {
         User user = userDao.getUserByUsername(principal.getName());

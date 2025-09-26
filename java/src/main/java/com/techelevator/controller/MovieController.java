@@ -216,11 +216,11 @@ public class MovieController {
         return favoriteDao.getFavoriteGenresByUserId(user.getId());
     }
 
-    @PreAuthorize("permitAll()")
+  /*  @PreAuthorize("permitAll()")
     @GetMapping("added")
     public List<Movie> getRecentlyAddedMovies() {
         return movieDao.getRecentlyAddedMovies();
-    }
+    }*/
 
     @PostMapping("/movies/likeStatuses")
     public Map<Integer, Integer> getMovieLikeStatuses(

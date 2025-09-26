@@ -6,10 +6,9 @@ import ProfileIcon from '../../assets/Profile.svg';
 import BrowseMoviesIcon from '../../assets/BrowseMovie.svg';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import MovieService from '../../services/MovieService';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 
 export default function HomeView() {
-  const nagigate = useNavigate();
   const { user } = useContext(UserContext);
   const [movies, setMovies] = useState([]);
   const [userVotes, setUserVotes] = useState({});
